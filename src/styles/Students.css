@@ -1,0 +1,21 @@
+.student-menu {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .student-menu ul {
+    padding-left: 15px;
+  }
+  
+  .student-menu li {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .student-menu li:hover {
+    cursor: pointer;
+    color: #007bff;
+  }
+  
