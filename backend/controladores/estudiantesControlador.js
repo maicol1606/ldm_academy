@@ -77,3 +77,15 @@ exports.restaurarEstudiante = (req, res) => {
         }
     });
 }
+
+exports.conteoEstudiantes = (req, res) => {
+    const query = 'SELECT COUNT(*) as total FROM usuarios WHERE id_rol = 2 and estado = 1';
+    db.query(query, (error, results) => {
+        if (error) {
+            console.error('Error al obtener el conteo de estudiantes:', error);
+            res.status(500).json({ error: 'Error al obtener el conteo de estudiantes' });
+        } else {
+            res.status(200).json({ total: results[0].total });
+        }
+    });
+}

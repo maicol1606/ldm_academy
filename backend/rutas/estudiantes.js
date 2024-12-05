@@ -10,4 +10,6 @@ router.delete('/eliminarEstudiante/:id', estudiantesControlador.eliminarEstudian
 
 router.put('/restaurarEstudiante/:id', estudiantesControlador.restaurarEstudiante);
 
+router.get('/conteoEstudiantes', estudiantesControlador.conteoEstudiantes);
+
 module.exports = router;
