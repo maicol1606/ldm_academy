@@ -1,0 +1,1 @@
+ldm_academy sera un proyecto enfocado al area de orientacion para el colegio fernando gonzalez ochoa el cual busca facilitar tareas relacionadas con servicio social desarrollado con las tecgonologias de react, node.js, express, mysql
