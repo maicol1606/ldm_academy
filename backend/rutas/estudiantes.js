@@ -1,0 +1,13 @@
+const express = require('express');
+const router = express.Router();
+const estudiantesControlador = require('../controladores/estudiantesControlador');
+
+router.get('/obtenerEstudiantes', estudiantesControlador.obtenerEstudiantes);
+
+router.put('/actualizarEstudiante/:id', estudiantesControlador.actualizarEstudiante);
+
+router.delete('/eliminarEstudiante/:id', estudiantesControlador.eliminarEstudiante);
+
+router.put('/restaurarEstudiante/:id', estudiantesControlador.restaurarEstudiante);
+
+module.exports = router;

@@ -2,21 +2,31 @@ const express = require('express');
 const db = require('./config/db');
 const app = express();
 const port = 3000; // Puedes cambiar el puerto si lo deseas
+const estudiantesRutas = require('./rutas/estudiantes');
+const cors = require('cors');
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.get('/', (req, res) => {
     res.send('¡Hola desde el servidor backend!');
 });
-app.get('/usuarios', (req, res) => {
-    db.query('SELECT * FROM usuarios', (error, results) => {
-        if (error) {
-            console.error('Error al obtener los usuarios:', error);
-            res.status(500).json({ error: 'Error al obtener los usuarios' });
-        } else {
-            res.status(200).send(results);
-        }
-    });
 
-})
+app.use('/api/estudiantes', estudiantesRutas);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Error en el servidor');
+});
+
 app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
+    console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
