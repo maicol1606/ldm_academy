@@ -2,65 +2,73 @@ import React from 'react'
 
 export default function NavegacionAdmin() {
     return (
-        <div>
+     
+        <div> 
             <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                 <i className='bi bi-arrow-right'></i>
             </button>
+            
 
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className= "bg-dark offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <img src="/img/navegacion/Avatar2.png" className="rounded-pill w-50 mx-auto d-block img-fluid hover-scale mt-4 border border-white 5-px" alt=""  style={{ transition: 'transform 0.3s', cursor: 'pointer'}} 
+  
+            onMouseOver={(e) => (e.target.style.transform = 'scale(1.1)')}
+            onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}/>
+            <figcaption class="roboto-medium text-center"><br />
+            <p class="h6"><i class="text-white"> orientador <br /><small class="roboto-condensed-light">Administrador </small></i></p>
+					</figcaption>
+           
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Colegio Fernando Gonzalez Ochoa</h5>
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-                    <div class="dropdown mt-3 text-decoration-none list-unstyled">
-        
-                        <li>
-                            <i class="fas fa-users fa-fw"></i> &nbsp; Estudiantes <i class="fas fa-chevron-down"></i>
+                <div class="--bs-body-color-white">
+                    <div className="--bs-body-color-rgb">
+                        <div><i class="text-white"></i>
+                        <i class="bi bi-people"></i><p class="h6 " style={{ marginTop: '-55px' }}> <i class="text-white ">&nbsp; &nbsp;&nbsp; Estudiante</i></p><i class="bi bi-people"></i>
                             <ul>
-                                <li>
-                                    <a href="estudiante-new.html"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar Estudiante</a>
-                                </li>
-                                <li>
-                                    <a href="estudiante-list.php"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de Estudiantes</a>
-                                </li>
-
-                                <li>
-                                    <a href="estudiante-informe.html"><i class="fas fa-hand-holding-usd fa-fw"></i> &nbsp; INFORME DEL ESTUDIANTE</a>
-                                </li>
-                            </ul>
-                        </li>
+                               
+                            <p class="h6" style={{ marginTop: '-25px' }}> <a href="" className="text-decoration-none"><i class="text-danger"></i> <i className="bi bi-mortarboard text-white  ">&nbsp;&nbsp;</i> <span className=''><i class="text-white "> Agregar Estudiante</i></span></a></p>
+                                
+                                
+                            <p class="h6"><a href="" className="text-decoration-none"><i class="fas fa-clipboard-list fa-fw bi bi-clipboard2 text-white"></i> &nbsp; <i class="text-white">Lista Estudiante</i></a></p>
+                                    </ul>
+                        
 
                         <li>
-                        <i class="fas fa-tshirt fa-fw"></i> &nbsp; Docentes <i class="fas fa-chevron-down"></i>
+                        <i class=""></i><p class="h6 " style={{ marginTop: '-20px' }}> <i class="text-white ">&nbsp; &nbsp;&nbsp; Docente</i></p><i class=""></i>
                             <ul>
                                 <li>
-                                    <a href="docente-new.html"><i class="text-primary-emphasis"> Agregar Docente</i> &nbsp; </a>
+                                <p class="h6"> <a href="" className="text-decoration-none"><i class="text-"></i> <i className="bi bi-people text-white  ">&nbsp;&nbsp;</i> <span className=''><i class="text-white "> Agregar Docente</i></span></a></p>
                                 </li>
                                 <li>
-                                    <a href="docente-list.php"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de docentes</a>
+                                <p class="h6"><a href="" className="text-decoration-none"><i class="fas fa-clipboard-list fa-fw bi bi-clipboard2 text-white"></i> &nbsp; <i class="text-white">Lista Docente</i></a></p>
                                 </li>
 
                             </ul>
                         </li>
                         <li>
-                            <i class="fas  fa-user-secret fa-fw"></i> &nbsp; Campañas <i class="fas fa-chevron-down"></i>
+                        <i class=""></i><p class="h6 " style={{ marginTop: '-20px' }}> <i class="text-white ">&nbsp; &nbsp;&nbsp; Campañas</i></p><i class=""></i>
                             <ul>
                                 <li>
-                                    <a href="campaña-new.html"><i class="fas fa-plus fa-fw"></i> &nbsp; Nueva Campaña</a>
+                                <p class="h6"> <a href="" className="text-decoration-none"><i class="text-"></i> <i className="bi bi-plus text-white  ">&nbsp;&nbsp;</i> <span className=''><i class="text-white "> Crear Campaña</i></span></a></p>
                                 </li>
                                 <li>
-                                    <a href="campaña-list.html"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de Campañas</a>
-                                </li>
-                                <li>
-                                    <a href="campaña-search.html"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar Campaña</a>
+                                <p class="h6"><a href="" className="text-decoration-none"><i class="fas fa-clipboard-list fa-fw bi bi-clipboard2 text-white"></i> &nbsp; <i class="text-white">Lista de Campañas</i></a></p>
                                 </li>
                             </ul>
                         </li>
-
+                        
                         <li>
-                            <a href="certificados.html"><i class="fas fa-store-alt fa-fw"></i> &nbsp; certificados</a>
+                        <i class=""></i><p class="h6 " style={{ marginTop: '-20px' }}> <i class="text-white ">&nbsp; &nbsp;&nbsp; Certificados</i></p><i class=""></i>
                         </li>
+                        <ul>
+                               <li>
+                                <p class="h6"><a href="" className="text-decoration-none"><i class="bi bi-clipboard2-check text-white"></i> &nbsp; <i class="text-white">Lista de Certificados</i></a></p>
+                                </li>
+                                </ul>
+                        
+                        </div>
                     </div>
                 </div>
             </div>
