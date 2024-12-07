@@ -17,7 +17,8 @@ function App() {
         <Route path='/admin/home' exact element={<InicioAdmin />} />
         <Route path='/admin' exact element={<AdminHome />} />
         <Route exact path='/home' element={<Home/>} />
-        <Route exact path='/nav' element={<NavegacionAdmin/>} />
+        <Route exact path='/nav' element={<NavegacionAdmin />} />
+        <Route exact path='/certificados' element={<Certificados />} />
 
       </Routes>
     </BrowserRouter>
