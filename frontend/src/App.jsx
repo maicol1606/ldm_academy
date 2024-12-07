@@ -5,6 +5,8 @@ import AdminHome from './Paginas/Administrador/AdminHome';
 import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
 
+//Importar las ruras de las paginas
+const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
 
 function App() {
 

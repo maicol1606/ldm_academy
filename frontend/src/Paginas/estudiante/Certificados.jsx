@@ -1,15 +1,16 @@
 import React from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
 import NavegacionAdmin from '../../Componentes/NavegacionAdmin';
 
-function Certificados() {
+export default function Certificados() {
   return (
-    <div>
-      <NavegacionAdmin />
-      <h1>Generar Certificados</h1>
-      <p>Cuando un estudiante complete las 120 horas, podrá generar su certificado aquí.</p>
-      <button>Generar certificado</button>
+    <div>import React from "react";
+      <div>
+        {<NavegacionAdmin />}
+    
+
+
+      </div>
     </div>
   );
 }
-
-export default Certificados;
