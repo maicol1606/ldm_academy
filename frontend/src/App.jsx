@@ -7,6 +7,8 @@ import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 
 
+//Importar las ruras de las paginas
+const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
 
 function App() {
 

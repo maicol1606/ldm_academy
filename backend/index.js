@@ -3,6 +3,7 @@ const db = require('./config/db');
 const app = express();
 const port = 3000; // Puedes cambiar el puerto si lo deseas
 const estudiantesRutas = require('./rutas/estudiantes');
+const docentesRutas = require('./rutas/docentes');
 const cors = require('cors');
 
 app.use(express.json());
@@ -21,6 +22,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/estudiantes', estudiantesRutas);
+
+app.use('/api/docentes', docentesRutas);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
