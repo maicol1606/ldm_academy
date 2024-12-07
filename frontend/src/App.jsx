@@ -4,6 +4,8 @@ import InicioAdmin from './Paginas/Administrador/InicioAdmin';
 import AdminHome from './Paginas/Administrador/AdminHome';
 import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
+import Registar from './Paginas/default/registar';
+
 
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
         <Route path='/admin' exact element={<AdminHome />} />
         <Route exact path='/home' element={<Home/>} />
         <Route exact path='/nav' element={<NavegacionAdmin/>} />
+        <Route exact path='/registar' element={<Registar/>} />
 
       </Routes>
     </BrowserRouter>
