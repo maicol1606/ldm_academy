@@ -1,9 +1,10 @@
+
 import "./css/style.css";
+
 import React from 'react';
 import Header from './Header';
 import Banner from './Banner';
 import Campaigns from './Campaigns';
-import Sidebar from './Sidebar';
 
 const HomePage = () => (
   <div id="wrapper">
@@ -14,8 +15,8 @@ const HomePage = () => (
         <Campaigns />
       </div>
     </div>
-    <Sidebar />
   </div>
+  
 );
 
 export default HomePage;

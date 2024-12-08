@@ -23,7 +23,7 @@ export default function InfoCampañas() {
           <div className="album py-5 bg-body-tertiary">
             <div className="container">
               <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                {[...Array(6)].map((_, index) => (
+                {[...Array(8)].map((_, index) => (
                   <div className="col" key={index}>
                     <div className="card shadow-sm">
                       <svg

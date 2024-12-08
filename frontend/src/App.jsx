@@ -5,16 +5,12 @@ import AdminHome from './Paginas/Administrador/AdminHome';
 import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
-
-
-
-
-
 import Campañas from './Paginas/estudiante/Campañas';
 
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
 const Perfil = lazy(() => import('./Paginas/estudiante/Perfil'));
+const HomePage = lazy(() => import('./Componentes/HomePage'));
 function App() {
 
 
@@ -28,7 +24,7 @@ function App() {
         <Route exact path='/home' element={<Home />} />
         <Route exact path='/nav' element={<NavegacionAdmin />} />
         <Route exact path='/registar' element={<Registar />} />
-
+        <Route path ="/homepage" element={<HomePage />} />
         <Route path="/campañas" element={<Campañas />} />
       </Routes>
     </BrowserRouter>
