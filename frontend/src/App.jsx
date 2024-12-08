@@ -6,6 +6,8 @@ import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
