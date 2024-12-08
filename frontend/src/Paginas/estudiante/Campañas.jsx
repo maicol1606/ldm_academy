@@ -1,10 +1,9 @@
 import React from 'react'
-import "bootstrap/dist/css/bootstrap.min.css";
 import NavegacionAdmin from '../../Componentes/NavegacionAdmin';
 export default function InfoCampañas() {
 
   return (
-    <div>import React from "react";
+    <div>
       <div>
         {<NavegacionAdmin />}
         {/* Main Section */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import InicioAdmin from './Paginas/Administrador/InicioAdmin';
 import AdminHome from './Paginas/Administrador/AdminHome';
@@ -7,17 +7,14 @@ import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 
 
-import './components/HomePage/css/style.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './components/HomePage/HomePage.jsx';
-import GenericPage from './components/GenericPage/GenericPage.jsx';
-import AuthPage from './components/AuthPage/AuthPage.jsx'; // Componente de autenticación
-import Certificados from './Paginas/estudiante/Certificados';
+
+
+
 import Campañas from './Paginas/estudiante/Campañas';
 
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
-
+const Perfil = lazy(() => import('./Paginas/estudiante/Perfil'));
 function App() {
 
 
@@ -32,10 +29,6 @@ function App() {
         <Route exact path='/nav' element={<NavegacionAdmin />} />
         <Route exact path='/registar' element={<Registar />} />
 
-        <Route path="/" element={<HomePage />} />
-        <Route path="/generic" element={<GenericPage />} />
-        <Route path="/auth" element={<AuthPage />} /> {/* Ruta para la página de autenticación */}
-        <Route path="/certificados" element={<Certificados />} />
         <Route path="/campañas" element={<Campañas />} />
       </Routes>
     </BrowserRouter>
