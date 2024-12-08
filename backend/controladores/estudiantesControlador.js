@@ -89,3 +89,17 @@ exports.conteoEstudiantes = (req, res) => {
         }
     });
 }
+
+exports.mostrarHorasEstudiante = (req, res) => {
+    const id = req.params.id;
+    const fecha = req.params.fecha; 
+    const query = 'SELECT * FROM asistencia WHERE id_usuario = ?';
+    db.query(query, [id], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las horas del estudiante:', error);
+            res.status(500).json({ error: 'Error al obtener las horas del estudiante' });
+        } else {
+            res.status(200).send(results);
+        }
+    });
+}

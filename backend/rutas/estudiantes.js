@@ -12,4 +12,6 @@ router.put('/restaurarEstudiante/:id', estudiantesControlador.restaurarEstudiant
 
 router.get('/conteoEstudiantes', estudiantesControlador.conteoEstudiantes);
 
+router.get('/mostrarHorasEstudiante/:id/:fecha', estudiantesControlador.mostrarHorasEstudiante);
+
 module.exports = router;

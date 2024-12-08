@@ -12,7 +12,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage.jsx';
 import GenericPage from './components/GenericPage/GenericPage.jsx';
 import AuthPage from './components/AuthPage/AuthPage.jsx'; // Componente de autenticación
-
+import Certificados from './Paginas/estudiante/Certificados';
+import Campañas from './Paginas/estudiante/Campañas';
 
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
@@ -34,7 +35,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/generic" element={<GenericPage />} />
         <Route path="/auth" element={<AuthPage />} /> {/* Ruta para la página de autenticación */}
-
+        <Route path="/certificados" element={<Certificados />} />
+        <Route path="/campañas" element={<Campañas />} />
       </Routes>
     </BrowserRouter>
   )
