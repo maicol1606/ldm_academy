@@ -8,11 +8,11 @@ import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
 
 
-
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
 const Perfil = lazy(() => import('./Paginas/estudiante/PerfilEstudiante'));
 const HomePage = lazy(() => import('./Componentes/HomePage'));
+const HomeDocente = lazy(() => import('./paginas/Docente/HomeDocente'));
 function App() {
 
 
@@ -29,6 +29,7 @@ function App() {
         <Route path ="/homepage" element={<HomePage />} />
         <Route path="/campañas" element={<Campañas />} />
         <Route path ="/perfil" element={<Perfil />} />
+        <Route path="/HomeDocente" element={<HomeDocente />} />
       </Routes>
     </BrowserRouter>
   )
