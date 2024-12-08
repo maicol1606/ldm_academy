@@ -18,8 +18,6 @@ const Horas = () => {
       alert('El máximo de horas es 120');
     }
   };
-
-  // Configuración de la gráfica (Chart.js)
   const data = {
     labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
     datasets: [
