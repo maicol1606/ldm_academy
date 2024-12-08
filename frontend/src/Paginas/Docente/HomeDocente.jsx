@@ -14,6 +14,9 @@ const HomeDocente = () => {
           <li className="nav-item mb-3">
             <a href="#login" className="nav-link">Login</a>
           </li>
+          <li className="nav-item mb-3">
+          <Link to="/crearcampaña">Crear campaña</Link>
+          </li>
         </ul>
       </nav>
 
