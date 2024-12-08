@@ -6,12 +6,12 @@ import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
-const Perfil = lazy(() => import('./Paginas/estudiante/Perfil'));
+const Perfil = lazy(() => import('./Paginas/estudiante/PerfilEstudiante'));
 const HomePage = lazy(() => import('./Componentes/HomePage'));
 function App() {
 
@@ -28,6 +28,7 @@ function App() {
         <Route exact path='/registar' element={<Registar />} />
         <Route path ="/homepage" element={<HomePage />} />
         <Route path="/campañas" element={<Campañas />} />
+        <Route path ="/perfil" element={<Perfil />} />
       </Routes>
     </BrowserRouter>
   )
