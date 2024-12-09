@@ -6,130 +6,167 @@ export default function Login() {
     const [showCodeInput, setShowCodeInput] = useState(false);
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
-    const [isCodeVerified, setIsCodeVerified] = useState(false);
+    const [toast, setToast] = useState({ visible: false, message: '', type: '' });
     const navigate = useNavigate();
 
-    //alerta de confirmación
+    // Alerta de confirmación para enviar el código
     const handleRecoverClick = () => {
-        if (window.confirm("¿Estás seguro de enviar el código?")) {
-            setShowModal(true);  //ventana emergente para ingresar el código
+        if (window.confirm("¿Estás seguro de enviar el código a tu correo?")) {
+            setShowModal(true);
         }
     };
 
-    //envío del código 
+    // Enviar el código y mostrar una alerta
     const handleSendCode = () => {
-        setShowCodeInput(true);  //ingresar el código
+        setShowModal(false);
+        setToast({ visible: true, message: 'Código enviado a tu correo.', type: 'info' });
+        setTimeout(() => setShowCodeInput(true), 1000); // Mostrar input del código después de 1 segundo
     };
 
-    //verificar el código ingresado
+    // Verificar el código ingresado
     const handleVerifyCode = () => {
-        // Aquí se debería realizar la validación del código (esto es solo un ejemplo)
         if (code === "123456") {
-            setIsCodeVerified(true);
-            alert("¡Código verificado con éxito!");
-            navigate('/campañas');  // Redirige a otra página
+            setToast({ visible: true, message: '¡Código verificado con éxito!', type: 'success' });
+            // Mostrar la alerta antes de redirigir
+            setTimeout(() => {
+                if (window.confirm("Código verificado correctamente. ¿Quieres continuar?")) {
+                    navigate('/campañas'); // Redirigir después de 1 segundo
+                }
+            }, 1000);
         } else {
-            alert("Código incorrecto, por favor intente nuevamente.");
+            setToast({ visible: true, message: 'Código incorrecto, por favor intente nuevamente.', type: 'danger' });
+            // Mostrar la alerta antes de redirigir
+            setTimeout(() => {
+                window.alert("El código ingresado no es correcto. Intenta nuevamente.");
+            }, 1000);
         }
+    };
+
+    // Redirigir al Homepage
+    const handleBackToHome = () => {
+        navigate('/Homepage'); // Redirige a la página "Homepage"
     };
 
     return (
-        <div
-            className="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5"
-            tabIndex="-1"
-            role="dialog"
-            id="modalSignin"
-        >
-            <div className="modal-dialog" role="document">
-                <div className="modal-content rounded-4 shadow">
-                    <div className="modal-header p-5 pb-4 border-bottom-0">
-                        <h1 className="fw-bold mb-0 fs-2">Iniciar Sesión</h1>
-                    </div>
+        <div className="container mt-5">
+            <div className="card shadow p-4" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                <h1 className="text-center">Iniciar Sesión</h1>
+                <div className="form-group mb-3">
+                    <label htmlFor="email">Correo Electrónico</label>
+                    <input
+                        type="email"
+                        id="email"
+                        className="form-control"
+                        placeholder="Ingresa tu correo"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div className="form-group mb-3">
+                    <label htmlFor="password">Contraseña</label>
+                    <input
+                        type="password"
+                        id="password"
+                        className="form-control"
+                        placeholder="Ingresa tu contraseña"
+                    />
+                </div>
+                <button className="btn btn-primary w-100 mb-3">Ingresar</button>
+                <button
+                    className="btn btn-link text-decoration-none"
+                    onClick={handleRecoverClick}
+                >
+                    ¿Olvidaste tu contraseña?
+                </button>
 
-                    <div className="modal-body p-5 pt-0">
-                        <form>
-                            <div className="form-floating mb-3">
-                                <input
-                                    type="email"
-                                    className="form-control rounded-3"
-                                    id="floatingInput"
-                                    placeholder="name@example.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                                <label htmlFor="floatingInput">Correo Electronico</label>
+                {/* Botón para volver al Homepage */}
+                <button 
+                    className="btn btn-secondary w-100 mt-3"
+                    onClick={handleBackToHome}
+                >
+                    Volver a inicio
+                </button>
+
+                {/* Modal para confirmar envío */}
+                {showModal && (
+                    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backdropFilter: 'blur(5px)' }}>
+                        <div className="modal-dialog modal-dialog-centered">
+                            <div className="modal-content rounded-3 shadow-lg">
+                                <div className="modal-header bg-primary text-white">
+                                    <h5 className="modal-title">Confirmar acción</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => setShowModal(false)}
+                                    ></button>
+                                </div>
+                                <div className="modal-body text-center">
+                                    <p>¿Estás seguro de enviar el código a tu correo?</p>
+                                </div>
+                                <div className="modal-footer">
+                                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                                        Cancelar
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleSendCode}>
+                                        Enviar código
+                                    </button>
+                                </div>
                             </div>
-                            <div className="form-floating mb-3">
-                                <input
-                                    type="password"
-                                    className="form-control rounded-3"
-                                    id="floatingPassword"
-                                    placeholder="Password"
-                                />
-                                <label htmlFor="floatingPassword">Contraseña</label>
+                        </div>
+                    </div>
+                )}
+
+                {/* Modal para ingresar el código enviado al correo */}
+                {showCodeInput && (
+                    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backdropFilter: 'blur(5px)' }}>
+                        <div className="modal-dialog modal-dialog-centered">
+                            <div className="modal-content rounded-3 shadow-lg">
+                                <div className="modal-header bg-info text-white">
+                                    <h5 className="modal-title">Ingresa el código</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => setShowCodeInput(false)}
+                                    ></button>
+                                </div>
+                                <div className="modal-body">
+                                    <p>Se ha enviado un código a tu correo <strong>{email}</strong>.</p>
+                                    <input
+                                        type="text"
+                                        className="form-control mb-3"
+                                        placeholder="Código"
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value)}
+                                    />
+                                    <button className="btn btn-info w-100" onClick={handleVerifyCode}>
+                                        Verificar código
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Toast Notifications */}
+                {toast.visible && (
+                    <div
+                        className={`toast align-items-center text-bg-${toast.type} border-0 position-fixed bottom-0 end-0 m-3`}
+                        role="alert"
+                        aria-live="assertive"
+                        aria-atomic="true"
+                    >
+                        <div className="d-flex">
+                            <div className="toast-body">
+                                {toast.message}
                             </div>
                             <button
-                                className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-                                type="submit"
-                            >
-                                Ingresar
-                            </button>
-                            <small className="text-body-secondary">
-                                ¿Olvidaste tu contraseña? 
-                                <button type="button" className="btn btn-link p-0" onClick={handleRecoverClick}>
-                                    Recuperar aquí
-                                </button>
-                            </small>
-                            <hr className="my-4" />
-
-                            {/* Ventana emergente para ingresar el código */}
-                            {showModal && (
-                                <div className="modal fade show d-block" id="recoverModal" tabIndex="-1" role="dialog">
-                                    <div className="modal-dialog" role="document">
-                                        <div className="modal-content rounded-4 shadow">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title">Recuperación de contraseña</h5>
-                                                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-                                            </div>
-                                            <div className="modal-body">
-                                                <p>Se enviará un código a tu correo <strong>{email}</strong>.</p>
-                                                <button className="btn btn-primary" onClick={handleSendCode}>Enviar código</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Ventana emergente para ingresar el código enviado al correo */}
-                            {showCodeInput && (
-                                <div className="modal fade show d-block" id="codeModal" tabIndex="-1" role="dialog">
-                                    <div className="modal-dialog" role="document">
-                                        <div className="modal-content rounded-4 shadow">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title">Ingresa el código enviado a tu correo</h5>
-                                                <button type="button" className="btn-close" onClick={() => setShowCodeInput(false)}></button>
-                                            </div>
-                                            <div className="modal-body">
-                                                <div className="form-floating mb-3">
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="codeInput"
-                                                        placeholder="Código"
-                                                        value={code}
-                                                        onChange={(e) => setCode(e.target.value)}
-                                                    />
-                                                    <label htmlFor="codeInput">Código</label>
-                                                </div>
-                                                <button className="btn btn-success w-100" onClick={handleVerifyCode}>Verificar código</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </form>
+                                type="button"
+                                className="btn-close btn-close-white me-2 m-auto"
+                                onClick={() => setToast({ visible: false, message: '', type: '' })}
+                            ></button>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
