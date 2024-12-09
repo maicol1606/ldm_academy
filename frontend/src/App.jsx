@@ -5,6 +5,7 @@ import AdminHome from './Paginas/Administrador/AdminHome';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
+import OlvidarContraseña from './Paginas/default/OlvidarContraseña';
 
 
 
@@ -40,6 +41,7 @@ const NavegacionAdmin = lazy(() => import('./Componentes/NavegacionAdmin'));
 const InicioAdmin = lazy(() => import('./Paginas/Administrador/InicioAdmin'));
 const Notificaciones = lazy(() => import('./Paginas/estudiante/Notificaciones'));
 const Login = lazy(() => import('./Paginas/default/Login'));
+const OlvidarContrasena = lazy(() => import('./Paginas/default/OlvidarContrasena'));
 function App() {
 
 
@@ -80,6 +82,7 @@ function App() {
         <Route path='navestudiante' element={<NavegacionEstudiante />} />
         <Route path='sidebar' element={<Sidebar />} />
         <Route path='login' element={<Login />} />
+        <Route path='olvidar' element={<OlvidarContrasena />} />  
 
       </Routes>
     </BrowserRouter>

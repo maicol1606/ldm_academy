@@ -42,8 +42,9 @@ export default function Login() {
                             </button>
                             <small className="text-body-secondary">
                                 ¿Olvidaste tu contraseña? 
-                                <ul class="list-inline">
-                                    <li class="list-inline-item"><a href="#">Recuperar aqui</a></li></ul>
+                                <a href="OlvidarContraseña" target="_blank" rel="noopener noreferrer">
+                                    Recuperar aqui
+    </a>
                             </small>
                             <hr className="my-4" />
 
