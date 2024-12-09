@@ -28,6 +28,15 @@ const BuscarCampañas = lazy(() => import('./Paginas/Docente/BuscarCampañas'));
 const GenCertificados = lazy(() => import('./Paginas/estudiante/GenCertificados'));
 const HomeEstudiante = lazy(() => import('./Paginas/estudiante/HomeEstudiante'));
 const Postularse = lazy(() => import('./Paginas/estudiante/Postularse'));
+const Banner = lazy(() => import('./Componentes/Banner'));
+const CampaignItem = lazy(() => import('./Componentes/CampaignItem'));
+const Campaingns = lazy(() => import('./Paginas/componentes/Campaigns'));
+const Contenet = lazy(() => import('./Componentes/Contenet'));
+const GenericPage = lazy(() => import('./Componentes/GenericPage'));
+const Header = lazy(() => import('./Componentes/Header'));
+const MiniPost = lazy(() => import('./Componentes/MiniPost'));
+const Sidebar = lazy(() => import('./Componentes/Sidebar'));
+const NavegacionEstudiante = lazy(() => import('./Componentes/NavegacionEstudiante'));
 function App() {
 
 
@@ -59,7 +68,17 @@ function App() {
         <Route path="/Horas" element={<Horas />} />
         <Route path='/notificaciones' element={<Notificaciones />} />  
         <Route path='/postularse' element={<Postularse />} />
-        
+        <Route path='banner' element={<Banner />} />
+        <Route path='campaignItems' element={<CampaignItems />} />
+        <Route path='campaingns' element={<Campaigns />} />
+        <Route path='Contenet' element={<Contenet />} />
+        <Route path='general' element={<GenericPage />} />
+        <Route path='header' element={<Header />} />
+        <Route path='minipost' element={<MiniPost />} />
+        <Route path='navestudiante' element={<NavegacionEstudiante />} />
+        <Route path='sidebar' element={<Sidebar />} />
+
+
       </Routes>
     </BrowserRouter>
 
