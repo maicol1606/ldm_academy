@@ -28,8 +28,8 @@ const Horas = lazy(() => import('./Paginas/estudiante/Horas'));
 const HomeEstudiante = lazy(() => import('./Paginas/estudiante/HomeEstudiante'));
 const Postularse = lazy(() => import('./Paginas/estudiante/Postularse'));
 const Banner = lazy(() => import('./Componentes/Banner'));
-const CampaignItem = lazy(() => import('./Componentes/CampaignItem'));
-const Campaingns = lazy(() => import('./Componentes/Campaigns'));
+const CampaignItems = lazy(() => import('./Componentes/CampaignItem'));
+const Campaigns  = lazy(() => import('./Componentes/Campaigns'));
 const Contenet = lazy(() => import('./Componentes/Content'));
 const GenericPage = lazy(() => import('./Componentes/GenericPage'));
 const Header = lazy(() => import('./Componentes/Header'));
@@ -38,6 +38,7 @@ const Sidebar = lazy(() => import('./Componentes/Sidebar'));
 const NavegacionEstudiante = lazy(() => import('./Componentes/NavegacionEstudiante'));
 const NavegacionAdmin = lazy(() => import('./Componentes/NavegacionAdmin'));
 const InicioAdmin = lazy(() => import('./Paginas/Administrador/InicioAdmin'));
+const Notificaciones = lazy(() => import('./Paginas/estudiante/Notificaciones'));
 function App() {
 
 
@@ -64,7 +65,6 @@ function App() {
         <Route path='/gestionarCampaña' element={<GestionarCampañas />} />
         <Route path='/homeDocentes' element={<HomeDocente />} />
         <Route path="/buscarCampaña" element={<BuscarCampañas />} />
-        <Route path="/gen" element={<GenCertificados />} />
         <Route path="/HomeEstudiante" element={<HomeEstudiante />} />
         <Route path="/Horas" element={<Horas />} />
         <Route path='/notificaciones' element={<Notificaciones />} />  

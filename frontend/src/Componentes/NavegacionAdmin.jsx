@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Modal,  } from 'react';
 
 
 export default function NavegacionAdmin() {
