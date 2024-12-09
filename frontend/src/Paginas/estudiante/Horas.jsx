@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
