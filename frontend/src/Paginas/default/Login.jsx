@@ -12,12 +12,6 @@ export default function Login() {
                 <div className="modal-content rounded-4 shadow">
                     <div className="modal-header p-5 pb-4 border-bottom-0">
                         <h1 className="fw-bold mb-0 fs-2">Iniciar Sesión</h1>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
                     </div>
 
                     <div className="modal-body p-5 pt-0">
@@ -47,7 +41,9 @@ export default function Login() {
                                 Ingresar
                             </button>
                             <small className="text-body-secondary">
-                                ¿Olvidaste tu contraseña? Recuperar aquí.
+                                ¿Olvidaste tu contraseña? 
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><a href="#">Recuperar aqui</a></li></ul>
                             </small>
                             <hr className="my-4" />
 
@@ -60,4 +56,5 @@ export default function Login() {
         </div>
     );
 };
+
 
