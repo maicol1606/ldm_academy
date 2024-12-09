@@ -6,6 +6,7 @@ const estudiantesRutas = require('./rutas/estudiantes');
 const docentesRutas = require('./rutas/docentes');
 const campanasRutas = require('./rutas/campañas');
 const certificadosRutas = require('./rutas/certificados');
+const authRutas = require('./rutas/auth');
 const cors = require('cors');
 
 app.use(express.json());
@@ -30,6 +31,8 @@ app.use('/api/docentes', docentesRutas);
 app.use('/api/campanas', campanasRutas);
 
 app.use('/api/certificados', certificadosRutas);
+
+app.use('/api/auth', authRutas);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

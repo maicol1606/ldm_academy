@@ -2,8 +2,7 @@ import React, { useState, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AdminHome from './Paginas/Administrador/AdminHome';
-import Home from './Paginas/default/Home';
-import Registar from './Paginas/default/registar';
+import Registar from './Paginas/default/Registar';
 import Campañas from './Paginas/estudiante/Campañas';
 //import OlvidarContraseña from './Paginas/default/OlvidarContraseña';
 
@@ -52,7 +51,7 @@ function App() {
 
         <Route path='/admin/home' exact element={<InicioAdmin />} />
         <Route path='/admin' exact element={<AdminHome />} />
-        <Route exact path='/home' element={<Home />} />
+       
         <Route exact path='/nav' element={<NavegacionAdmin />} />
         <Route exact path='/registar' element={<Registar />} />
         <Route path ="/homepage" element={<HomePage />} />
