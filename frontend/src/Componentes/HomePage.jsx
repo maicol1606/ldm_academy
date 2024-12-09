@@ -14,7 +14,7 @@ const HomePage = () => (
         <Header />
         <Banner />
         <Campaigns />
-        <Content />
+        <Content  />
       </div>
     </div>
   </div>

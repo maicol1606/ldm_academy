@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function InfoCampañas() {
   const [showPostuladoModal, setShowPostuladoModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
+
+  const [campanas, setCampanas] = useState([]);
+
+  console.log(campanas);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [campanasRes] = await Promise.all([
+          axios.get(`http://localhost:3000/api/campanas/mostrarCampanas`),
+        ]);
+        setCampanas(campanasRes.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   // Función para manejar la postulación
   const handlePostular = () => {
@@ -17,16 +37,6 @@ export default function InfoCampañas() {
     setSelectedCampaign(index);
     setShowInfoModal(true);
   };
-
-  // Datos de las campañas, puedes modificarlos
-  const campaigns = [
-    { id: 1, title: 'Campaña 1', description: 'Descripción de la campaña 1' },
-    { id: 2, title: 'Campaña 2', description: 'Descripción de la campaña 2' },
-    { id: 3, title: 'Campaña 3', description: 'Descripción de la campaña 3' },
-    { id: 4, title: 'Campaña 4', description: 'Descripción de la campaña 4' },
-    { id: 5, title: 'Campaña 5', description: 'Descripción de la campaña 5' },
-    { id: 6, title: 'Campaña 6', description: 'Descripción de la campaña 6' }
-  ];
 
   return (
     <div>
@@ -47,8 +57,8 @@ export default function InfoCampañas() {
         <div className="album py-5 bg-body-tertiary">
           <div className="container">
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-              {campaigns.map((campaign, index) => (
-                <div className="col" key={campaign.id}>
+              {campanas.map((campana, index) => (
+                <div className="col" key={campana.id_campañas}>
                   <div className="card shadow-lg border-0 rounded-3 transition-all duration-300 hover:scale-105">
                     <svg
                       className="bd-placeholder-img card-img-top rounded-3"
@@ -63,11 +73,11 @@ export default function InfoCampañas() {
                       <title>Placeholder</title>
                       <rect width="100%" height="100%" fill="#55595c" />
                       <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-                        Postulate
+                        {campana.nom_campaña}
                       </text>
                     </svg>
                     <div className="card-body">
-                      <p className="card-text">{campaign.description}</p>
+                      <p className="card-text">{campana.descripcion}</p>
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="btn-group">
                           <button

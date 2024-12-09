@@ -41,18 +41,7 @@ function CrearCampaña() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="idCampaña">ID de la campaña</label>
-          <input
-            type="text"
-            className="form-control"
-            id="idCampaña"
-            value={idCampaña}
-            readOnly
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="numEstudiantes">Número de estudiantes</label>
+          <label htmlFor="numEstudiantes">Número de cupos</label>
           <input
             type="number"
             className="form-control"
