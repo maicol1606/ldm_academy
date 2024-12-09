@@ -21,6 +21,7 @@ const CrearCampaña = lazy(() => import('./Paginas/Docente/CrearCampaña'));
 const GestionarCampañas = lazy(() => import('./Paginas/Docente/GestionarCampañas'));
 const HomeDocente = lazy(() => import('./Paginas/Docente/HomeDocente'));
 const PerfilDocente = lazy(() => import('./Paginas/Docente/PerfilDocente'));
+const BuscarCampañas = lazy(() => import('./Paginas/Docente/BuscarCampañas'));
 function App() {
 
 
@@ -46,6 +47,7 @@ function App() {
         <Route path='/crearCampaña' element={<CrearCampaña />} />
         <Route path='/gestionarCampaña' element={<GestionarCampañas />} />
         <Route path='/homeDocentes' element={<HomeDocente />} />
+        <Route path="/buscarCampaña" element={<BuscarCampañas />} />
       </Routes>
     </BrowserRouter>
 
