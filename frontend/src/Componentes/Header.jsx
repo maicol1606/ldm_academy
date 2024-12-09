@@ -27,6 +27,7 @@ const Header = () => {
 
         {/* Ícono de iniciar sesión */}
         <Nav.Link href="/login" className="mb-4">
+
           <i className="bi bi-person-circle" style={{ fontSize: '1.5rem' }}></i>
         </Nav.Link>
 
