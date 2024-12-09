@@ -6,11 +6,14 @@ import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
+import GenCertificados from './Paginas/estudiante/GenCertificados';
+import Horas from './Paginas/estudiante/Horas';
+
 
 
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
-const Perfil = lazy(() => import('./Paginas/estudiante/PerfilEstudiante'));
+const PerfilEstudiante = lazy(() => import('./Paginas/estudiante/PerfilEstudiante'));
 const HomePage = lazy(() => import('./Componentes/HomePage'));
 const AdminMenu = lazy(() => import('./Paginas/Administrador/AdminMenu'));
 const CampaignList = lazy(() => import('./Paginas/Administrador/CampaignList'));
@@ -22,6 +25,9 @@ const GestionarCampañas = lazy(() => import('./Paginas/Docente/GestionarCampañ
 const HomeDocente = lazy(() => import('./Paginas/Docente/HomeDocente'));
 const PerfilDocente = lazy(() => import('./Paginas/Docente/PerfilDocente'));
 const BuscarCampañas = lazy(() => import('./Paginas/Docente/BuscarCampañas'));
+const GenCertificados = lazy(() => import('./Paginas/estudiante/GenCertificados'));
+const HomeEstudiante = lazy(() => import('./Paginas/estudiante/HomeEstudiante'));
+const Postularse = lazy(() => import('./Paginas/estudiante/Postularse'));
 function App() {
 
 
@@ -37,7 +43,7 @@ function App() {
         <Route exact path='/registar' element={<Registar />} />
         <Route path ="/homepage" element={<HomePage />} />
         <Route path="/campañas" element={<Campañas />} />
-        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/perfil" element={<PerfilEstudiante />} />
         <Route path="/perfilDocente" element={<PerfilDocente />} />
         <Route path="/admin/menu" element={<AdminMenu />} />
         <Route path="/campaignList" element={<CampaignList />} />
@@ -48,6 +54,12 @@ function App() {
         <Route path='/gestionarCampaña' element={<GestionarCampañas />} />
         <Route path='/homeDocentes' element={<HomeDocente />} />
         <Route path="/buscarCampaña" element={<BuscarCampañas />} />
+        <Route path="/genCertificados" element={<GenCertificados />} />
+        <Route path="/HomeEstudiante" element={<HomeEstudiante />} />
+        <Route path="/Horas" element={<Horas />} />
+        <Route path='/notificaciones' element={<Notificaciones />} />  
+        <Route path='/postularse' element={<Postularse />} />
+        
       </Routes>
     </BrowserRouter>
 
