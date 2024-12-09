@@ -31,7 +31,7 @@ const Postularse = lazy(() => import('./Paginas/estudiante/Postularse'));
 const Banner = lazy(() => import('./Componentes/Banner'));
 const CampaignItems = lazy(() => import('./Componentes/CampaignItem'));
 const Campaigns  = lazy(() => import('./Componentes/Campaigns'));
-const Contenet = lazy(() => import('./Componentes/Content'));
+const Content = lazy(() => import('./Componentes/Content'));
 const GenericPage = lazy(() => import('./Componentes/GenericPage'));
 const Header = lazy(() => import('./Componentes/Header'));
 const MiniPost = lazy(() => import('./Componentes/MiniPost'));
@@ -72,16 +72,17 @@ function App() {
         <Route path="/Horas" element={<Horas />} />
         <Route path='/notificaciones' element={<Notificaciones />} />  
         <Route path='/postularse' element={<Postularse />} />
-        <Route path='banner' element={<Banner />} />
-        <Route path='campaignItems' element={<CampaignItems />} />
-        <Route path='campaingns' element={<Campaigns />} />
-        <Route path='Contenet' element={<Contenet />} />
-        <Route path='general' element={<GenericPage />} />
-        <Route path='header' element={<Header />} />
-        <Route path='minipost' element={<MiniPost />} />
-        <Route path='navestudiante' element={<NavegacionEstudiante />} />
-        <Route path='sidebar' element={<Sidebar />} />
-        <Route path='login' element={<Login />} /> 
+        <Route path='/banner' element={<Banner />} />
+        <Route path='/campaignItems' element={<CampaignItems />} />
+        <Route path='/campaingns' element={<Campaigns />} />
+        <Route path='/Content' element={<Content />} />
+        <Route path='/general' element={<GenericPage />} />
+        <Route path='/header' element={<Header />} />
+        <Route path='/minipost' element={<MiniPost />} />
+        <Route path='/navestudiante' element={<NavegacionEstudiante />} />
+        <Route path='/sidebar' element={<Sidebar />} />
+        <Route path='/login' element={<Login />} /> 
+        <Route path='/certificado' element={<Certificados />} />
 
       </Routes>
     </BrowserRouter>

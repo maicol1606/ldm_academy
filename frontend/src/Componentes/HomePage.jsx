@@ -5,6 +5,7 @@ import React from 'react';
 import Header from './Header';
 import Banner from './Banner';
 import Campaigns from './Campaigns';
+import Content from "./Content";
 
 const HomePage = () => (
   <div id="wrapper">
@@ -13,6 +14,7 @@ const HomePage = () => (
         <Header />
         <Banner />
         <Campaigns />
+        <Content />
       </div>
     </div>
   </div>
