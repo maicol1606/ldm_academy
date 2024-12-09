@@ -1,11 +1,11 @@
 import React, { useState, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import InicioAdmin from './Paginas/Administrador/InicioAdmin';
+
 import AdminHome from './Paginas/Administrador/AdminHome';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
-import GenCertificados from './Paginas/estudiante/GenCertificados';
+
 
 
 
@@ -37,7 +37,7 @@ const MiniPost = lazy(() => import('./Componentes/MiniPost'));
 const Sidebar = lazy(() => import('./Componentes/Sidebar'));
 const NavegacionEstudiante = lazy(() => import('./Componentes/NavegacionEstudiante'));
 const NavegacionAdmin = lazy(() => import('./Componentes/NavegacionAdmin'));
-
+const InicioAdmin = lazy(() => import('./Paginas/Administrador/InicioAdmin'));
 function App() {
 
 
@@ -64,7 +64,7 @@ function App() {
         <Route path='/gestionarCampaña' element={<GestionarCampañas />} />
         <Route path='/homeDocentes' element={<HomeDocente />} />
         <Route path="/buscarCampaña" element={<BuscarCampañas />} />
-        <Route path="/genCertificados" element={<GenCertificados />} />
+        <Route path="/gen" element={<GenCertificados />} />
         <Route path="/HomeEstudiante" element={<HomeEstudiante />} />
         <Route path="/Horas" element={<Horas />} />
         <Route path='/notificaciones' element={<Notificaciones />} />  

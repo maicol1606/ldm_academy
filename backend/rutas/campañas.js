@@ -14,4 +14,6 @@ router.get('/mostrarCampana/:nom_campana', campañasControlador.mostrarCampanaNo
 
 router.get('/mostrarCampanaPorId/:id', campañasControlador.mostrarCampanaId);
 
+router.delete('/eliminarPorCupos/:id', campañasControlador.eliminarPorCupos);
+
 module.exports = router;

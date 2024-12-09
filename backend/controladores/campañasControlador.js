@@ -87,3 +87,16 @@ exports.mostrarCampanaId = (req, res) => {
         }
     });
 };
+
+exports.eliminarPorCupos = (req, res) => {
+    const id = req.params.id;
+    const query = 'UPDATE campañas SET estado = 0  WHERE cupos = 0 ';
+    db.query(query, [id], (error, results) => {
+        if (error) {
+            console.error('Error al eliminar la campaña:', error);
+            res.status(500).json({ error: 'Error al eliminar la campaña' });
+        } else {
+            res.status(200).json({ message: 'Campaña eliminada correctamente' });
+        }
+    });
+};
