@@ -8,7 +8,6 @@ import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
 
 
-
 //Importar las ruras de las paginas
 const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
 const Perfil = lazy(() => import('./Paginas/estudiante/PerfilEstudiante'));
@@ -17,6 +16,7 @@ const AdminMenu = lazy(() => import('./Paginas/Administrador/AdminMenu'));
 const CampaignList = lazy(() => import('./Paginas/Administrador/CampaignList'));
 const CampaignNew = lazy(() => import('./Paginas/Administrador/CampaignNew'));
 const CampaignSearch = lazy(() => import('./Paginas/Administrador/CampaignSearch'));
+const AsignarHoras = lazy(() => import('./Paginas/Docente/AsignarHoras'));
 function App() {
 
 
@@ -33,10 +33,12 @@ function App() {
         <Route path ="/homepage" element={<HomePage />} />
         <Route path="/campañas" element={<Campañas />} />
         <Route path="/perfil" element={<Perfil />} />
+        <Route path="/perfil" element={<Perfil />} />
         <Route path="/admin/menu" element={<AdminMenu />} />
         <Route path="/campaignList" element={<CampaignList />} />
         <Route path="/CampaignNew" element={<CampaignNew />} />
         <Route path='/CampaignSearch' element={<CampaignSearch />} />
+        <Route path='/asignarHoras' element={<AsignarHoras />} />
       </Routes>
     </BrowserRouter>
 
