@@ -39,6 +39,7 @@ const NavegacionEstudiante = lazy(() => import('./Componentes/NavegacionEstudian
 const NavegacionAdmin = lazy(() => import('./Componentes/NavegacionAdmin'));
 const InicioAdmin = lazy(() => import('./Paginas/Administrador/InicioAdmin'));
 const Notificaciones = lazy(() => import('./Paginas/estudiante/Notificaciones'));
+const Login = lazy(() => import('./Paginas/default/Login'));
 function App() {
 
 
@@ -78,7 +79,7 @@ function App() {
         <Route path='minipost' element={<MiniPost />} />
         <Route path='navestudiante' element={<NavegacionEstudiante />} />
         <Route path='sidebar' element={<Sidebar />} />
-
+        <Route path='login' element={<Login />} />
 
       </Routes>
     </BrowserRouter>
