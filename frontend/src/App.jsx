@@ -2,12 +2,11 @@ import React, { useState, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import InicioAdmin from './Paginas/Administrador/InicioAdmin';
 import AdminHome from './Paginas/Administrador/AdminHome';
-import NavegacionAdmin from './Componentes/NavegacionAdmin';
 import Home from './Paginas/default/Home';
 import Registar from './Paginas/default/registar';
 import Campañas from './Paginas/estudiante/Campañas';
 import GenCertificados from './Paginas/estudiante/GenCertificados';
-import Horas from './Paginas/estudiante/Horas';
+
 
 
 
@@ -24,19 +23,21 @@ const CrearCampaña = lazy(() => import('./Paginas/Docente/CrearCampaña'));
 const GestionarCampañas = lazy(() => import('./Paginas/Docente/GestionarCampañas'));
 const HomeDocente = lazy(() => import('./Paginas/Docente/HomeDocente'));
 const PerfilDocente = lazy(() => import('./Paginas/Docente/PerfilDocente'));
-const BuscarCampañas = lazy(() => import('./Paginas/Docente/BuscarCampañas'));
-const GenCertificados = lazy(() => import('./Paginas/estudiante/GenCertificados'));
+const BuscarCampañas = lazy(() => import('./Paginas/estudiante/BuscarCampañas'));
+const Horas = lazy(() => import('./Paginas/estudiante/Horas'));
 const HomeEstudiante = lazy(() => import('./Paginas/estudiante/HomeEstudiante'));
 const Postularse = lazy(() => import('./Paginas/estudiante/Postularse'));
 const Banner = lazy(() => import('./Componentes/Banner'));
 const CampaignItem = lazy(() => import('./Componentes/CampaignItem'));
-const Campaingns = lazy(() => import('./Paginas/componentes/Campaigns'));
-const Contenet = lazy(() => import('./Componentes/Contenet'));
+const Campaingns = lazy(() => import('./Componentes/Campaigns'));
+const Contenet = lazy(() => import('./Componentes/Content'));
 const GenericPage = lazy(() => import('./Componentes/GenericPage'));
 const Header = lazy(() => import('./Componentes/Header'));
 const MiniPost = lazy(() => import('./Componentes/MiniPost'));
 const Sidebar = lazy(() => import('./Componentes/Sidebar'));
 const NavegacionEstudiante = lazy(() => import('./Componentes/NavegacionEstudiante'));
+const NavegacionAdmin = lazy(() => import('./Componentes/NavegacionAdmin'));
+
 function App() {
 
 
