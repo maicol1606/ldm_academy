@@ -1,41 +1,102 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 function CrearCampaña() {
-  const [nombreCampaña, setNombreCampaña] = useState('');
-  const [numEstudiantes, setNumEstudiantes] = useState(0);
-  const [especificaciones, setEspecificaciones] = useState('');
-  const [informacion, setInformacion] = useState('');
-  const [fotoCampaña, setFotoCampaña] = useState(null);
-  const [idCampaña, setIdCampaña] = useState(generateId());
 
-  // Función para generar un ID único
-  function generateId() {
-    return 'ID-' + Math.random().toString(36).substr(2, 9);
+  const token = localStorage.getItem('token');
+  const id_user = JSON.parse(atob(token.split(".")[1])).id;
+
+  const [Campaña, setCampaña] = useState({
+    nom_campana: '',
+    descripcion: '',
+    fecha: '',
+    cupos: '',
+    id_docente: id_user,
+    foto: null
+  });
+  console.log(Campaña);
+  const handleChange = (e) => {
+    setCampaña({
+      ...Campaña,
+      [e.target.name]: e.target.value
+    })
   }
 
   const handleFileChange = (e) => {
-    setFotoCampaña(e.target.files[0]);
+    const file = e.target.files[0];
+    setCampaña((prevCampaña) => ({
+      ...prevCampaña,
+      foto: file
+    }));
   };
-
-  const handleSubmit = (e) => {
+    
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí, en un escenario real, enviarías la información a un servidor o base de datos.
-    alert('Campaña creada exitosamente');
+
+    const formData = new FormData();
+    formData.append('nom_campana', Campaña.nom_campana);
+    formData.append('descripcion', Campaña.descripcion);
+    formData.append('fecha', Campaña.fecha);
+    formData.append('cupos', Campaña.cupos);
+    formData.append('id_docente', Campaña.id_docente);
+    formData.append('foto', Campaña.foto);
+
+    try{ 
+      const res= await axios.post('http://localhost:3000/api/campanas/agregarCampana', formData);
+      if(res.status === 200){
+        Swal.fire({
+          title: res.data.title,
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+
+        setCampaña({
+          nom_campana: '',
+          descripcion: '',
+          fecha: '',
+          cupos: '',
+          id_docente: id_user,
+          foto: null
+        });
+
+      }else{
+        Swal.fire({
+          title: 'Error al crear la campaña',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: error.response.data.title, 
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    
   };
 
   return (
     <div className="container mt-5">
-      <h2>Crear Nueva Campaña</h2>
-      <form onSubmit={handleSubmit}>
+      <div className="d-flex justify-content-between align-items-center">
+        <h2>Crear Nueva Campaña</h2>
+        <Link to='/gestionarCampañas' className="btn btn-primary mt-3">Volver <i className="bi bi-arrow-left"></i></Link>
+      </div>
+      <form onSubmit={handleSubmit} className='p-5'>
         <div className="form-group">
           <label htmlFor="nombreCampaña">Nombre de la campaña</label>
           <input
+          onChange={handleChange}
             type="text"
             className="form-control"
             id="nombreCampaña"
-            value={nombreCampaña}
-            onChange={(e) => setNombreCampaña(e.target.value)}
+            name='nom_campana'
+            value={Campaña.nom_campana}
+            
             placeholder="Ingrese el nombre de la campaña"
           />
         </div>
@@ -43,37 +104,42 @@ function CrearCampaña() {
         <div className="form-group">
           <label htmlFor="numEstudiantes">Número de cupos</label>
           <input
+          onChange={handleChange}
             type="number"
             className="form-control"
             id="numEstudiantes"
-            value={numEstudiantes}
-            onChange={(e) => setNumEstudiantes(e.target.value)}
+            name='cupos'
+            value={Campaña.cupos}
+            
             placeholder="Ingrese el número de estudiantes"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="especificaciones">Especificaciones de la campaña</label>
+          <label htmlFor="descrpcion">Descripcion de la campaña</label>
           <textarea
+          onChange={handleChange}
             className="form-control"
-            id="especificaciones"
+            id="descrpcion"
+            name='descripcion'
             rows="3"
-            value={especificaciones}
-            onChange={(e) => setEspecificaciones(e.target.value)}
-            placeholder="Ingrese las especificaciones"
+            value={Campaña.descripcion}
+            placeholder="Ingrese la descripción"
           ></textarea>
         </div>
 
         <div className="form-group">
-          <label htmlFor="informacion">Información adicional</label>
-          <textarea
+          <label htmlFor="fecha">Fecha de Inicio</label>
+          <input
+          onChange={handleChange}
+            type="date"
             className="form-control"
-            id="informacion"
-            rows="3"
-            value={informacion}
-            onChange={(e) => setInformacion(e.target.value)}
-            placeholder="Información adicional sobre la campaña"
-          ></textarea>
+            id="fecha"
+            name='fecha'
+            value={Campaña.fecha}
+            
+            placeholder="Ingrese la fecha"
+          />
         </div>
 
         <div className="form-group">
@@ -82,6 +148,9 @@ function CrearCampaña() {
             type="file"
             className="form-control-file"
             id="fotoCampaña"
+            name='foto'
+          
+            accept='image/*'
             onChange={handleFileChange}
           />
         </div>

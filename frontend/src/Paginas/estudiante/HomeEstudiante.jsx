@@ -1,6 +1,28 @@
-import React from 'react'
-
+import React , { useState, useEffect } from 'react'
+import cerrarSesion from '../../hooks/cerrarSesion.JS';
 export default function HomeEstudiante() {
+
+  const [campañas, setCampañas] = useState([]);
+  const [docentes, setDocentes] = useState([]);
+
+  const CerrarSesion= cerrarSesion();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [campanasRes, docentesRes] = await Promise.all([
+          axios.get(`http://localhost:3000/api/campanas/mostrarCampanas`),
+          axios.get(`http://localhost:3000/api/docentes/obtenerDocentes`),
+        ]);
+        setCampañas(campanasRes.data);
+        setDocentes(docentesRes.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
 <div className="d-flex">
       {/* Menú lateral */}
@@ -20,6 +42,7 @@ export default function HomeEstudiante() {
             <a href="#certificados" className="nav-link">Certificados</a>
           </li>
         </ul>
+        <button className="btn btn-danger" onClick={CerrarSesion}>Cerrar Sesion</button>
       </nav>
 
       {/* Contenido principal */}

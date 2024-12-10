@@ -1,7 +1,8 @@
 import React from 'react';
 import { Carousel, Button, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-const HomeDocente = () => {
+const HomeDocentes = () => {
   return (
     <div className="d-flex">
       {/* Menú estático */}
@@ -72,7 +73,7 @@ const HomeDocente = () => {
             <h5 className="card-title">¿Cómo Funciona el Sistema?</h5>
             <p>Este sistema está diseñado para ayudar a los docentes a gestionar las horas de servicio social de los estudiantes, gestionar campañas y generar certificados.</p>
             <Button variant="primary" className="mr-3">Ver Asignación de Horas</Button>
-            <Button variant="secondary">Gestionar Campañas</Button>
+            <Link to="/gestionarCampañas" className='btn btn-secondary'>Gestionar Campañas</Link>
           </div>
         </div>
       </div>
@@ -80,4 +81,4 @@ const HomeDocente = () => {
   );
 };
 
-export default HomeDocente;
+export default HomeDocentes;

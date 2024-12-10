@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import cerrarSesion from '../hooks/cerrarSesion.JS';
 
 export default function NavegacionEstudiante() {
     const [hover, setHover] = useState(null); 
@@ -6,7 +7,9 @@ export default function NavegacionEstudiante() {
     const [showEditModal, setShowEditModal] = useState(false); 
     const [profileImage, setProfileImage] = useState('/img/navegacion/Avatar2.png'); 
     const [selectedFile, setSelectedFile] = useState(null); 
-    const [selectedCampaign, setSelectedCampaign] = useState(''); 
+    const [selectedCampaign, setSelectedCampaign] = useState('');
+
+    const CerrarSesion = cerrarSesion(); 
 
     const handleMouseEnter = (icon) => setHover(icon); 
     const handleMouseLeave = () => setHover(null); 
@@ -74,11 +77,12 @@ export default function NavegacionEstudiante() {
                 {/* Menú de íconos */}
                 <ul className="list-unstyled w-100 d-flex flex-column align-items-center">
                     {[ 
-                        { icon: 'bi-clock', text: 'Ver horas' }, 
-                        { icon: 'bi-info-circle', text: 'Información de la campaña' },
-                        { icon: 'bi-list-task', text: 'Lista de campañas' },
-                        { icon: 'bi-bell', text: 'Notificaciones' },
-                        { icon: 'bi-clipboard2-check', text: 'Certificados' }
+                        { icon: 'bi-clock', text: 'Ver horas', link : '/horas' }, 
+                        { icon: 'bi-info-circle', text: 'Información de la campaña', link : '/informacion' },
+                        { icon: 'bi-list-task', text: 'Lista de campañas', link : '/campanas' },
+                        { icon: 'bi-bell', text: 'Notificaciones', link : '/notificaciones' },
+                        { icon: 'bi-clipboard2-check', text: 'Certificados', link : '/certificados' },
+                        { icon: 'bi-box-arrow-right', text: 'Cerrar sesion', link : '/' },
                     ].map((item, index) => (
                         <li
                             key={index}
@@ -87,8 +91,11 @@ export default function NavegacionEstudiante() {
                             onMouseLeave={handleMouseLeave}
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
-                                // Redirección simulada
-                                window.location.href = "#"; 
+                                if (item.text === 'Cerrar sesion') {
+                                    CerrarSesion();
+                                    return;
+                                }
+                                window.location.href = item.link;
                             }}
                         >
                             <div className="icon-container position-relative">

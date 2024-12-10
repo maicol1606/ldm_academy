@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const secret = 'mysecretkey';
 
 exports.registar = (req, res) => {
     const nombre = req.body.nombre;
@@ -50,7 +51,7 @@ exports.login = (req, res) => {
             const contrasenaValida = bcrypt.compareSync(contrasena, usuario.contrasena);
 
             if (contrasenaValida) {
-                const token = jwt.sign({ id: usuario.id_usuario, rol: usuario.id_rol }, 'secret', { expiresIn: '3h' });
+                const token = jwt.sign({ id: usuario.id_usuario, rol: usuario.id_rol }, secret, { expiresIn: '3h' });
                 res.status(200).send({ token: token, title: 'Inicio de sesión exitoso', rol : usuario.id_rol });
             } else {
                 res.status(401).send({ error: 'Credenciales incorrectas' });
@@ -58,3 +59,20 @@ exports.login = (req, res) => {
         }
     });
 }
+exports.validarToken = (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(403).send('Token no proporcionado');
+    }
+
+    jwt.verify(token, secret, (err, decoded) => {
+        if (err) {
+            console.error("Error al verificar el token:", err);
+            return res.status(401).send('Error al verificar el token');
+        }
+
+        req.user = decoded;
+        res.send({ rol: decoded.rol });
+    });
+};
