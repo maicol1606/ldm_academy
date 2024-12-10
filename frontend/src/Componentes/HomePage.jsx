@@ -5,7 +5,7 @@ import React from 'react';
 import Header from './Header';
 import Banner from './Banner';
 import Campaigns from './Campaigns';
-import Content from "./Content";
+//import Content from "./Content";
 
 const HomePage = () => (
   <div id="wrapper">
@@ -13,8 +13,8 @@ const HomePage = () => (
       <div className="inner">
         <Header />
         <Banner />
-        <Campaigns />
-        <Content  />
+        <Campaigns/>
+       {/* <Content  />*/}
       </div>
     </div>
   </div>

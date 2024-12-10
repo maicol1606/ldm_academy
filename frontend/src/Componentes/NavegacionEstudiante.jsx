@@ -71,40 +71,44 @@ export default function NavegacionEstudiante() {
                     onClick={handleProfileClick} 
                 />
 
-                {/* Menú de íconos */}
-                <ul className="list-unstyled w-100 d-flex flex-column align-items-center">
-                    {[ 
-                        { icon: 'bi-clock', text: 'Ver horas' }, 
-                        { icon: 'bi-info-circle', text: 'Información de la campaña' },
-                        { icon: 'bi-list-task', text: 'Lista de campañas' },
-                        { icon: 'bi-bell', text: 'Notificaciones' },
-                        { icon: 'bi-clipboard2-check', text: 'Certificados' }
-                    ].map((item, index) => (
-                        <li
-                            key={index}
-                            className="mb-4 position-relative"
-                            onMouseEnter={() => handleMouseEnter(item.text)}
-                            onMouseLeave={handleMouseLeave}
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                                // Redirección simulada
-                                window.location.href = "#"; 
-                            }}
-                        >
-                            <div className="icon-container position-relative">
-                                <i className={`bi ${item.icon} text-white`} style={{ fontSize: '30px' }}></i>
-                                {hover === item.text && (
-                                    <span
-                                        className="position-absolute top-50 start-100 translate-middle ms-2 bg-dark text-white rounded-3 px-2 py-1"
-                                        style={{ whiteSpace: 'nowrap', zIndex: 10 }}
-                                    >
-                                        {item.text}
-                                    </span>
-                                )}
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+{/* Menú de íconos */}
+<ul className="list-unstyled w-100 d-flex flex-column align-items-center">
+    {[ 
+        { icon: 'bi-house-door', text: 'Inicio', link: '/HomeEstudiante' },  
+        { icon: 'bi-clock', text: 'Ver horas', link: '/Horas' }, 
+        { icon: 'bi-info-circle', text: 'Información de la campaña', link: '/InformacionCampaña' },
+        { icon: 'bi-tags', text: 'Campañas', link: '/Campañas' },  
+        { icon: 'bi-list-task', text: 'Lista de campañas', link: '/listCampanas' },
+        { icon: 'bi-bell', text: 'Notificaciones', link: '/Notificaciones' },
+        { icon: 'bi-clipboard2-check', text: 'Certificados', link: '/GenCertificados' }
+    ].map((item, index) => (
+        <li
+            key={index}
+            className="mb-4 position-relative"
+            onMouseEnter={() => handleMouseEnter(item.text)}
+            onMouseLeave={handleMouseLeave}
+            style={{ cursor: 'pointer', textAlign: 'center' }}
+            onClick={() => {
+                // Redirección a la URL correspondiente
+                window.location.href = item.link; 
+            }}
+        >
+            <div className="icon-container position-relative">
+                <i className={`bi ${item.icon} text-white`} style={{ fontSize: '30px' }}></i>
+                {/* Condicional para mostrar la etiqueta a la derecha */}
+                {hover === item.text && (
+                    <span
+                        className="position-absolute top-50 start-100 translate-middle-y ms-2 bg-dark text-white rounded-3 px-2 py-1"
+                        style={{ whiteSpace: 'nowrap', zIndex: 10, maxWidth: '150px', fontSize: '12px' }}
+                    >
+                        {item.text}
+                    </span>
+                )}
+            </div>
+        </li>
+    ))}
+</ul>
+
             </div>
 
             {/*ver perfil */}

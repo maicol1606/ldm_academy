@@ -1,5 +1,6 @@
-import React, { useState, Modal,  } from 'react';
-
+import React, { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function NavegacionAdmin() {
     const [activeMenu, setActiveMenu] = useState(null);
@@ -12,58 +13,37 @@ export default function NavegacionAdmin() {
     });
     const [isEditing, setIsEditing] = useState(false);
 
-    // Función para manejar la expansión de los menús
     const toggleMenu = (menu) => {
-        if (activeMenu === menu) {
-            setActiveMenu(null); // Si el menú ya está abierto, lo cerramos
-        } else {
-            setActiveMenu(menu); // Si no está abierto, lo abrimos
-        }
+        setActiveMenu(activeMenu === menu ? null : menu);
     };
 
-    const handleProfileClick = () => {
-        setShowProfileModal(true); // Abrir modal de perfil
-    };
+    const handleProfileClick = () => setShowProfileModal(true);
 
     const handleCloseProfileModal = () => {
-        setShowProfileModal(false); // Cerrar modal de perfil
-        setIsEditing(false); // Resetear el estado de edición
+        setShowProfileModal(false);
+        setIsEditing(false);
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setProfileData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        setProfileData({ ...profileData, [name]: value });
     };
 
     const handleProfilePictureChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfileData((prevData) => ({
-                    ...prevData,
-                    profilePicture: reader.result, // Actualiza la imagen con el archivo seleccionado
-                }));
-            };
-            reader.readAsDataURL(file); // Convierte el archivo a una URL base64
+            reader.onloadend = () => setProfileData({ ...profileData, profilePicture: reader.result });
+            reader.readAsDataURL(file);
         }
     };
 
-    const handleEditProfile = () => {
-        setIsEditing(true); // Activar el modo de edición
-    };
+    const handleEditProfile = () => setIsEditing(true);
 
-    const handleSaveProfile = () => {
-        // Aquí puedes agregar lógica para guardar los cambios en el backend
-        setIsEditing(false); // Desactivar el modo de edición
-    };
+    const handleSaveProfile = () => setIsEditing(false);
 
     return (
         <div>
-            {/* Botón para abrir el menú */}
             <button
                 className="btn btn-primary"
                 type="button"
@@ -71,19 +51,18 @@ export default function NavegacionAdmin() {
                 data-bs-target="#offcanvasAdmin"
                 aria-controls="offcanvasAdmin"
             >
-                <i className="bi bi-arrow-right"></i>
+                <i className="bi bi-list"></i>
             </button>
 
-            {/* Menú de navegación */}
             <div
                 className="offcanvas offcanvas-start bg-dark text-white"
                 tabIndex="-1"
                 id="offcanvasAdmin"
                 aria-labelledby="offcanvasAdminLabel"
-                style={{ width: '250px' }}
+                style={{ width: '300px' }}
             >
                 <div className="offcanvas-header">
-                    <h5 className="offcanvas-title" id="offcanvasAdminLabel"></h5>
+                    <h5 className="offcanvas-title" id="offcanvasAdminLabel">Menú Administrador</h5>
                     <button
                         type="button"
                         className="btn-close btn-close-white"
@@ -92,99 +71,57 @@ export default function NavegacionAdmin() {
                     ></button>
                 </div>
                 <div className="offcanvas-body">
-                    {/* Foto de perfil */}
-                    <img
-                        src={profileData.profilePicture} // Ruta de la imagen de perfil
-                        className="rounded-circle w-50 mx-auto d-block img-fluid mb-3 border border-light"
-                        alt="Foto de perfil"
-                        style={{ cursor: 'pointer' }}
-                        onClick={handleProfileClick} // Abre el modal al hacer clic
-                    />
-                    <div className="text-center mb-3">
-                        <p className="h6">{profileData.name}</p>
+                    <div className="text-center">
+                        <img
+                            src={profileData.profilePicture}
+                            className="rounded-circle w-50 border border-light mb-3"
+                            alt="Avatar"
+                            style={{ cursor: 'pointer' }}
+                            onClick={handleProfileClick}
+                        />
+                        <h6>{profileData.name}</h6>
                     </div>
 
-                    {/* Opciones del menú */}
-                    <ul className="list-unstyled">
-                        {/* Estudiantes */}
+                    <ul className="list-unstyled mt-4">
                         <li className="mb-3">
-                            <a
-                                href="#"
-                                className="text-decoration-none text-white"
+                            <button
+                                className="btn btn-dark w-100 text-start"
                                 onClick={() => toggleMenu('estudiantes')}
-                                style={{ display: 'block', padding: '10px', borderRadius: '5px' }}
-                                onMouseEnter={(e) => e.target.style.backgroundColor = '#343a40'}
-                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                             >
-                                <i className="bi bi-person text-white me-2"></i> Estudiantes
-                            </a>
-                            {/* Submenú de Estudiantes */}
+                                <i className="bi bi-person me-2"></i> Estudiantes
+                            </button>
                             {activeMenu === 'estudiantes' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Estudiante</a></li>
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Estudiantes</a></li>
+                                    <li><button className="btn btn-dark w-100 text-start">Agregar Estudiante</button></li>
+                                    <li><button className="btn btn-dark w-100 text-start">Lista de Estudiantes</button></li>
                                 </ul>
                             )}
                         </li>
-
-                        {/* Docentes */}
                         <li className="mb-3">
-                            <a
-                                href="#"
-                                className="text-decoration-none text-white"
+                            <button
+                                className="btn btn-dark w-100 text-start"
                                 onClick={() => toggleMenu('docentes')}
-                                style={{ display: 'block', padding: '10px', borderRadius: '5px' }}
-                                onMouseEnter={(e) => e.target.style.backgroundColor = '#343a40'}
-                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                             >
-                                <i className="bi bi-person-plus text-white me-2"></i> Docentes
-                            </a>
-                            {/* Submenú de Docentes */}
+                                <i className="bi bi-person-plus me-2"></i> Docentes
+                            </button>
                             {activeMenu === 'docentes' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Docente</a></li>
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Docentes</a></li>
+                                    <li><button className="btn btn-dark w-100 text-start">Agregar Docente</button></li>
+                                    <li><button className="btn btn-dark w-100 text-start">Lista de Docentes</button></li>
                                 </ul>
                             )}
                         </li>
-
-                        {/* Campañas */}
                         <li className="mb-3">
-                            <a
-                                href="#"
-                                className="text-decoration-none text-white"
+                            <button
+                                className="btn btn-dark w-100 text-start"
                                 onClick={() => toggleMenu('campanas')}
-                                style={{ display: 'block', padding: '10px', borderRadius: '5px' }}
-                                onMouseEnter={(e) => e.target.style.backgroundColor = '#343a40'}
-                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                             >
-                                <i className="bi bi-flag text-white me-2"></i> Campañas
-                            </a>
-                            {/* Submenú de Campañas */}
+                                <i className="bi bi-flag me-2"></i> Campañas
+                            </button>
                             {activeMenu === 'campanas' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-plus-circle me-2"></i> Crear Campaña</a></li>
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-list me-2"></i> Lista de Campañas</a></li>
-                                </ul>
-                            )}
-                        </li>
-
-                        {/* Certificados */}
-                        <li className="mb-3">
-                            <a
-                                href="#"
-                                className="text-decoration-none text-white"
-                                onClick={() => toggleMenu('certificados')}
-                                style={{ display: 'block', padding: '10px', borderRadius: '5px' }}
-                                onMouseEnter={(e) => e.target.style.backgroundColor = '#343a40'}
-                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                            >
-                                <i className="bi bi-file-earmark-check text-white me-2"></i> Certificados
-                            </a>
-                            {/* Submenú de Certificados */}
-                            {activeMenu === 'certificados' && (
-                                <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-file-earmark me-2"></i> Lista de Certificados</a></li>
+                                    <li><button className="btn btn-dark w-100 text-start">Crear Campaña</button></li>
+                                    <li><button className="btn btn-dark w-100 text-start">Lista de Campañas</button></li>
                                 </ul>
                             )}
                         </li>
@@ -192,73 +129,64 @@ export default function NavegacionAdmin() {
                 </div>
             </div>
 
-            {/* Modal de Perfil */}
-            <Modal show={showProfileModal} onHide={handleCloseProfileModal}>
+            <Modal show={showProfileModal} onHide={handleCloseProfileModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>{isEditing ? 'Editar Perfil' : 'Perfil de Administrador'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="text-center mb-3">
                         <img
-                            src={profileData.profilePicture} // Foto de perfil
-                            className="rounded-circle w-50 mx-auto d-block mb-3"
-                            alt="Foto de perfil"
+                            src={profileData.profilePicture}
+                            className="rounded-circle w-50"
+                            alt="Avatar"
                         />
-                        {isEditing ? (
+                        {isEditing && (
                             <input
                                 type="file"
                                 accept="image/*"
-                                className="form-control mb-3"
+                                className="form-control mt-3"
                                 onChange={handleProfilePictureChange}
                             />
-                        ) : null}
-                    </div>
-                    <div>
-                        {isEditing ? (
-                            <div>
-                                <div className="mb-3">
-                                    <label className="form-label">Nombre</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="name"
-                                        value={profileData.name}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Correo Electrónico</label>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        name="email"
-                                        value={profileData.email}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                        ) : (
-                            <div>
-                                <p><strong>Nombre:</strong> {profileData.name}</p>
-                                <p><strong>Correo Electrónico:</strong> {profileData.email}</p>
-                                <p><strong>Rol:</strong> {profileData.role}</p>
-                            </div>
                         )}
                     </div>
+                    {isEditing ? (
+                        <div>
+                            <div className="mb-3">
+                                <label>Nombre</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    value={profileData.name}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label>Correo Electrónico</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name="email"
+                                    value={profileData.email}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <p><strong>Nombre:</strong> {profileData.name}</p>
+                            <p><strong>Correo:</strong> {profileData.email}</p>
+                            <p><strong>Rol:</strong> {profileData.role}</p>
+                        </div>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     {isEditing ? (
-                        <button className="btn btn-primary" onClick={handleSaveProfile}>
-                            Guardar
-                        </button>
+                        <Button variant="primary" onClick={handleSaveProfile}>Guardar</Button>
                     ) : (
-                        <button className="btn btn-warning" onClick={handleEditProfile}>
-                            Editar Perfil
-                        </button>
+                        <Button variant="warning" onClick={handleEditProfile}>Editar</Button>
                     )}
-                    <button className="btn btn-secondary" onClick={handleCloseProfileModal}>
-                        Cerrar
-                    </button>
+                    <Button variant="secondary" onClick={handleCloseProfileModal}>Cerrar</Button>
                 </Modal.Footer>
             </Modal>
         </div>

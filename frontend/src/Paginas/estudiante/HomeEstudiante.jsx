@@ -1,75 +1,120 @@
-import React from 'react'
+import React, { useState } from 'react';
+import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
 
 export default function HomeEstudiante() {
+  const [showModal, setShowModal] = useState(false);
+
+  const personasEnCampañas = {
+    comedor: 10,
+    biblioteca: 5,
+    enfermería: 8,
+    coordinación: 4,
+    salón: 6,
+    orientación: 7,
+  };
+
+  const personasPostuladas = {
+    comedor: 15,
+    biblioteca: 12,
+    enfermería: 10,
+    coordinación: 8,
+    salón: 9,
+    orientación: 11,
+  };
+
+  const handleModal = () => setShowModal(!showModal);
+
   return (
-<div className="d-flex">
-      {/* Menú lateral */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light flex-column p-3" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
-        <h4 className="mb-4">Menú</h4>
-        <ul className="nav flex-column">
-          <li className="nav-item mb-3">
-            <a href="#perfil" className="nav-link active">Ver Perfil</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#horas" className="nav-link">Ver Horas</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#campañas" className="nav-link">Campañas</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#certificados" className="nav-link">Certificados</a>
-          </li>
-        </ul>
-      </nav>
+    <div className="d-flex">
+      {/* Componente de navegación */}
+      <NavegacionAdmin />
 
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>
         <section id="perfil" className="text-center mt-5">
-          <h1>Servicio Social</h1>
-          <img 
-            src="ruta-de-tu-imagen" 
-            alt="Imagen relacionada al servicio social" 
-            className="img-fluid rounded mb-3" 
-            style={{ maxWidth: '300px' }} 
-          />
-          <p>Texto explicativo sobre el servicio social.</p>
-          <p>Otro párrafo con información adicional.</p>
-          <button className="btn btn-primary btn-lg">Hacer Servicio Social</button>
+          <div className="service-social-header" style={{ backgroundImage: 'url(ruta-de-tu-imagen)', backgroundSize: 'cover', height: '300px' }}>
+            <div className="overlay">
+              <h1 className="text-white">Servicio Social</h1>
+              <button className="btn btn-primary btn-lg">Hacer Servicio Social</button>
+            </div>
+          </div>
         </section>
 
-        {/* Otras secciones */}
-        <section id="horas" className="mt-5">
-          <h2>Ver Horas</h2>
-          <p>Detalles de las horas aquí...</p>
+        {/* Botón para ver personas realizando servicio social */}
+        <section className="mt-4">
+          <button className="btn btn-info" onClick={handleModal}>Ver cuántas personas se encuentran realizando servicio social</button>
         </section>
 
+        {/* Modal para mostrar las campañas */}
+        {showModal && (
+          <div className="modal show" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Personas realizando servicio social</h5>
+                  <button type="button" className="close" onClick={handleModal}>
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Campaña</th>
+                        <th>Personas realizando servicio social</th>
+                        <th>Personas postuladas</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.keys(personasEnCampañas).map((campaña, index) => (
+                        <tr key={index}>
+                          <td>{campaña.charAt(0).toUpperCase() + campaña.slice(1)}</td>
+                          <td>{personasEnCampañas[campaña]}</td>
+                          <td>{personasPostuladas[campaña]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Campañas disponibles */}
         <section id="campañas" className="mt-5">
           <h2>Campañas disponibles</h2>
           <div className="row">
-            {Array.from({ length: 6 }).map((_, index) => (
+            {[
+              { nombre: 'Comedor', descripcion: 'Las personas que hacen servicio social en comedor están pendientes de que los estudiantes obtengan comida y ayudan a repartir almuerzos.', necesarias: 20, postuladas: 15 },
+              { nombre: 'Biblioteca', descripcion: 'Asisten en la organización de libros, tareas administrativas y apoyo a los usuarios de la biblioteca.', necesarias: 10, postuladas: 12 },
+              { nombre: 'Enfermería', descripcion: 'Colaboran en la asistencia médica básica y apoyo a los pacientes en la enfermería.', necesarias: 8, postuladas: 10 },
+              { nombre: 'Coordinación', descripcion: 'Apoyan en la organización y coordinación de actividades y eventos escolares.', necesarias: 6, postuladas: 8 },
+              { nombre: 'Salón', descripcion: 'Asisten en las actividades de enseñanza, colaboran con los docentes y mantienen el orden en los salones de clase.', necesarias: 12, postuladas: 9 },
+              { nombre: 'Orientación', descripcion: 'Brindan apoyo al orientador en tareas académicas y de bienestar de los estudiantes.', necesarias: 7, postuladas: 11 },
+            ].map((campaña, index) => (
               <div key={index} className="col-md-4 mb-4">
-                <div className="card shadow-sm">
+                <div className="card shadow-sm" style={{ height: '100%' }}>
                   <img 
-                    src="ruta-de-tu-imagen" 
-                    alt={`Imagen de la campaña ${index + 1}`} 
+                    src={`ruta-imagen-${campaña.nombre.toLowerCase()}`} 
+                    alt={`Imagen de la campaña ${campaña.nombre}`} 
                     className="card-img-top" 
                     style={{ height: '150px', objectFit: 'cover' }} 
                   />
-                  <div className="card-body text-center">
-                    <h5 className="card-title">Nombre de la campaña {index + 1}</h5>
-                    <p className="card-text">Descripción breve sobre qué se hace en el Servicio Social.</p>
+                  <div className="card-body">
+                    <h5 className="card-title">{campaña.nombre}</h5>
+                    <p className="card-text">{campaña.descripcion}</p>
+                    <hr />
+                    <p><strong>Personas necesarias:</strong> {campaña.necesarias}</p>
+                    <p><strong>Personas postuladas:</strong> {campaña.postuladas}</p>
+                    <button className="btn btn-success">Postularse</button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </section>
-
-        <section id="certificados" className="mt-5">
-          <h2>Certificados</h2>
-          <p>Información sobre los certificados obtenidos.</p>
-        </section>
       </div>
     </div>
-  )
+  );
 }

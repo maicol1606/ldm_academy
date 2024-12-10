@@ -1,5 +1,4 @@
 import React from "react";
-
 export default function AdminHome() {
   return (
     <div className="container mt-4">

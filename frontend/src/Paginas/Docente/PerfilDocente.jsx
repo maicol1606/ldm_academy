@@ -1,86 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Card, Table } from 'react-bootstrap';
+import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
 
-const PerfilDocente = () => {
-  const [docente, setDocente] = useState({
-    nombre: 'Juanes',
-    id: '12345',
-    correo: 'juanes@gmail.com',
-    estudiantesAsignados: 12,
-    campañas: ['Comedor'],
-  });
-  
-  const [isEditing, setIsEditing] = useState(false);
-  const [newCorreo, setNewCorreo] = useState(docente.correo);
+export default function Notificaciones() {
+  // Definir el estado para las notificaciones
+  const [notificaciones, setNotificaciones] = useState([]);
 
-  const manejarEditar = () => {
-    setIsEditing(true);
-  };
-
-  const manejarGuardar = () => {
-    setDocente({ ...docente, correo: newCorreo });
-    setIsEditing(false);
-  };
+  // Simulación de la carga de datos (esto podría venir de una API)
+  useEffect(() => {
+    const datosNotificaciones = [
+      { id: 1, nombre: 'Juan Pérez', campaña: 'Comedor', numIdentificacion: '12345', estado: 'Aceptada' },
+      { id: 2, nombre: 'María Gómez', campaña: 'Biblioteca', numIdentificacion: '67890', estado: 'Pendiente' },
+      { id: 3, nombre: 'Carlos Rodríguez', campaña: 'Enfermería', numIdentificacion: '11223', estado: 'Rechazada' },
+    ];
+    setNotificaciones(datosNotificaciones); // Asignar los datos al estado
+  }, []);
 
   return (
     <div>
-      <h2>Perfil del Docente</h2>
-      <Card>
-        <Card.Body>
-          <Card.Title>{docente.nombre}</Card.Title>
-          <Card.Text>
-            <strong>ID: </strong>{docente.id}
-          </Card.Text>
-          <Card.Text>
-            <strong>Correo: </strong>
-            {isEditing ? (
-              <Form.Control
-                type="email"
-                value={newCorreo}
-                onChange={(e) => setNewCorreo(e.target.value)}
-              />
-            ) : (
-              docente.correo
-            )}
-          </Card.Text>
-          <Card.Text>
-            <strong>Estudiantes Asignados: </strong>{docente.estudiantesAsignados}
-          </Card.Text>
-          <Card.Text>
-            <strong>Campañas Asignadas: </strong>
-            {docente.campañas.join(', ')}
-          </Card.Text>
+      <div className="d-flex">
+        {/* Menú lateral */}
+        <nav className="navbar navbar-expand-lg navbar-light bg-light flex-column p-3" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
+          <h4 className="mb-4">Menú</h4>
+          <ul className="nav flex-column">
+            <li className="nav-item mb-3">
+              <a href="#perfil" className="nav-link active">Ver Perfil</a>
+            </li>
+            <li className="nav-item mb-3">
+              <a href="#horas" className="nav-link">Ver Horas</a>
+            </li>
+            <li className="nav-item mb-3">
+              <a href="#campañas" className="nav-link">Campañas</a>
+            </li>
+            <li className="nav-item mb-3">
+              <a href="#certificados" className="nav-link">Certificados</a>
+            </li>
+            <li className="nav-item mb-3">
+              <a href="#notificaciones" className="nav-link">Notificaciones</a>
+            </li>
+          </ul>
+        </nav>
 
-          {isEditing ? (
-            <Button variant="success" onClick={manejarGuardar}>Guardar</Button>
-          ) : (
-            <Button variant="primary" onClick={manejarEditar}>Editar Perfil</Button>
-          )}
-        </Card.Body>
-      </Card>
-
-      <h3>Estudiantes Asignados</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Nombre del Estudiante</th>
-            <th>ID del Estudiante</th>
-            <th>Campaña</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* mapeo de la lista de estudiantes asignados */}
-          {[...Array(docente.estudiantesAsignados)].map((_, index) => (
-            <tr key={index}>
-              <td>Estudiante {index + 1}</td>
-              <td>{`ID${index + 1000}`}</td>
-              <td>{docente.campañas[index % docente.campañas.length]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+        {/* Contenido principal */}
+        <div className="container" style={{ marginLeft: '260px' }}>
+          <section id="notificaciones" className="mt-5">
+            <h2 className="text-center mb-4">Notificaciones</h2>
+            <table className="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Campañas Postuladas</th>
+                  <th>Número de Identificación</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {notificaciones.map((notificacion) => (
+                  <tr key={notificacion.id}>
+                    <td>{notificacion.id}</td>
+                    <td>{notificacion.nombre}</td>
+                    <td>{notificacion.campaña}</td>
+                    <td>{notificacion.numIdentificacion}</td>
+                    <td>
+                      <span className={`badge ${notificacion.estado === 'Aceptada' ? 'bg-success' : 'bg-danger'}`}>
+                        {notificacion.estado}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default PerfilDocente;
+}
