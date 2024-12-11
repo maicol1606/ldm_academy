@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
@@ -42,7 +42,7 @@ const Horas = () => {
 
   return (
     <div className="d-flex">
-
+<NavegacionEstudiante />
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>
         <section id="horas" className="mt-5">

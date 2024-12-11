@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 
 export default function HomeEstudiante() {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +27,7 @@ export default function HomeEstudiante() {
   return (
     <div className="d-flex">
       {/* Componente de navegación */}
-      <NavegacionAdmin />
+      <NavegacionEstudiante />
 
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>

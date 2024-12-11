@@ -4,6 +4,7 @@ import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 export default function Notificaciones() {
   return (
     <div>
+      <NavegacionEstudiante />
       <div className="d-flex">
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>

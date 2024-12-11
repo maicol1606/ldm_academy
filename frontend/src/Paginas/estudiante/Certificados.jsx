@@ -1,6 +1,6 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import NavegacionAdmin from '../../Componentes/NavegacionAdmin';
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 import HomeEstudiante from './HomeEstudiante';
 import GenCertificados from './GenCertificados';
 import Horas from './Horas';

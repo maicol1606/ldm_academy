@@ -1,24 +1,11 @@
 import React from 'react';
 import { Carousel, Button, Alert } from 'react-bootstrap';
+import NavegadorDocente from '../../Componentes/NavegadorDocente';
 
 const HomeDocente = () => {
   return (
     <div className="d-flex">
-      {/* Menú estático */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light flex-column p-3" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
-        <h4 className="mb-4">Menú</h4>
-        <ul className="nav flex-column">
-          <li className="nav-item mb-3">
-            <a href="#servicios" className="nav-link active">Información de Servicios Sociales</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#login" className="nav-link">Login</a>
-          </li>
-          <li className="nav-item mb-3">
-          <Link to="/crearcampaña">Crear campaña</Link>
-          </li>
-        </ul>
-      </nav>
+      <NavegadorDocente />
 
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>

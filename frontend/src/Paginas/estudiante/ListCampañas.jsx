@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 
 const ListCampaña = () => {
   // Datos simulados de las campañas
@@ -52,6 +52,7 @@ const ListCampaña = () => {
 
   return (
     <div>
+        <NavegacionEstudiante />
       <h2>Lista de Campañas</h2>
       <table border="1" style={{ width: "100%", textAlign: "center" }}>
         <thead>

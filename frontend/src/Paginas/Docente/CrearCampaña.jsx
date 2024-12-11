@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NavegadorDocente from '../../Componentes/NavegadorDocente';
 
 function CrearCampaña() {
   const [nombreCampaña, setNombreCampaña] = useState('');
@@ -26,6 +27,7 @@ function CrearCampaña() {
 
   return (
     <div className="container mt-5">
+      <NavegadorDocente />
       <h2>Crear Nueva Campaña</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

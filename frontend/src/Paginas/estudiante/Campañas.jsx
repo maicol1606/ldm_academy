@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -40,7 +40,7 @@ export default function InfoCampañas() {
 
   return (
     <div>
-      <NavegacionAdmin />
+      <NavegacionEstudiante />
       <main>
         <section className="py-5 text-center container">
           <div className="row py-lg-5">

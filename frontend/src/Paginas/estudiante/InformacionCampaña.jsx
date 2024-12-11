@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavegacionAdmin from '../../Componentes/NavegacionEstudiante';
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 
 const InfoCampaña = () => {
   // Datos simulados de las campañas
@@ -57,6 +57,7 @@ const InfoCampaña = () => {
 
   return (
     <div>
+        <NavegacionEstudiante />
       <h2>Información de las Campañas</h2>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
         {campañas.map((campaña) => (

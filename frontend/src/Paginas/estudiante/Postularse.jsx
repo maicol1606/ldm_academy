@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 const Postularse = () => {
   const [showModal, setShowModal] = useState(false); 
   const [selectedCampaign, setSelectedCampaign] = useState(null); 
@@ -30,27 +30,7 @@ const Postularse = () => {
 
   return (
     <div className="d-flex">
-      {/* Menú lateral */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light flex-column p-3" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
-        <h4 className="mb-4">Menú</h4>
-        <ul className="nav flex-column">
-          <li className="nav-item mb-3">
-            <a href="#perfil" className="nav-link active">Ver Perfil</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#horas" className="nav-link">Ver Horas</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#campañas" className="nav-link">Campañas</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#certificados" className="nav-link">Certificados</a>
-          </li>
-          <li className="nav-item mb-3">
-            <a href="#postularse" className="nav-link">Postúlate</a>
-          </li>
-        </ul>
-      </nav>
+   <NavegacionEstudiante />
 
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>

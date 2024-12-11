@@ -1,32 +1,10 @@
 import React from "react";
-
+import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 const PerfilEstudiante = () => {
   return (
     <div className="container-fluid mt-4">
       <div className="row">
-        {/* Menú lateral */}
-        <div className="col-md-3">
-          <div className="list-group">
-            <a href="#" className="list-group-item list-group-item-action">
-              Página Principal
-            </a>
-            <a href="#" className="list-group-item list-group-item-action">
-              Campañas
-            </a>
-            <a href="#" className="list-group-item list-group-item-action">
-              Certificados
-            </a>
-            <a href="#" className="list-group-item list-group-item-action">
-              Ver Horas
-            </a>
-            <a href="#" className="list-group-item list-group-item-action active">
-              Perfil
-            </a>
-            <a href="#" className="list-group-item list-group-item-action text-danger">
-              Logout
-            </a>
-          </div>
-        </div>
+      <NavegacionEstudiante />
 
         {/* Contenido del perfil */}
         <div className="col-md-9">
