@@ -78,10 +78,10 @@ export default function NavegacionEstudiante() {
                 <ul className="list-unstyled w-100 d-flex flex-column align-items-center">
                     {[ 
                         { icon: 'bi-clock', text: 'Ver horas', link : '/horas' }, 
-                        { icon: 'bi-info-circle', text: 'Información de la campaña', link : '/informacion' },
-                        { icon: 'bi-list-task', text: 'Lista de campañas', link : '/campanas' },
-                        { icon: 'bi-bell', text: 'Notificaciones', link : '/notificaciones' },
-                        { icon: 'bi-clipboard2-check', text: 'Certificados', link : '/certificados' },
+                        { icon: 'bi-info-circle', text: 'Información de la campaña', link : '/InformacionCampaña' },
+                        { icon: 'bi-list-task', text: 'Lista de campañas', link : '/ListCampañas' },
+                        { icon: 'bi-bell', text: 'Notificaciones', link : '/NotificacionesAdmin' },
+                        { icon: 'bi-clipboard2-check', text: 'Certificados', link : '/CertificadoAdmin' },
                         { icon: 'bi-box-arrow-right', text: 'Cerrar sesion', link : '/' },
                     ].map((item, index) => (
                         <li

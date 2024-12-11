@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 
-const InfoCampaña = () => {
+const InformacionCampaña = () => {
   // Datos simulados de las campañas
   const [campañas] = useState([
     {
@@ -134,4 +134,4 @@ const InfoCampaña = () => {
   );
 };
 
-export default InfoCampaña;
+export default InformacionCampaña;

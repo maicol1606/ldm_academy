@@ -32,6 +32,8 @@ const Horas = lazy(() => import('./Paginas/estudiante/Horas'));
 const HomeEstudiante = lazy(() => import('./Paginas/estudiante/HomeEstudiante'));
 const Postularse = lazy(() => import('./Paginas/estudiante/Postularse'));
 const Notificaciones = lazy(() => import('./Paginas/estudiante/Notificaciones'));
+const InformacionCampaña = lazy(() => import('./Paginas/estudiante/InformacionCampaña'));
+const ListCampañas = lazy(() => import('./Paginas/estudiante/ListCampañas'));
 
 
 //docente
@@ -93,6 +95,8 @@ function App() {
         <Route path="/Horas" element={<Horas />} />
         <Route path='/notificaciones' element={<Notificaciones />} /> 
         <Route path='/certificado' element={<Certificados />} />
+        <Route path='/InformacionCampaña' element={<InformacionCampaña />}/>
+        <Route path='/ListCampañas' element={<ListCampañas />}></Route>
         </Route>
 
         {/* Rutas para el docente */}
