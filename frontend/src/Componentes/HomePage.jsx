@@ -12,9 +12,11 @@ const HomePage = () => (
     <div id="main">
       <div className="inner">
         <Header />
-        <Banner />
-        <Campaigns/>
-       {/* <Content  />*/}
+        <div className="container">
+          <Banner />
+          <Campaigns />
+        </div>
+        {/* <Content  />*/}
       </div>
     </div>
   </div>

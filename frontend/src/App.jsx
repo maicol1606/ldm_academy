@@ -15,6 +15,12 @@ const AdminMenu = lazy(() => import('./Paginas/Administrador/AdminMenu'));
 const CampaignList = lazy(() => import('./Paginas/Administrador/CampaignList'));
 const CampaignNew = lazy(() => import('./Paginas/Administrador/CampaignNew'));
 const CampaignSearch = lazy(() => import('./Paginas/Administrador/CampaignSearch'));
+const EstudianteList = lazy(() => import('./Paginas/Administrador/EstudianteList'));
+const EstudianteNew = lazy(() => import('./Paginas/Administrador/EstudianteNew'));
+const DocenteList = lazy(() => import('./Paginas/Administrador/DocenteList'));
+const DocenteNew = lazy(() => import('./Paginas/Administrador/DocenteNew'));
+const NotificaionesAdmin = lazy(() => import('./Paginas/Administrador/NotificaionesAdmin'));
+const CertificadoAdmin = lazy(() => import('./Paginas/Administrador/CertificadoAdmin'));
 
 
 //estudiante 
@@ -63,11 +69,17 @@ function App() {
       <Routes>
         {/* Rutas para el admin */}
         <Route element={<RutaPrivada requiredRol={1} />}>
-        <Route path='/admin' exact element={<AdminHome />} />
+        <Route path='/admin/' exact element={<AdminHome />} />
         <Route path="/admin/menu" element={<AdminMenu />} />
         <Route path="/campaignList" element={<CampaignList />} />
         <Route path="/CampaignNew" element={<CampaignNew />} />
         <Route path='/CampaignSearch' element={<CampaignSearch />} />
+        <Route path='/EstudianteList' element={<EstudianteList />}/>
+        <Route path='/DocenteList' element={<DocenteList />}/>
+        <Route path='/DocenteNew' element={<DocenteNew />}/>
+        <Route path='/EstudianteNew' element={<EstudianteNew />}/>
+        <Route path='/NotificacionesAdmin' element={<NotificaionesAdmin />}/>
+        <Route path='/CertificadoAdmin' element={<CertificadoAdmin />}/>
         </Route>
 
 

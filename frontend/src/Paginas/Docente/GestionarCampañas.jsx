@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate , Link } from 'react-router-dom';
+import NavegadorDocente from '../../Componentes/NavegadorDocente';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
@@ -61,7 +62,7 @@ const GestionarCampañas = () => {
       <NavegadorDocente />
 
       {/* Contenido principal */}
-      <div className="container" style={{ marginLeft: '260px' }}>
+      <div className="container justify-content-center p-5">
         <h2 className="text-center mb-4">Gestionar Campañas</h2>
 
         {/* Botón para abrir el formulario */}

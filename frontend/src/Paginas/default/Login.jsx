@@ -2,18 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { FaSignInAlt, FaHome } from 'react-icons/fa';
 
 export default function Login() {
-    const [user, setUser] = useState({ email: '', password: '' });
-    const [showModal, setShowModal] = useState(false);
-    const [showCodeInput, setShowCodeInput] = useState(false);
-    const [email, setEmail] = useState('');
-    const [code, setCode] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [toast, setToast] = useState({ visible: false, message: '', type: '' });
-    const navigate = useNavigate();
+
+    const [user, setUser] = useState({
+        email: '',
+        password: ''
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,7 +21,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/login', user);
+            const response = await axios.post('http://localhost:3000/api/auth/login', user);
             if (response.status === 200) {
                 Swal.fire({
                     icon: 'success',
@@ -67,124 +62,158 @@ export default function Login() {
         }
     }
 
-    const handleForgotPassword = () => {
-        Swal.fire({
-            title: '¿Olvidaste tu contraseña?',
-            text: 'Se enviará un código a tu correo.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                setEmail(user.email);
-                setShowModal(false);
-                setToast({ visible: true, message: 'Código enviado a tu correo.', type: 'info' });
-                setTimeout(() => setShowCodeInput(true), 1000);
-            }
-        });
-    }
+    const [showModal, setShowModal] = useState(false);
+    const [showCodeInput, setShowCodeInput] = useState(false);
+    const [email, setEmail] = useState('');
+    const [code, setCode] = useState('');
+    const [toast, setToast] = useState({ visible: false, message: '', type: '' });
+    const navigate = useNavigate();
 
-    const handleVerifyCode = () => {
-        if (code === "123456") {
-            setToast({ visible: true, message: '¡Código verificado con éxito!', type: 'success' });
-            setTimeout(() => {
-                setShowCodeInput(false);
-                setShowModal(true);
-            }, 1000);
-        } else {
-            setToast({ visible: true, message: 'Código incorrecto, por favor intente nuevamente.', type: 'danger' });
+    // Alerta de confirmación para enviar el código
+    const handleRecoverClick = () => {
+        if (window.confirm("¿Estás seguro de enviar el código a tu correo?")) {
+            setShowModal(true);
         }
     };
 
-    const handleUpdatePassword = () => {
-        if (newPassword !== confirmPassword) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Contraseñas no coinciden',
-                text: 'Por favor, asegúrese de que las contraseñas coincidan.',
-            });
+    // Enviar el código y mostrar una alerta
+    const handleSendCode = () => {
+        setShowModal(false);
+        setToast({ visible: true, message: 'Código enviado a tu correo.', type: 'info' });
+        setTimeout(() => setShowCodeInput(true), 1000); // Mostrar input del código después de 1 segundo
+    };
+
+    // Verificar el código ingresado
+    const handleVerifyCode = () => {
+        if (code === "123456") {
+            setToast({ visible: true, message: '¡Código verificado con éxito!', type: 'success' });
+            // Mostrar la alerta antes de redirigir
+            setTimeout(() => {
+                if (window.confirm("Código verificado correctamente. ¿Quieres continuar?")) {
+                    navigate('/campañas'); // Redirigir después de 1 segundo
+                }
+            }, 1000);
         } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Contraseña actualizada con éxito',
-                text: 'Tu contraseña ha sido actualizada. Puedes iniciar sesión.',
-            }).then(() => {
-                navigate('/HomeEstudiante'); 
-            });
+            setToast({ visible: true, message: 'Código incorrecto, por favor intente nuevamente.', type: 'danger' });
+            // Mostrar la alerta antes de redirigir
+            setTimeout(() => {
+                window.alert("El código ingresado no es correcto. Intenta nuevamente.");
+            }, 1000);
         }
+    };
+
     // Redirigir al Homepage
     const handleBackToHome = () => {
         navigate('/'); // Redirige a la página "Homepage"
     };
 
     return (
-        <div className="container-fluid" style={{ background: 'linear-gradient(to right, #4CAF50, #2196F3)', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="card shadow p-4" style={{ maxWidth: '500px', width: '100%' }}>
+        <div className="container mt-5">
+            <div className="card shadow p-4" style={{ maxWidth: '500px', margin: '0 auto' }}>
                 <form onSubmit={handleSubmit}>
-                    <h1 className="text-center mb-4">Iniciar Sesión</h1>
+                    <h1 className="text-center">Iniciar Sesión</h1>
                     <div className="form-floating mb-3">
-                        <input type="email" onChange={handleChange} className="form-control" id="floatingInput" placeholder="correo" name="email" required />
+                        <input pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{6,}$" type="email" onChange={handleChange} className="form-control " id="floatingInput" placeholder="correo" name='correo' required />
                         <label htmlFor="floatingInput"><i className="bi bi-envelope-at"></i>&nbsp; Correo</label>
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="password" onChange={handleChange} className="form-control" id="floatingInput" placeholder="contrasena" name="password" required />
+                        <input type="password" onChange={handleChange} className="form-control " id="floatingInput" placeholder="contrasena" name='contrasena' required />
                         <label htmlFor="floatingInput"><i className="bi bi-lock"></i>&nbsp; Contraseña</label>
                     </div>
-                    <div className="d-flex justify-content-between">
-                        <button type="submit" className="btn btn-primary">
-                            <FaSignInAlt /> Ingresar
-                        </button>
-                        <button type="button" className="btn btn-primary" onClick={handleForgotPassword}>
-                            ¿Olvidaste tu contraseña?
-                        </button>
-                        <button type="button" className="btn btn-primary" onClick={() => navigate('/')}>
-                            <FaHome /> Volver al inicio
-                        </button>
-                    </div>
+                    <button className="btn btn-primary w-100 mb-3" type='submit'>Ingresar</button>
+                    <button
+                        className="btn btn-link text-decoration-none"
+                        onClick={handleRecoverClick}
+                    >
+                        ¿Olvidaste tu contraseña?
+                    </button>
+
+                    {/* Botón para volver al Homepage */}
+                    <button
+                        className="btn btn-secondary w-100 mt-3"
+                        onClick={handleBackToHome}
+                    >
+                        Volver a inicio
+                    </button>
                 </form>
 
+                {/* Modal para confirmar envío */}
+                {showModal && (
+                    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backdropFilter: 'blur(5px)' }}>
+                        <div className="modal-dialog modal-dialog-centered">
+                            <div className="modal-content rounded-3 shadow-lg">
+                                <div className="modal-header bg-primary text-white">
+                                    <h5 className="modal-title">Confirmar acción</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => setShowModal(false)}
+                                    ></button>
+                                </div>
+                                <div className="modal-body text-center">
+                                    <p>¿Estás seguro de enviar el código a tu correo?</p>
+                                </div>
+                                <div className="modal-footer">
+                                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                                        Cancelar
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleSendCode}>
+                                        Enviar código
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Modal para ingresar el código enviado al correo */}
                 {showCodeInput && (
                     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backdropFilter: 'blur(5px)' }}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content rounded-3 shadow-lg">
                                 <div className="modal-header bg-info text-white">
                                     <h5 className="modal-title">Ingresa el código</h5>
-                                    <button type="button" className="btn-close" onClick={() => setShowCodeInput(false)}></button>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => setShowCodeInput(false)}
+                                    ></button>
                                 </div>
                                 <div className="modal-body">
                                     <p>Se ha enviado un código a tu correo <strong>{email}</strong>.</p>
-                                    <input type="text" className="form-control mb-3" placeholder="Código" value={code} onChange={(e) => setCode(e.target.value)} />
-                                    <button className="btn btn-info w-100" onClick={handleVerifyCode}>Verificar código</button>
+                                    <input
+                                        type="text"
+                                        className="form-control mb-3"
+                                        placeholder="Código"
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value)}
+                                    />
+                                    <button className="btn btn-info w-100" onClick={handleVerifyCode}>
+                                        Verificar código
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {showModal && !showCodeInput && (
-                    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backdropFilter: 'blur(5px)' }}>
-                        <div className="modal-dialog modal-dialog-centered">
-                            <div className="modal-content rounded-3 shadow-lg">
-                                <div className="modal-header bg-warning text-white">
-                                    <h5 className="modal-title">Ingresa tu nueva contraseña</h5>
-                                    <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-                                </div>
-                                <div className="modal-body">
-                                    <input type="password" className="form-control mb-3" placeholder="Nueva contraseña" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-                                    <input type="password" className="form-control mb-3" placeholder="Confirmar contraseña" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                                    <button className="btn btn-warning w-100" onClick={handleUpdatePassword}>Actualizar contraseña</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
+                {/* Toast Notifications */}
                 {toast.visible && (
-                    <div className={`toast align-items-center text-bg-${toast.type} border-0 position-fixed bottom-0 end-0 m-3`} role="alert" aria-live="assertive" aria-atomic="true">
+                    <div
+                        className={`toast align-items-center text-bg-${toast.type} border-0 position-fixed bottom-0 end-0 m-3`}
+                        role="alert"
+                        aria-live="assertive"
+                        aria-atomic="true"
+                    >
                         <div className="d-flex">
-                            <div className="toast-body">{toast.message}</div>
-                            <button type="button" className="btn-close btn-close-white me-2 m-auto" onClick={() => setToast({ visible: false, message: '', type: '' })}></button>
+                            <div className="toast-body">
+                                {toast.message}
+                            </div>
+                            <button
+                                type="button"
+                                className="btn-close btn-close-white me-2 m-auto"
+                                onClick={() => setToast({ visible: false, message: '', type: '' })}
+                            ></button>
                         </div>
                     </div>
                 )}

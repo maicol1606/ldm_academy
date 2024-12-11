@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "./NavegadorDocente.css"; // Archivo CSS opcional para detalles extra
+import cerrarSesion from '../hooks/cerrarSesion.JS';
+import { Link } from "react-router-dom";
 
 const NavegadorDocente = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const CerrarSesion = cerrarSesion(); 
 
   const toggleProfileModal = () => {
     setShowProfileModal(!showProfileModal);
@@ -26,7 +26,7 @@ const NavegadorDocente = () => {
 
       {/* Navegación principal */}
       <nav className="nav flex-column text-center">
-        <a href="/home-docente" className="nav-link py-3" title="Home Docente">
+        <a href="/homeDocenteS" className="nav-link py-3" title="Home Docente">
           <i className="bi bi-house fs-4"></i>
           <span className="d-block">Inicio</span>
         </a>
@@ -34,14 +34,15 @@ const NavegadorDocente = () => {
           <i className="bi bi-clock fs-4"></i>
           <span className="d-block">Asignar Horas</span>
         </a>
-        <a href="/crear-campaña" className="nav-link py-3" title="Crear Campaña">
-          <i className="bi bi-plus-circle fs-4"></i>
-          <span className="d-block">Crear Campaña</span>
-        </a>
-        <a href="/gestionar-campaña" className="nav-link py-3" title="Gestionar Campaña">
+      
+        <Link to="/gestionarCampañas" className="nav-link py-3" title="Gestionar Campaña">
           <i className="bi bi-pencil fs-4"></i>
           <span className="d-block">Gestionar Campaña</span>
-        </a>
+        </Link>
+        <button onClick={CerrarSesion} className="nav-link text-danger py-3" title="Gestionar Campaña">
+          <i className="bi bi-door-closed fs-4"></i>
+          <span className="d-block">Cerrar sesion</span>
+        </button>
       </nav>
 
       {/* Modal de edición de perfil */}

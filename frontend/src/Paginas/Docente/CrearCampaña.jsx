@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import NavegadorDocente from '../../Componentes/NavegadorDocente';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 
-function CrearCampaña() {
+export default function CrearCampaña() {
 
   const token = localStorage.getItem('token');
   const id_user = JSON.parse(atob(token.split(".")[1])).id;
@@ -81,89 +81,86 @@ function CrearCampaña() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="d-flex">
       <NavegadorDocente />
-      <h2>Crear Nueva Campaña</h2>
-      <form onSubmit={handleSubmit}>
-      <div className="d-flex justify-content-between align-items-center">
-        <h2>Crear Nueva Campaña</h2>
-        <Link to='/gestionarCampañas' className="btn btn-primary mt-3">Volver <i className="bi bi-arrow-left"></i></Link>
+      <div className="container justify-content-center p-5">
+        <div className="d-flex justify-content-between align-items-center">
+          <h2>Crear Nueva Campaña</h2>
+          <Link to='/gestionarCampañas' className="btn btn-primary mt-3">Volver <i className="bi bi-arrow-left"></i></Link>
+        </div>
+        <form onSubmit={handleSubmit} className='p-5'>
+          <div className="form-group">
+            <label htmlFor="nombreCampaña">Nombre de la campaña</label>
+            <input
+              onChange={handleChange}
+              type="text"
+              className="form-control"
+              id="nombreCampaña"
+              name='nom_campana'
+              value={Campaña.nom_campana}
+
+              placeholder="Ingrese el nombre de la campaña"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="numEstudiantes">Número de cupos</label>
+            <input
+              onChange={handleChange}
+              type="number"
+              className="form-control"
+              id="numEstudiantes"
+              name='cupos'
+              value={Campaña.cupos}
+
+              placeholder="Ingrese el número de estudiantes"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="descrpcion">Descripcion de la campaña</label>
+            <textarea
+              onChange={handleChange}
+              className="form-control"
+              id="descrpcion"
+              name='descripcion'
+              rows="3"
+              value={Campaña.descripcion}
+              placeholder="Ingrese la descripción"
+            ></textarea>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="fecha">Fecha de Inicio</label>
+            <input
+              onChange={handleChange}
+              type="date"
+              className="form-control"
+              id="fecha"
+              name='fecha'
+              value={Campaña.fecha}
+
+              placeholder="Ingrese la fecha"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="fotoCampaña">Subir foto de la campaña</label>
+            <input
+              type="file"
+              className="form-control-file"
+              id="fotoCampaña"
+              name='foto'
+
+              accept='image/*'
+              onChange={handleFileChange}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary mt-3">
+            Crear Campaña
+          </button>
+        </form>
       </div>
-      <form onSubmit={handleSubmit} className='p-5'>
-        <div className="form-group">
-          <label htmlFor="nombreCampaña">Nombre de la campaña</label>
-          <input
-          onChange={handleChange}
-            type="text"
-            className="form-control"
-            id="nombreCampaña"
-            name='nom_campana'
-            value={Campaña.nom_campana}
-            
-            placeholder="Ingrese el nombre de la campaña"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="numEstudiantes">Número de cupos</label>
-          <input
-          onChange={handleChange}
-            type="number"
-            className="form-control"
-            id="numEstudiantes"
-            name='cupos'
-            value={Campaña.cupos}
-            
-            placeholder="Ingrese el número de estudiantes"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="descrpcion">Descripcion de la campaña</label>
-          <textarea
-          onChange={handleChange}
-            className="form-control"
-            id="descrpcion"
-            name='descripcion'
-            rows="3"
-            value={Campaña.descripcion}
-            placeholder="Ingrese la descripción"
-          ></textarea>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="fecha">Fecha de Inicio</label>
-          <input
-          onChange={handleChange}
-            type="date"
-            className="form-control"
-            id="fecha"
-            name='fecha'
-            value={Campaña.fecha}
-            
-            placeholder="Ingrese la fecha"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="fotoCampaña">Subir foto de la campaña</label>
-          <input
-            type="file"
-            className="form-control-file"
-            id="fotoCampaña"
-            name='foto'
-          
-            accept='image/*'
-            onChange={handleFileChange}
-          />
-        </div>
-
-        <button type="submit" className="btn btn-primary mt-3">
-          Crear Campaña
-        </button>
-      </form>
     </div>
   );
 }
-
-export default CrearCampaña;

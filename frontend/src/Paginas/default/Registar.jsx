@@ -52,8 +52,8 @@ export default function registar() {
   }
 
   return (
-    <div className="p-3 mb-2 bg-info-subtle text-info-emphasis">
-      <div className="col-6 md-5 ">
+    <div className="p-3 mb-2 bg- ">
+      <div className=" ">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-lg-12 col-xl-11">
             <div className="card-body p-md-5">
@@ -61,7 +61,7 @@ export default function registar() {
                 <div className='w-100 w-sm-50 px-5 rounded'>
                   <div className='text-center my-3'>
                     <div className='d-flex justify-content-center'>
-                      <img src="" className="ml-6" alt="..." /></div>
+                      </div>
                     <h1 className='text-info'>Registrate Ahora</h1>
                     <p>Crea tu cuenta con nosotros</p>
                   </div>

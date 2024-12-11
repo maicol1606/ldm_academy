@@ -1,9 +1,12 @@
-import React, { useState, Modal,  } from 'react';
-
+import React, { useState} from 'react';
+import {Modal } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import cerrarSesion from '../hooks/cerrarSesion.JS';
 
 export default function NavegacionAdmin() {
     const [activeMenu, setActiveMenu] = useState(null);
-    const [showProfileModal, setShowProfileModal] = useState(false);
+    const [showProfileModal, setShowProfileModal] = useState(false)
+    const CerrarSesion = cerrarSesion(); ;
     const [profileData, setProfileData] = useState({
         name: 'Administrador',
         email: 'admin@gmail.com',
@@ -121,8 +124,8 @@ export default function NavegacionAdmin() {
                             {/* Submenú de Estudiantes */}
                             {activeMenu === 'estudiantes' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Estudiante</a></li>
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Estudiantes</a></li>
+                                    <li><Link to="/EstudianteNew" className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Estudiante</Link></li>
+                                    <li><Link to="/EstudianteList" className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Estudiantes</Link></li>
                                 </ul>
                             )}
                         </li>
@@ -142,8 +145,8 @@ export default function NavegacionAdmin() {
                             {/* Submenú de Docentes */}
                             {activeMenu === 'docentes' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Docente</a></li>
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Docentes</a></li>
+                                    <li><Link to="/DocenteNew"  className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Docente</Link></li>
+                                    <li>< Link to="/DocenteList"  className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Docentes</Link></li>
                                 </ul>
                             )}
                         </li>
@@ -163,8 +166,8 @@ export default function NavegacionAdmin() {
                             {/* Submenú de Campañas */}
                             {activeMenu === 'campanas' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-plus-circle me-2"></i> Crear Campaña</a></li>
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-list me-2"></i> Lista de Campañas</a></li>
+                                    <li><Link to="/CampaignNew" className="text-decoration-none text-white"><i className="bi bi-plus-circle me-2"></i> Crear Campaña</Link></li>
+                                    <li><Link to="/CampaignList"  className="text-decoration-none text-white"><i className="bi bi-list me-2"></i> Lista de Campañas</Link></li>
                                 </ul>
                             )}
                         </li>
@@ -184,9 +187,21 @@ export default function NavegacionAdmin() {
                             {/* Submenú de Certificados */}
                             {activeMenu === 'certificados' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><a href="#" className="text-decoration-none text-white"><i className="bi bi-file-earmark me-2"></i> Lista de Certificados</a></li>
+                                    <li><Link to="/CertificadoAdmin" className="text-decoration-none text-white"><i className="bi bi-file-earmark me-2"></i> Lista de Certificados</Link></li>
                                 </ul>
                             )}
+                        </li>
+                        <li className="mb-3">
+                            <a
+                                href="#"
+                                className="text-decoration-none text-white"
+                                onClick={CerrarSesion}
+                                style={{ display: 'block', padding: '10px', borderRadius: '5px' }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#343a40'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                            >
+                                <i className="bi bi-box-arrow-right text-white me-2"></i> Cerrar Sesion
+                            </a>
                         </li>
                     </ul>
                 </div>
