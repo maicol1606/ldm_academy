@@ -127,6 +127,7 @@ export default function Login() {
                     >
                         ¿Olvidaste tu contraseña?
                     </button>
+                    <p >¿Aun no tienes una cuenta? <a className='btn btn-link text-decoration-none' href="/registar">Registrate</a></p>
 
                     {/* Botón para volver al Homepage */}
                     <button
@@ -135,6 +136,7 @@ export default function Login() {
                     >
                         Volver a inicio
                     </button>
+                    
                 </form>
 
                 {/* Modal para confirmar envío */}
