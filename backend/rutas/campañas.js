@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const campañasControlador = require('../controladores/campañasControlador');
 
-router.post('/agregarCampana', campañasControlador.agregarCampana);
+router.post('/agregarCampana', campañasControlador.uploadCampana, campañasControlador.agregarCampana);
 
 router.delete('/eliminarCampana/:id', campañasControlador.eliminarCampana);
 

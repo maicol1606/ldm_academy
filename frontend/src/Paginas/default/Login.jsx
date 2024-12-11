@@ -38,16 +38,16 @@ export default function Login() {
                     const rol = response.data.rol;
                     switch (rol) {
                         case 1:
-                            navigate('/admin/home');
+                            navigate('/admin');
                             break;
                         case 2:
                             navigate('/HomeEstudiante');
                             break;
                         case 3:
-                            navigate('/homeDocentes');
+                            navigate('/HomeDocentes');
                             break;
                         default:
-                            navigate('/homepage');
+                            navigate('/');
                     }
                 });
             } else {
@@ -113,6 +113,9 @@ export default function Login() {
                 navigate('/HomeEstudiante'); 
             });
         }
+    // Redirigir al Homepage
+    const handleBackToHome = () => {
+        navigate('/'); // Redirige a la página "Homepage"
     };
 
     return (

@@ -1,33 +1,49 @@
-import React, { useState } from 'react';
-import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
-
+import React , { useState, useEffect } from 'react'
+import cerrarSesion from '../../hooks/cerrarSesion.JS';
 export default function HomeEstudiante() {
-  const [showModal, setShowModal] = useState(false);
 
-  const personasEnCampañas = {
-    comedor: 10,
-    biblioteca: 5,
-    enfermería: 8,
-    coordinación: 4,
-    salón: 6,
-    orientación: 7,
-  };
+  const [campañas, setCampañas] = useState([]);
+  const [docentes, setDocentes] = useState([]);
 
-  const personasPostuladas = {
-    comedor: 15,
-    biblioteca: 12,
-    enfermería: 10,
-    coordinación: 8,
-    salón: 9,
-    orientación: 11,
-  };
+  const CerrarSesion= cerrarSesion();
 
-  const handleModal = () => setShowModal(!showModal);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [campanasRes, docentesRes] = await Promise.all([
+          axios.get(`http://localhost:3000/api/campanas/mostrarCampanas`),
+          axios.get(`http://localhost:3000/api/docentes/obtenerDocentes`),
+        ]);
+        setCampañas(campanasRes.data);
+        setDocentes(docentesRes.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
-    <div className="d-flex">
-      {/* Componente de navegación */}
-      <NavegacionEstudiante />
+<div className="d-flex">
+      {/* Menú lateral */}
+      <nav className="navbar navbar-expand-lg navbar-light bg-light flex-column p-3" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
+        <h4 className="mb-4">Menú</h4>
+        <ul className="nav flex-column">
+          <li className="nav-item mb-3">
+            <a href="#perfil" className="nav-link active">Ver Perfil</a>
+          </li>
+          <li className="nav-item mb-3">
+            <a href="#horas" className="nav-link">Ver Horas</a>
+          </li>
+          <li className="nav-item mb-3">
+            <a href="#campañas" className="nav-link">Campañas</a>
+          </li>
+          <li className="nav-item mb-3">
+            <a href="#certificados" className="nav-link">Certificados</a>
+          </li>
+        </ul>
+        <button className="btn btn-danger" onClick={CerrarSesion}>Cerrar Sesion</button>
+      </nav>
 
       {/* Contenido principal */}
       <div className="container" style={{ marginLeft: '260px' }}>

@@ -1,23 +1,51 @@
 const db = require('../config/db');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.resolve(__dirname, '../../frontend/public/img/campañas/');
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const ext = file.originalname.split(".").pop();
+        cb(null, `campana_${Date.now()}.${ext}`);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// Función para eliminar una imagen de la carpeta
+const eliminar = async (image) => {
+    try {
+        const filePath = path.resolve(__dirname, `../../frontend/public/img/campañas/${image}`);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        console.error('Error eliminando imagen:', err);
+    }
+};
+exports.uploadCampana= upload.single('foto');
 
 exports.agregarCampana = (req, res) => {
-    const nom_campana = req.body.nom_campana;
-    const descripcion = req.body.descripcion;
-    const fecha = req.body.fecha;
-    console.log(fecha);
-    const cupos = req.body.cupos;
-    const id_docente = req.body.id_docente;
-    console.log(id_docente);
-    const query = 'INSERT INTO campañas ( nom_campaña, descripcion, fecha, cupos, id_docente) VALUES ( ?, ?, ?, ?,?)';
-    db.query(query, [nom_campana, descripcion, fecha, cupos, id_docente], (error, results) => {
+    const { nom_campana, descripcion, fecha, cupos, id_docente } = req.body;
+    const foto = req.file;
+
+    if (!foto) {
+        return res.status(400).send({ title: 'Debe subir una foto para la campaña' });
+    }
+
+    const query = 'INSERT INTO campañas (nom_campaña, descripcion, fecha, cupos, id_docente, imagen) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(query, [nom_campana, descripcion, fecha, cupos, id_docente, foto.filename], (error, results) => {
         if (error) {
-            console.error('Error al agregar la campaña:', error);
-            res.status(500).json({ error: 'Error al agregar la campaña' });
+            console.error('Error al agregar la campaña:', error);
+            res.status(500).send({ title: 'Error al agregar la campaña' });
         } else {
-            res.status(200).json({ message: 'Campaña agregada correctamente' });
+            res.status(200).send({ title: 'Campaña agregada correctamente' });
         }
     });
 };
+
 
 exports.eliminarCampana = (req, res) => {
     const id = req.params.id;

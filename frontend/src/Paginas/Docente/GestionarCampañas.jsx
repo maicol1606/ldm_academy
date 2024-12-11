@@ -1,33 +1,60 @@
-import React, { useState } from 'react';
-import NavegadorDocente from '../../Componentes/NavegadorDocente';
+import React, { useState, useEffect } from 'react';
+import { useNavigate , Link } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import moment from 'moment';
 
 const GestionarCampañas = () => {
-  const [campañas, setCampañas] = useState([
-    { id: 1, nombre: 'Campaña de Reciclaje', descripcion: 'Recoge residuos en la comunidad' },
-    { id: 2, nombre: 'Campaña de Salud', descripcion: 'Promueve hábitos saludables' },
-    { id: 3, nombre: 'Campaña de Alimentación', descripcion: 'Distribuye alimentos entre los estudiantes' },
-  ]);
+  const [campañas, setCampañas] = useState([]);
+  const [docentes, setDocentes] = useState([]);
 
- 
-  const [nuevaCampaña, setNuevaCampaña] = useState({ nombre: '', descripcion: '' });
+  const navigate = useNavigate();
 
-  // Función para agregar una nueva campaña
-  const agregarCampaña = () => {
-    const id = campañas.length + 1;
-    setCampañas([...campañas, { id, nombre: nuevaCampaña.nombre, descripcion: nuevaCampaña.descripcion }]);
-    setNuevaCampaña({ nombre: '', descripcion: '' }); // Limpiar el formulario
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [campanasRes, docentesRes] = await Promise.all([
+          axios.get(`http://localhost:3000/api/campanas/mostrarCampanas`),
+          axios.get(`http://localhost:3000/api/docentes/obtenerDocentes`),
+        ]);
+        setCampañas(campanasRes.data);
+        setDocentes(docentesRes.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  // Función para eliminar una campaña
-  const eliminarCampaña = (id) => {
-    setCampañas(campañas.filter((campaña) => campaña.id !== id));
-  };
-
-  // Función para actualizar el formulario de nueva campaña
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNuevaCampaña({ ...nuevaCampaña, [name]: value });
-  };
+  const eliminarCampaña = async (id) => {
+    try {
+      const confirm = await Swal.fire({
+      title: '¿Estás seguro de borrar esta campaña?',
+      text: "No podrás revertir esta operación",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar'
+    });
+    if (confirm.isConfirmed) {
+      const res = await axios.delete(`http://localhost:3000/api/campanas/eliminarCampana/${id}`);
+      if (res.status === 200) {
+        Swal.fire({
+          title: 'Campaña borrada',
+          text: 'La campaña ha sido borrada',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          navigate(0);
+        })
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    Swal.fire('Error', 'Error al eliminar la campaña', 'error');
+  }
+};
 
   return (
     <div className="d-flex">
@@ -38,87 +65,39 @@ const GestionarCampañas = () => {
         <h2 className="text-center mb-4">Gestionar Campañas</h2>
 
         {/* Botón para abrir el formulario */}
-        <button className="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#nuevaCampañaModal">Agregar Nueva Campaña</button>
+        <Link to="/crearCampaña" className="btn btn-primary mb-4">Agregar Nueva Campaña</Link>
 
         {/* Tabla de campañas */}
         <table className="table table-bordered">
           <thead>
             <tr>
+              <th>Imagen</th>
               <th>Nombre</th>
               <th>Descripción</th>
               <th>Acciones</th>
+              <th>Fecha</th>
+              <th>Docente</th>
             </tr>
           </thead>
           <tbody>
             {campañas.map((campaña) => (
-              <tr key={campaña.id}>
-                <td>{campaña.nombre}</td>
+              <tr key={campaña.id_campaña}>
+                <td><img width={100} height={100} className="rounded-3" src={`/img/campañas/${campaña.imagen}`} alt="" /></td>
+                <td>{campaña.nom_campaña}</td>
                 <td>{campaña.descripcion}</td>
+                <td>{campaña.cupos}</td>
+                <td>{moment(campaña.fecha).format('DD/MM/YYYY')}</td>
+                <td>{docentes.find(docente => docente.id_usuario === campaña.id_docente).nombre} {docentes.find(docente => docente.id_usuario === campaña.id_docente).apellido}</td>
                 <td>
                   <button className="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#nuevaCampañaModal" onClick={() => setNuevaCampaña(campaña)}>
                     Editar
                   </button>
-                  <button className="btn btn-danger btn-sm ms-2" onClick={() => eliminarCampaña(campaña.id)}>Eliminar</button>
+                  <button className="btn btn-danger btn-sm ms-2" onClick={() => eliminarCampaña(campaña.id_campaña)}>Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-
-        {/* Modal para agregar o editar campaña */}
-        <div className="modal fade" id="nuevaCampañaModal" tabIndex="-1" aria-labelledby="nuevaCampañaModalLabel" aria-hidden="true">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="nuevaCampañaModalLabel">{nuevaCampaña.id ? 'Editar Campaña' : 'Nueva Campaña'}</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="mb-3">
-                    <label htmlFor="nombre" className="form-label">Nombre de la campaña</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="nombre"
-                      name="nombre"
-                      value={nuevaCampaña.nombre}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="descripcion" className="form-label">Descripción</label>
-                    <textarea
-                      className="form-control"
-                      id="descripcion"
-                      name="descripcion"
-                      value={nuevaCampaña.descripcion}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => {
-                    if (nuevaCampaña.id) {
-                      setCampañas(campañas.map(campaña => campaña.id === nuevaCampaña.id ? nuevaCampaña : campaña));
-                    } else {
-                      agregarCampaña();
-                    }
-                    document.getElementById('nuevaCampañaModal').classList.remove('show');
-                    document.querySelector('.modal-backdrop').remove();
-                  }}
-                >
-                  {nuevaCampaña.id ? 'Actualizar' : 'Agregar'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
