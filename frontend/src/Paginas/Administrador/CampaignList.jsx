@@ -1,5 +1,5 @@
 import React from "react";
-
+import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 export default function CampaignList() {
   return (
     <div className="container mt-4">
