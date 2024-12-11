@@ -32,7 +32,7 @@ const Header = () => {
         </Nav.Link>
 
         {/* Ícono de información */}
-        <Nav.Link href="/Content">
+        <Nav.Link href="/Registar">
           <i className="bi bi-info-circle" style={{ fontSize: '1.5rem' }}></i>
         </Nav.Link>
       </Nav>
