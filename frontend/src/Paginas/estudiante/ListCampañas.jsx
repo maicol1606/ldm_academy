@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
+import { Card, Button, Row, Col, Badge, Container } from 'react-bootstrap';
 
 const ListCampañas = () => {
-  // Datos simulados de las campañas
   const [campañas] = useState([
     {
       nombre: "Comedor",
@@ -51,48 +51,48 @@ const ListCampañas = () => {
   };
 
   return (
-    <div>
-        <NavegacionEstudiante />
-      <h2>Lista de Campañas</h2>
-      <table border="1" style={{ width: "100%", textAlign: "center" }}>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Postulados</th>
-            <th>Participantes</th>
-            <th>Descripción</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="d-flex">
+      <NavegacionEstudiante />
+      <Container className="mt-4" style={{ marginLeft: '260px' }}>
+        <h2 className="text-center mb-4">Lista de Campañas</h2>
+        <Row className="g-4">
           {campañas.map((campaña) => (
-            <tr key={campaña.nombre}>
-              <td>{campaña.nombre}</td>
-              <td>{campaña.postulados}</td>
-              <td>{campaña.participantes}</td>
-              <td>{campaña.descripcion}</td>
-              <td>
-                {campañasPostuladas.includes(campaña.nombre) ? (
-                  <span>En espera</span>
-                ) : (
-                  <button onClick={() => handlePostularse(campaña.nombre)}>Postularse</button>
-                )}
-              </td>
-            </tr>
+            <Col key={campaña.nombre} xs={12} sm={6} md={4}>
+              <Card className="shadow-sm h-100">
+                <Card.Body>
+                  <Card.Title>{campaña.nombre}</Card.Title>
+                  <Card.Text>{campaña.descripcion}</Card.Text>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <Badge bg="primary">Postulados: {campaña.postulados}</Badge>
+                    <Badge bg="success">Participantes: {campaña.participantes}</Badge>
+                  </div>
+                  <div className="text-center mt-3">
+                    {campañasPostuladas.includes(campaña.nombre) ? (
+                      <Badge bg="warning">En espera</Badge>
+                    ) : (
+                      <Button variant="dark" onClick={() => handlePostularse(campaña.nombre)}>
+                        Postularse
+                      </Button>
+                    )}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </tbody>
-      </table>
-
-      <h3>Campañas en las que te has postulado</h3>
-      {campañasPostuladas.length > 0 ? (
-        <ul>
-          {campañasPostuladas.map((campaña) => (
-            <li key={campaña}>{campaña}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No te has postulado a ninguna campaña.</p>
-      )}
+        </Row>
+        <div className="mt-5">
+          <h3>Campañas en las que te has postulado</h3>
+          {campañasPostuladas.length > 0 ? (
+            <ul className="list-group">
+              {campañasPostuladas.map((campaña) => (
+                <li key={campaña} className="list-group-item">{campaña}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-muted">No te has postulado a ninguna campaña.</p>
+          )}
+        </div>
+      </Container>
     </div>
   );
 };

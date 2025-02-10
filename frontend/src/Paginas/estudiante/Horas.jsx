@@ -1,68 +1,68 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+import { FaClock, FaRegCalendarAlt, FaRegClock } from 'react-icons/fa';
 
 const Horas = () => {
-  const [horasSemana, setHorasSemana] = useState([3, 4, 2, 5, 3]); 
-  const [horasTotales, setHorasTotales] = useState(15); 
-
-  const sumarHoras = (horas) => {
-    if (horasTotales + horas <= 120) {
-      setHorasTotales(horasTotales + horas);
-    } else {
-      alert('El máximo de horas es 120');
-    }
-  };
-  const data = {
-    labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
-    datasets: [
-      {
-        label: 'Horas Trabajadas (Semana)',
-        data: horasSemana,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 5,
-      },
-    },
-  };
-
   return (
     <div className="d-flex">
-<NavegacionEstudiante />
-      {/* Contenido principal */}
+      <NavegacionEstudiante />
       <div className="container" style={{ marginLeft: '260px' }}>
         <section id="horas" className="mt-5">
-          <h2 className="text-center mb-4">Horas de Servicio Social</h2>
+          <h2 className="text-center mb-4">Gestión de Horas de Servicio Social</h2>
 
-          {/* Gráfica de progreso semanal */}
-          <div className="mb-5">
-            <h4>Progreso Semanal</h4>
-            <Line data={data} options={options} />
+          <div className="row text-center mb-4">
+            <div className="col-md-4">
+              <div className="card p-3">
+                <FaRegClock size={30} className="mb-2" />
+                <h5>Horas Mensuales</h5>
+                <p>XX horas</p>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card p-3">
+                <FaClock size={30} className="mb-2" />
+                <h5>Horas Registradas</h5>
+                <p>XX horas</p>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card p-3">
+                <FaRegCalendarAlt size={30} className="mb-2" />
+                <h5>Horas Extra</h5>
+                <p>XX horas</p>
+              </div>
+            </div>
           </div>
 
-          {/* Contador de horas */}
           <div className="mb-5">
-            <h4>Horas Acumuladas: {horasTotales} / 120</h4>
-            <button className="btn btn-primary" onClick={() => sumarHoras(5)}>
-              Agregar 5 Horas
-            </button>
-            <button className="btn btn-primary ml-2" onClick={() => sumarHoras(3)}>
-              Agregar 3 Horas
-            </button>
+            <h4>Registro de Horas</h4>
+            <table className="table table-bordered text-center">
+              <thead>
+                <tr>
+                  <th>Día</th>
+                  <th>Fecha</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                  <th>Nombre de Campaña</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lunes</td>
+                  <td>01/02/2024</td>
+                  <td>08:00 AM</td>
+                  <td>12:00 PM</td>
+                  <td>Campaña</td>
+                </tr>
+                <tr>
+                  <td>Martes</td>
+                  <td>02/02/2024</td>
+                  <td>09:00 AM</td>
+                  <td>01:00 PM</td>
+                  <td>Campaña </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </div>

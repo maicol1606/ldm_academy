@@ -1,88 +1,64 @@
 import React, { useState } from "react";
-import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
+import "bootstrap/dist/css/bootstrap.min.css";
+import NavegacionEstudiante from "../../Componentes/NavegacionEstudiante";
 
 const InformacionCampaña = () => {
-  // Datos simulados de las campañas
   const [campañas] = useState([
-    {
-      nombre: "Comedor",
-      imagen: "https://via.placeholder.com/150",
-      horas: 3,
-      motivo: "Se asignan 3 horas porque es una actividad moderada y no requiere esfuerzo físico constante.",
-    },
-    {
-      nombre: "Salón",
-      imagen: "https://via.placeholder.com/150",
-      horas: 4,
-      motivo: "Se asignan 4 horas debido a las múltiples actividades realizadas dentro de los salones.",
-    },
-    {
-      nombre: "Biblioteca",
-      imagen: "https://via.placeholder.com/150",
-      horas: 2,
-      motivo: "Se asignan 2 horas porque es una actividad de bajo esfuerzo y demanda menor tiempo.",
-    },
-    {
-      nombre: "Enfermería",
-      imagen: "https://via.placeholder.com/150",
-      horas: 5,
-      motivo: "Se asignan 5 horas porque se requiere apoyo constante en situaciones de salud.",
-    },
-    {
-      nombre: "Coordinación",
-      imagen: "https://via.placeholder.com/150",
-      horas: 3,
-      motivo: "Se asignan 3 horas debido a la naturaleza administrativa de las actividades.",
-    },
-    {
-      nombre: "Orientación",
-      imagen: "https://via.placeholder.com/150",
-      horas: 4,
-      motivo: "Se asignan 4 horas por el apoyo necesario en tareas relacionadas con los estudiantes.",
-    },
+    { nombre: "Comedor", imagen: "https://via.placeholder.com/150", horas: 3, motivo: "Se asignan 3 horas porque es una actividad moderada y no requiere esfuerzo físico constante." },
+    { nombre: "Salón", imagen: "https://via.placeholder.com/150", horas: 4, motivo: "Se asignan 4 horas debido a las múltiples actividades realizadas dentro de los salones." },
+    { nombre: "Biblioteca", imagen: "https://via.placeholder.com/150", horas: 2, motivo: "Se asignan 2 horas porque es una actividad de bajo esfuerzo y demanda menor tiempo." },
+    { nombre: "Enfermería", imagen: "https://via.placeholder.com/150", horas: 5, motivo: "Se asignan 5 horas porque se requiere apoyo constante en situaciones de salud." },
+    { nombre: "Coordinación", imagen: "https://via.placeholder.com/150", horas: 3, motivo: "Se asignan 3 horas debido a la naturaleza administrativa de las actividades." },
+    { nombre: "Orientación", imagen: "https://via.placeholder.com/150", horas: 4, motivo: "Se asignan 4 horas por el apoyo necesario en tareas relacionadas con los estudiantes." },
   ]);
 
-  // Estado para manejar la ventana emergente
   const [campañaSeleccionada, setCampañaSeleccionada] = useState(null);
 
-  // Función para abrir la ventana emergente
   const abrirVentana = (campaña) => {
     setCampañaSeleccionada(campaña);
   };
 
-  // Función para cerrar la ventana emergente
   const cerrarVentana = () => {
     setCampañaSeleccionada(null);
   };
 
   return (
-    <div>
-        <NavegacionEstudiante />
-      <h2>Información de las Campañas</h2>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
+    <div className="container mt-4">
+      <NavegacionEstudiante />
+      <h2 className="text-center mb-4">Información de las Campañas</h2>
+
+      <div className="row">
         {campañas.map((campaña) => (
-          <div
-            key={campaña.nombre}
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              width: "200px",
-              textAlign: "center",
-              cursor: "pointer",
-              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#f9f9f9",
-            }}
-            onClick={() => abrirVentana(campaña)}
-          >
-            <img src={campaña.imagen} alt={campaña.nombre} style={{ width: "100%", borderRadius: "8px" }} />
-            <h3>{campaña.nombre}</h3>
+          <div key={campaña.nombre} className="col-12 col-sm-6 col-md-4 mb-4">
+            <div
+              className="card shadow-lg border-0"
+              style={{
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                borderRadius: "12px",
+              }}
+              onClick={() => abrirVentana(campaña)}
+              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              <img
+                src={campaña.imagen}
+                className="card-img-top rounded-top"
+                alt={campaña.nombre}
+                style={{ height: "180px", objectFit: "cover" }}
+              />
+              <div className="card-body text-center">
+                <h5 className="fw-bold">{campaña.nombre}</h5>
+                <button className="btn btn-primary">Más información</button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
       {campañaSeleccionada && (
         <div
+          className="d-flex justify-content-center align-items-center"
           style={{
             position: "fixed",
             top: 0,
@@ -90,41 +66,27 @@ const InformacionCampaña = () => {
             width: "100%",
             height: "100%",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            zIndex: 1050,
           }}
         >
           <div
+            className="card p-4 shadow-lg"
             style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "8px",
-              width: "400px",
+              width: "90%",
+              maxWidth: "450px",
               textAlign: "center",
-              position: "relative",
             }}
           >
             <button
               onClick={cerrarVentana}
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                background: "none",
-                border: "none",
-                fontSize: "18px",
-                cursor: "pointer",
-              }}
-            >
-              &times;
-            </button>
+              className="btn-close position-absolute top-0 end-0 m-2"
+            ></button>
             <img
               src={campañaSeleccionada.imagen}
               alt={campañaSeleccionada.nombre}
-              style={{ width: "100%", borderRadius: "8px", marginBottom: "10px" }}
+              className="rounded img-fluid mb-3"
             />
-            <h3>{campañaSeleccionada.nombre}</h3>
+            <h3 className="fw-bold">{campañaSeleccionada.nombre}</h3>
             <p><strong>Horas asignadas:</strong> {campañaSeleccionada.horas}</p>
             <p><strong>Motivo:</strong> {campañaSeleccionada.motivo}</p>
           </div>
