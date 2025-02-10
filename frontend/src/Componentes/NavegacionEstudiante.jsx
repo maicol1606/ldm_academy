@@ -148,7 +148,7 @@ export default function NavegacionEstudiante() {
                     <p><strong>Nombre:</strong> Juan Pérez</p>
                     <p><strong>Campaña:</strong> Desarrollo de Software</p>
                     <p><strong>Horas revisadas:</strong> 30</p>
-                    <p><strong>Dirección:</strong> Calle Ficticia 123</p>
+                    <p><strong>Dirección:</strong> Calle F 2123</p>
                     <p><strong>Teléfono:</strong> 300-123-4567</p>
                     <p><strong>Correo electrónico:</strong> juan.perez@email.com</p>
                     <button className="btn btn-primary" onClick={handleEditClick}>
