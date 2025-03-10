@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const NavegadorDocente = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
   const CerrarSesion = cerrarSesion(); 
   const navigate = useNavigate();
 
@@ -14,6 +15,15 @@ const NavegadorDocente = () => {
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
+    setNotificationMessage("");
+  };
+
+  const handleAccept = (studentName) => {
+    setNotificationMessage(`Se aceptó la notificación de ${studentName}.`);
+  };
+
+  const handleReject = (studentName) => {
+    setNotificationMessage(`Se rechazó la notificación de ${studentName}.`);
   };
 
   const students = [
@@ -84,11 +94,12 @@ const NavegadorDocente = () => {
                       {student.name}
                     </span>
                     <div className="ms-auto">
-                      <button className="btn btn-success btn-sm me-2">Aceptar</button>
-                      <button className="btn btn-danger btn-sm">Rechazar</button>
+                      <button className="btn btn-success btn-sm me-2" onClick={() => handleAccept(student.name)}>Aceptar</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleReject(student.name)}>Rechazar</button>
                     </div>
                   </div>
                 ))}
+                {notificationMessage && <div className="alert alert-info mt-3">{notificationMessage}</div>}
               </div>
             </div>
           </div>
