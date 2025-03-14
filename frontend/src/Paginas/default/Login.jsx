@@ -108,7 +108,7 @@ export default function Login() {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5" align="center">
             <div className="card shadow p-4" style={{ maxWidth: '500px', margin: '0 auto' }}>
                 <form onSubmit={handleSubmit}>
                     <h1 className="text-center">Iniciar Sesión</h1>

@@ -13,7 +13,7 @@ const ListCampañas = () => {
     {
       nombre: "Salón",
       postulados: 2,
-      participantes: 2,
+      participantes: 8,
       descripcion: "Mantener el orden en los salones y colaborar con actividades.",
     },
     {
