@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
+import { FaEdit, FaTrash } from "react-icons/fa"; // Importamos iconos para mejorar visualmente
+
 const EstudianteList = () => {
   const [usuarios, setUsuarios] = useState([]);
   
@@ -31,17 +33,17 @@ const EstudianteList = () => {
   };
 
   return (
-    <div className="container-fluid">
-        <NavegacionAdmin />
+    <div className="container-fluid p-4">
+      <NavegacionAdmin />
       <div className="table-responsive">
-        <table className="table table-dark table-sm">
-          <thead>
-            <tr className="text-center roboto-medium">
-              <th></th>
+        <table className="table table-hover table-striped text-center">
+          <thead className="thead-dark">
+            <tr>
+              <th>#</th>
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Correo</th>
-              <th>Telefono</th>
+              <th>Teléfono</th>
               <th>Curso</th>
               <th>Actualizar</th>
               <th>Eliminar</th>
@@ -49,7 +51,7 @@ const EstudianteList = () => {
           </thead>
           <tbody>
             {usuarios.map((usuario, index) => (
-              <tr key={usuario.id_usuario}>
+              <tr key={usuario.id_usuario} className="align-middle">
                 <td>{index + 1}</td>
                 <td>{usuario.nombre}</td>
                 <td>{usuario.apellido}</td>
@@ -57,13 +59,13 @@ const EstudianteList = () => {
                 <td>{usuario.telefono}</td>
                 <td>{usuario.curso}</td>
                 <td>
-                  <button type="button" className="btn btn-success" onClick={() => handleEdit(usuario.id_usuario)}>
-                    Modificar
+                  <button type="button" className="btn btn-outline-success btn-sm" onClick={() => handleEdit(usuario.id_usuario)}>
+                    <FaEdit />
                   </button>
                 </td>
                 <td>
-                  <button type="button" className="btn btn-danger" onClick={() => handleDelete(usuario.id_usuario)}>
-                    Eliminar
+                  <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(usuario.id_usuario)}>
+                    <FaTrash />
                   </button>
                 </td>
               </tr>
@@ -71,8 +73,8 @@ const EstudianteList = () => {
           </tbody>
         </table>
       </div>
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
+      <nav aria-label="Paginación">
+        <ul className="pagination justify-content-center mt-3">
           <li className="page-item disabled">
             <a className="page-link" href="#" tabIndex="-1">Anterior</a>
           </li>

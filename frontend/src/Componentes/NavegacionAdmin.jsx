@@ -14,7 +14,7 @@ export default function NavegacionAdmin() {
         profilePicture: '/img/navegacion/Avatar2.png',
     });
     const [isEditing, setIsEditing] = useState(false);
-
+ 
     // Función para manejar la expansión de los menús
     const toggleMenu = (menu) => {
         if (activeMenu === menu) {

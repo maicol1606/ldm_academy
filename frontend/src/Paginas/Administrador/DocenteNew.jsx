@@ -1,177 +1,112 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
+
 const DocenteNew = () => {
+  const [formData, setFormData] = useState({
+    usuario_dni: "",
+    usuario_nombre: "",
+    usuario_apellido: "",
+    usuario_telefono: "",
+    usuario_direccion: "",
+    usuario_usuario: "",
+    usuario_email: "",
+    usuario_clave_1: "",
+    usuario_clave_2: ""
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formData.usuario_clave_1 !== formData.usuario_clave_2) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
+    console.log("Formulario enviado", formData);
+  };
+
   return (
-    <div className="container-fluid">
-        <NavegacionAdmin />
-      <form className="form-neon" autoComplete="off">
-        {/* Información personal */}
-        <fieldset>
-          <legend>
-            <i className="far fa-address-card"></i> &nbsp; Información personal
-          </legend>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12 col-md-4">
-                <div className="form-group">
-                  <label htmlFor="usuario_dni" className="bmd-label-floating">
-                    Número de Identificación
-                  </label>
-                  <input
-                    type="text"
-                    pattern="[0-9-]{1,20}"
-                    className="form-control"
-                    name="usuario_dni"
-                    id="usuario_dni"
-                    maxLength="20"
-                  />
-                </div>
+    <div className="container-fluid p-4">
+      <NavegacionAdmin />
+      <div className="card shadow-lg p-4">
+        <h2 className="text-center mb-4">Registrar Nuevo Docente</h2>
+        <form autoComplete="off" onSubmit={handleSubmit}>
+          <div className="row g-3">
+            <div className="col-md-4">
+              <div className="form-floating">
+                <input type="text" className="form-control" name="usuario_dni" id="usuario_dni" value={formData.usuario_dni} onChange={handleChange} maxLength="20" placeholder="Número de Identificación" />
+                <label htmlFor="usuario_dni">Número de Identificación</label>
               </div>
-
-              <div className="col-12 col-md-4">
-                <div className="form-group">
-                  <label htmlFor="usuario_nombre" className="bmd-label-floating">
-                    Nombres
-                  </label>
-                  <input
-                    type="text"
-                    pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,35}"
-                    className="form-control"
-                    name="usuario_nombre"
-                    id="usuario_nombre"
-                    maxLength="35"
-                  />
-                </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-floating">
+                <input type="text" className="form-control" name="usuario_nombre" id="usuario_nombre" value={formData.usuario_nombre} onChange={handleChange} maxLength="35" placeholder="Nombres" />
+                <label htmlFor="usuario_nombre">Nombres</label>
               </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
-                  <label htmlFor="usuario_apellido" className="bmd-label-floating">
-                    Apellidos
-                  </label>
-                  <input
-                    type="text"
-                    pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,35}"
-                    className="form-control"
-                    name="usuario_apellido"
-                    id="usuario_apellido"
-                    maxLength="35"
-                  />
-                </div>
-              </div>
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label htmlFor="usuario_telefono" className="bmd-label-floating">
-                    Teléfono
-                  </label>
-                  <input
-                    type="text"
-                    pattern="[0-9()+]{1,20}"
-                    className="form-control"
-                    name="usuario_telefono"
-                    id="usuario_telefono"
-                    maxLength="20"
-                  />
-                </div>
-              </div>
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label htmlFor="usuario_direccion" className="bmd-label-floating">
-                    Dirección
-                  </label>
-                  <input
-                    type="text"
-                    pattern="[a-zA-Z0-99áéíóúÁÉÍÓÚñÑ()# ]{1,190}"
-                    className="form-control"
-                    name="usuario_direccion"
-                    id="usuario_direccion"
-                    maxLength="190"
-                  />
-                </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-floating">
+                <input type="text" className="form-control" name="usuario_apellido" id="usuario_apellido" value={formData.usuario_apellido} onChange={handleChange} maxLength="35" placeholder="Apellidos" />
+                <label htmlFor="usuario_apellido">Apellidos</label>
               </div>
             </div>
           </div>
-        </fieldset>
-        <br /><br /><br />
-
-        {/* Información de la cuenta */}
-        <fieldset>
-          <legend>
-            <i className="fas fa-user-lock"></i> &nbsp; Información de la cuenta
-          </legend>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label htmlFor="usuario_usuario" className="bmd-label-floating">
-                    Nombre de usuario
-                  </label>
-                  <input
-                    type="text"
-                    pattern="[a-zA-Z0-9]{1,35}"
-                    className="form-control"
-                    name="usuario_usuario"
-                    id="usuario_usuario"
-                    maxLength="35"
-                  />
-                </div>
+          <div className="row g-3 mt-3">
+            <div className="col-md-6">
+              <div className="form-floating">
+                <input type="text" className="form-control" name="usuario_telefono" id="usuario_telefono" value={formData.usuario_telefono} onChange={handleChange} maxLength="20" placeholder="Teléfono" />
+                <label htmlFor="usuario_telefono">Teléfono</label>
               </div>
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label htmlFor="usuario_email" className="bmd-label-floating">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    name="usuario_email"
-                    id="usuario_email"
-                    maxLength="70"
-                  />
-                </div>
-              </div>
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label htmlFor="usuario_clave_1" className="bmd-label-floating">
-                    Contraseña
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="usuario_clave_1"
-                    id="usuario_clave_1"
-                    maxLength="200"
-                  />
-                </div>
-              </div>
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label htmlFor="usuario_clave_2" className="bmd-label-floating">
-                    Repetir contraseña
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="usuario_clave_2"
-                    id="usuario_clave_2"
-                    maxLength="200"
-                  />
-                </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-floating">
+                <input type="text" className="form-control" name="usuario_direccion" id="usuario_direccion" value={formData.usuario_direccion} onChange={handleChange} maxLength="190" placeholder="Dirección" />
+                <label htmlFor="usuario_direccion">Dirección</label>
               </div>
             </div>
           </div>
-        </fieldset>
-        <br /><br /><br />
-
-        <p className="text-center" style={{ marginTop: '40px' }}>
-          <button type="reset" className="btn btn-raised btn-secondary btn-sm">
-            <i className="fas fa-paint-roller"></i> &nbsp; LIMPIAR
-          </button>
-          &nbsp; &nbsp;
-          <button type="submit" className="btn btn-raised btn-info btn-sm">
-            <i className="far fa-save"></i> &nbsp; GUARDAR
-          </button>
-        </p>
-      </form>
+          <hr className="my-4" />
+          <h4 className="mb-3">Información de la Cuenta</h4>
+          <div className="row g-3">
+            <div className="col-md-6">
+              <div className="form-floating">
+                <input type="text" className="form-control" name="usuario_usuario" id="usuario_usuario" value={formData.usuario_usuario} onChange={handleChange} maxLength="35" placeholder="Nombre de usuario" />
+                <label htmlFor="usuario_usuario">Nombre de usuario</label>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-floating">
+                <input type="email" className="form-control" name="usuario_email" id="usuario_email" value={formData.usuario_email} onChange={handleChange} maxLength="70" placeholder="Email" />
+                <label htmlFor="usuario_email">Email</label>
+              </div>
+            </div>
+          </div>
+          <div className="row g-3 mt-3">
+            <div className="col-md-6">
+              <div className="form-floating">
+                <input type="password" className="form-control" name="usuario_clave_1" id="usuario_clave_1" value={formData.usuario_clave_1} onChange={handleChange} maxLength="200" placeholder="Contraseña" />
+                <label htmlFor="usuario_clave_1">Contraseña</label>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-floating">
+                <input type="password" className="form-control" name="usuario_clave_2" id="usuario_clave_2" value={formData.usuario_clave_2} onChange={handleChange} maxLength="200" placeholder="Repetir contraseña" />
+                <label htmlFor="usuario_clave_2">Repetir contraseña</label>
+              </div>
+            </div>
+          </div>
+          <div className="text-center mt-4">
+            <button type="reset" className="btn btn-secondary btn-lg shadow-sm me-3">
+              <i className="fas fa-paint-roller"></i> &nbsp; LIMPIAR
+            </button>
+            <button type="submit" className="btn btn-info btn-lg shadow-sm">
+              <i className="far fa-save"></i> &nbsp; GUARDAR
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
