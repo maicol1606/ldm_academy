@@ -1,12 +1,12 @@
-import React, { useState} from 'react';
-import {Modal } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import cerrarSesion from '../hooks/cerrarSesion.JS';
 
 export default function NavegacionAdmin() {
     const [activeMenu, setActiveMenu] = useState(null);
     const [showProfileModal, setShowProfileModal] = useState(false)
-    const CerrarSesion = cerrarSesion(); ;
+    const CerrarSesion = cerrarSesion();;
     const [profileData, setProfileData] = useState({
         name: 'Administrador',
         email: 'admin@gmail.com',
@@ -14,7 +14,7 @@ export default function NavegacionAdmin() {
         profilePicture: '/img/navegacion/Avatar2.png',
     });
     const [isEditing, setIsEditing] = useState(false);
- 
+
     // Función para manejar la expansión de los menús
     const toggleMenu = (menu) => {
         if (activeMenu === menu) {
@@ -145,8 +145,8 @@ export default function NavegacionAdmin() {
                             {/* Submenú de Docentes */}
                             {activeMenu === 'docentes' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><Link to="/DocenteNew"  className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Docente</Link></li>
-                                    <li>< Link to="/DocenteList"  className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Docentes</Link></li>
+                                    <li><Link to="/DocenteNew" className="text-decoration-none text-white"><i className="bi bi-person-plus me-2"></i> Agregar Docente</Link></li>
+                                    <li>< Link to="/DocenteList" className="text-decoration-none text-white"><i className="bi bi-person-lines-fill me-2"></i> Lista de Docentes</Link></li>
                                 </ul>
                             )}
                         </li>
@@ -167,7 +167,7 @@ export default function NavegacionAdmin() {
                             {activeMenu === 'campanas' && (
                                 <ul className="list-unstyled ps-4">
                                     <li><Link to="/CampaignNew" className="text-decoration-none text-white"><i className="bi bi-plus-circle me-2"></i> Crear Campaña</Link></li>
-                                    <li><Link to="/CampaignList"  className="text-decoration-none text-white"><i className="bi bi-list me-2"></i> Lista de Campañas</Link></li>
+                                    <li><Link to="/CampaignList" className="text-decoration-none text-white"><i className="bi bi-list me-2"></i> Lista de Campañas</Link></li>
                                 </ul>
                             )}
                         </li>
@@ -188,6 +188,26 @@ export default function NavegacionAdmin() {
                             {activeMenu === 'certificados' && (
                                 <ul className="list-unstyled ps-4">
                                     <li><Link to="/CertificadoAdmin" className="text-decoration-none text-white"><i className="bi bi-file-earmark me-2"></i> Lista de Certificados</Link></li>
+                                </ul>
+                            )}
+                        </li>
+                        {/* Estadisticas */}
+                        <li className="mb-3">
+                            <a
+                                href="#"
+                                className="text-decoration-none text-white"
+                                onClick={() => toggleMenu('estadisticas')}
+                                style={{ display: 'block', padding: '10px', borderRadius: '5px' }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#343a40'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                            >
+                                <i class="bi bi-graph-up">  </i>     Estadisticas
+                            </a>
+                            {/* Submenú de Estadisticas */}
+                            {activeMenu === 'estadisticas' && (
+                                <ul className="list-unstyled ps-4">
+                                    <li><Link to="/Estadisticas" className="text-decoration-none text-white"><i class="bi bi-clock-history"></i>   En proceso  </Link></li>
+                                    <li><Link to="/Estadisticas" className="text-decoration-none text-white"><i class="bi bi-check2-circle"></i>  Finalizadas </Link></li>
                                 </ul>
                             )}
                         </li>
