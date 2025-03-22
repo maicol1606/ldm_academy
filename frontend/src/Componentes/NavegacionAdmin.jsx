@@ -206,7 +206,7 @@ export default function NavegacionAdmin() {
                             {/* Submenú de Estadisticas */}
                             {activeMenu === 'estadisticas' && (
                                 <ul className="list-unstyled ps-4">
-                                    <li><Link to="/Estadisticas" className="text-decoration-none text-white"><i class="bi bi-clock-history"></i>   En proceso  </Link></li>
+                                    <li><Link to="/EnProceso" className="text-decoration-none text-white"><i class="bi bi-clock-history"></i>   En proceso  </Link></li>
                                     <li><Link to="/Estadisticas" className="text-decoration-none text-white"><i class="bi bi-check2-circle"></i>  Finalizadas </Link></li>
                                 </ul>
                             )}
