@@ -81,7 +81,7 @@ function App() {
           <Route path='/DocenteList' element={<DocenteList />} />
           <Route path='/DocenteNew' element={<DocenteNew />} />
           <Route path='/EstudianteNew' element={<EstudianteNew />} />
-          <Route path='/NotificacionesAdmin' element={<NotificaionesAdmin />} />
+          <Route path='/NotificaionesAdmin' element={<NotificaionesAdmin />} />
           <Route path='/CertificadoAdmin' element={<CertificadoAdmin />} />
         </Route>
 
