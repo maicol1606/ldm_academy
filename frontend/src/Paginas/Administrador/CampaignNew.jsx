@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 
 export default function CampaignNew() {
-  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [studentsRequired, setStudentsRequired] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [teacher, setTeacher] = useState("");
+  const [schedule, setSchedule] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Nueva campaña agregada:\nNombre: ${name}\nDescripción: ${description}\nUbicación: ${location}`);
-    setName("");
+    alert(`Nueva campaña agregada:\nDescripción: ${description}\nUbicación: ${location}\nEstudiantes requeridos: ${studentsRequired}\nInicio: ${startDate}\nDocente: ${teacher}\nJornada: ${schedule}`);
     setDescription("");
     setLocation("");
+    setStudentsRequired("");
+    setStartDate("");
+    setTeacher("");
+    setSchedule("");
   };
 
   return (
@@ -24,18 +30,6 @@ export default function CampaignNew() {
           </h2>
           <form onSubmit={handleSubmit} className="needs-validation" noValidate>
             <div className="form-group">
-              <label htmlFor="campaign_name">Nombre de la campaña</label>
-              <input
-                type="text"
-                className="form-control"
-                id="campaign_name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group mt-3">
               <label htmlFor="campaign_description">Descripción</label>
               <textarea
                 className="form-control"
@@ -63,6 +57,78 @@ export default function CampaignNew() {
                 <option value="Orientación">Orientación</option>
                 <option value="Biblioteca">Biblioteca</option>
               </select>
+            </div>
+
+            <div className="form-group mt-3">
+              <label htmlFor="students_required">Estudiantes requeridos</label>
+              <input
+                type="number"
+                className="form-control"
+                id="students_required"
+                value={studentsRequired}
+                onChange={(e) => setStudentsRequired(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group mt-3">
+              <label htmlFor="start_date">Inicio de la campaña</label>
+              <input
+                type="date"
+                className="form-control"
+                id="start_date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group mt-3">
+              <label htmlFor="teacher">Docente a cargo</label>
+              <select
+                className="form-control"
+                id="teacher"
+                value={teacher}
+                onChange={(e) => setTeacher(e.target.value)}
+                required
+              >
+                <option value="" disabled>Seleccione un docente</option>
+                <option value="Docente 1">Docente 1</option>
+                <option value="Docente 2">Docente 2</option>
+                <option value="Docente 3">Docente 3</option>
+              </select>
+            </div>
+
+            <div className="form-group mt-3">
+              <label>Jornada</label>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="schedule"
+                  id="morning"
+                  value="Mañana"
+                  onChange={(e) => setSchedule(e.target.value)}
+                  required
+                />
+                <label className="form-check-label" htmlFor="morning">
+                  Mañana
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="schedule"
+                  id="afternoon"
+                  value="Tarde"
+                  onChange={(e) => setSchedule(e.target.value)}
+                  required
+                />
+                <label className="form-check-label" htmlFor="afternoon">
+                  Tarde
+                </label>
+              </div>
             </div>
 
             <div className="text-center mt-4">

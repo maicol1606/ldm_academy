@@ -54,20 +54,21 @@ export default function NavegacionAdmin() {
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasAdmin"
                     aria-controls="offcanvasAdmin"
-                    style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 1050 }}
+                    style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 1 }}
                 >
                     <i className="bi bi-list fs-4"></i>
                 </button>
             )}
 
-            <div
-                className="offcanvas offcanvas-start bg-gradient text-white"
-                tabIndex="-1"
-                id="offcanvasAdmin"
-                style={{ width: '280px', background: 'linear-gradient(135deg, #1e3c72, #2a5298)' }}
-                onShow={() => setMenuOpen(true)}
-                onHide={() => setMenuOpen(false)}
-            >
+<div
+    className="offcanvas offcanvas-start text-white"
+    tabIndex="-1"
+    id="offcanvasAdmin"
+    style={{ width: '280px', backgroundColor: '#000' }} // Fondo negro
+    onShow={() => setMenuOpen(true)}
+    onHide={() => setMenuOpen(false)}
+>
+
                 <div className="offcanvas-header border-bottom">
                     <h5 className="offcanvas-title">Menú Administrador</h5>
                     <button type="button" className="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
