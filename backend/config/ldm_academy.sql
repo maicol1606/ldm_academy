@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-12-2024 a las 03:12:49
+-- Tiempo de generación: 02-04-2025 a las 17:12:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -48,17 +48,19 @@ CREATE TABLE `campañas` (
   `fecha` date NOT NULL,
   `cupos` int(10) NOT NULL,
   `id_docente` int(11) NOT NULL,
-  `imagen` text NOT NULL
+  `imagen` text NOT NULL,
+  `estado` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `campañas`
 --
 
-INSERT INTO `campañas` (`id_campaña`, `nom_campaña`, `descripcion`, `fecha`, `cupos`, `id_docente`, `imagen`) VALUES
-(1, 'comedor', 'comer', '2024-07-22', 10, 3, ''),
-(3, 'biblioteca', 'Se solicita apoyo en el area d', '2024-12-08', 5, 3, ''),
-(4, 'Comedor', 'Se solicita apoyo en el area d', '2024-12-08', 5, 3, '');
+INSERT INTO `campañas` (`id_campaña`, `nom_campaña`, `descripcion`, `fecha`, `cupos`, `id_docente`, `imagen`, `estado`) VALUES
+(3, 'biblioteca', 'Se solicita apoyo en el area d', '2024-12-08', 5, 3, '', 1),
+(4, 'Comedor', 'Se solicita apoyo en el area d', '2024-12-08', 3, 3, '', 1),
+(6, 'estudiarrrrr', 'Estudiar durisimo', '2025-04-10', 9, 7, 'campana_1743595226657.jpg', 1),
+(7, 'profesor', 'ayudar al prfe', '2025-04-29', 0, 7, 'campana_1743602442395.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -85,6 +87,13 @@ CREATE TABLE `postulacion` (
   `id_campaña` int(10) DEFAULT NULL,
   `aceptacion` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `postulacion`
+--
+
+INSERT INTO `postulacion` (`id_postulacion`, `id_usuario`, `id_campaña`, `aceptacion`) VALUES
+(3, 7, 6, NULL);
 
 -- --------------------------------------------------------
 
@@ -121,17 +130,22 @@ CREATE TABLE `usuarios` (
   `telefono` varchar(100) DEFAULT NULL,
   `id_rol` int(10) DEFAULT NULL,
   `curso` varchar(10) DEFAULT NULL,
-  `estado` int(2) NOT NULL DEFAULT 1
+  `estado` int(2) NOT NULL DEFAULT 1,
+  `codigo_verificacion` varchar(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `correo`, `contrasena`, `telefono`, `id_rol`, `curso`, `estado`) VALUES
-(1, 'luna', 'Diaz ', 'stefhanny@gmail.com', '$2y$10$JtHUsJ3fwkMg8d8iHaZa1evj/yyDxxsSCh0GCitoHHpNrJS6KLKj6', '3114370736', 2, '1102', 1),
-(2, 'camila', 'suspes', 'Valor por defecto', '$2y$10$bhj5U.Wix0GeL2webY1SyuZEOGJ0aWpGaNctmECiuxUcW9d1LI5Pi', '3138975212', 2, '1101', 1),
-(3, 'pedro', 'lopez', 'pedro@gmail.com', '1234567890', '311547893', 3, '', 1);
+INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `correo`, `contrasena`, `telefono`, `id_rol`, `curso`, `estado`, `codigo_verificacion`) VALUES
+(1, 'luna', 'Diaz ', 'stefhanny@gmail.com', '$2y$10$JtHUsJ3fwkMg8d8iHaZa1evj/yyDxxsSCh0GCitoHHpNrJS6KLKj6', '3114370736', 2, '1102', 1, ''),
+(2, 'camila', 'suspes', 'Valor por defecto', '$2y$10$bhj5U.Wix0GeL2webY1SyuZEOGJ0aWpGaNctmECiuxUcW9d1LI5Pi', '3138975212', 2, '1101', 1, ''),
+(3, 'pedro', 'lopez', 'pedro@gmail.com', '1234567890', '311547893', 3, '', 1, ''),
+(4, 'loren', 'triana', 'lorencamilatrianasuspes@gmail.com', '$2a$10$iQXTStFAndPrKEZcm0Xm5ODwfC5gJu.0fa0TI4xDOU60qYKveUiEm', '3115412636', 2, '1101', 1, '4031'),
+(5, 'luna', 'ramirez', 'stefannny.028293@gmail.com', '$2a$10$GdwFRedDqq2hU2tpBEh.3ufFFGVUVvpLpK4ieMRQNTZs/yn.uJkFu', '3114370736', 2, '1102', 1, '2788'),
+(6, 'blanca', 'triana', 'blancayanethsuspes@gmail.com', '$2a$10$JxUOrmzHCcu3NxnrKI16ue687oCzZ7O.1TLGzI0IPkY.V7Xd3VS8C', '3208794032', 1, '1102', 1, ''),
+(7, 'sergio', 'ruiz', 'sergio@gmail.com', '$2a$10$WOn.DgskGPOST.ANOBqXuu9.jNcWBXgsLF/gOKONSHoyKNHtlyXRK', '3115412658', 3, '1101', 1, '');
 
 --
 -- Índices para tablas volcadas
@@ -193,7 +207,7 @@ ALTER TABLE `asistencia`
 -- AUTO_INCREMENT de la tabla `campañas`
 --
 ALTER TABLE `campañas`
-  MODIFY `id_campaña` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_campaña` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `certificacion`
@@ -205,13 +219,13 @@ ALTER TABLE `certificacion`
 -- AUTO_INCREMENT de la tabla `postulacion`
 --
 ALTER TABLE `postulacion`
-  MODIFY `id_postulacion` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_postulacion` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
