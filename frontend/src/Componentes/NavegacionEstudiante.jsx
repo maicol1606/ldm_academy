@@ -79,7 +79,7 @@ export default function NavegacionEstudiante() {
                 <ul className="list-unstyled w-100 d-flex flex-column align-items-center">
                     {[
                         { icon: 'bi-clock', text: 'Ver horas', link: '/horas' },
-                        { icon: 'bi-info-circle', text: 'Información de la campaña', link: '/InformacionCampaña' },
+                        { icon: 'bi-info-circle', text: 'Información de la campaña', link: '/HomeEstudiante' },
                         { icon: 'bi-list-task', text: 'Lista de campañas', link: '/ListCampañas' },
                         { icon: 'bi-bell', text: 'Notificaciones', link: '/Notificaciones' },
                         { icon: 'bi-clipboard2-check', text: 'Certificados', link: '/GenCertificados' },

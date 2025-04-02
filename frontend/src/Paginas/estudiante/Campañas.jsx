@@ -12,17 +12,20 @@ export default function InfoCampañas() {
 
   const [campanas, setCampanas] = useState([]);
   const [docentes, setDocentes] = useState([]);
+  const [postulaciones, setPostulaciones] = useState([]);
 
-  const CerrarSesion= cerrarSesion();
+  const CerrarSesion = cerrarSesion();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [campanasRes, docentesRes] = await Promise.all([
+        const [campanasRes, postulacionesRes, docentesRes] = await Promise.all([
           axios.get(`http://localhost:3000/api/campanas/mostrarCampanas`),
+          axios.get(`http://localhost:3000/api/postulacion/mostrarPostulacion/${idUsuario}`),
           axios.get(`http://localhost:3000/api/docentes/obtenerDocentes`),
         ]);
         setCampanas(campanasRes.data);
+        setPostulaciones(postulacionesRes.data);
         setDocentes(docentesRes.data);
       } catch (error) {
         console.log(error);
@@ -31,10 +34,55 @@ export default function InfoCampañas() {
     fetchData();
   }, []);
 
+  async function verificarPostulacion() {
+    if (postulaciones.length > 0) {
+      const response = await Swal.fire({
+        icon: 'warning',
+        title: 'Ya postulaste',
+        text: 'Ya has postulado para una campaña.',
+      })
+      if (response.isConfirmed) {
+        window.location.href = '/horas';
+      }
+    }
+    else {
+      return false;
+    }
+  }
+
+  verificarPostulacion();
+  const token = localStorage.getItem('token');
+  const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
+  const idUsuario = tokenDecoded ? tokenDecoded.id : null;
+
+  const [postulado, setPostulado] = useState({
+    id_usuario: idUsuario,
+    id_campaña: '',
+  });
+
   // Función para manejar la postulación
-  const handlePostular = () => {
-    alert('¡Te has postulado!');
-    setShowPostuladoModal(false);
+  const handlePostular  = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/postulacion/agregarPostulacion', postulado);
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Postulación realizada',
+          text: 'Has postulado correctamente para la campaña.',
+        }).then(() => {
+          window.location.href = '/horas';
+        });
+      }
+    }
+    catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al postular',
+        text: error.response.data.error,
+      });
+    }
   };
 
   // Función para mostrar la ventana de información de la campaña
@@ -77,7 +125,7 @@ export default function InfoCampañas() {
                         focusable="false"
                       />
                     </div>
-                      
+
                     <div className="card-body">
                       <p className="fs-4">{campana.nom_campaña}</p>
 
@@ -90,7 +138,7 @@ export default function InfoCampañas() {
                           <button
                             type="button"
                             className="btn btn-sm btn-outline-primary transition-all duration-200 hover:bg-primary hover:text-white"
-                            onClick={() => setShowPostuladoModal(true)}
+                            onClick={() => setShowPostuladoModal(true) || setPostulado({ id_campaña: campana.id_campaña, id_usuario: idUsuario })}
                           >
                             Postularse
                           </button>
@@ -141,6 +189,7 @@ export default function InfoCampañas() {
                   type="button"
                   className="btn btn-primary"
                   onClick={handlePostular}
+
                 >
                   Confirmar
                 </button>
@@ -174,7 +223,7 @@ export default function InfoCampañas() {
                   <p><span className="fw-bold text-primary">Descripción: </span>{campanas[selectedCampaign].descripcion}</p>
                   <p><span className="fw-bold text-primary">Fecha de inicio: </span> {moment(campanas[selectedCampaign].fecha_inicio).format('DD/MM/YYYY')}</p>
                   <p><span className="fw-bold text-primary">Cupos disponibles: </span>{campanas[selectedCampaign].cupos}</p>
-                  <p><span className="fw-bold text-primary">Docente: </span>{docentes.find((docente) => docente.id_usuario === campanas[selectedCampaign].id_docente).nombre} {docentes.find((docente) => docente.id_usuario === campanas[selectedCampaign].id_docente).apellidos}</p>
+                  <p><span className="fw-bold text-primary">Docente: </span>{docentes.find((docente) => docente.id_usuario == campanas[selectedCampaign].id_docente)?.nombre} {docentes.find((docente) => docente.id_usuario == campanas[selectedCampaign].id_docente)?.apellidos}</p>
                 </div>
               </div>
               <div className="modal-footer">
@@ -193,3 +242,4 @@ export default function InfoCampañas() {
     </div>
   );
 }
+//SELECT COUNT(id_campaña) as cuenta FROM `postulacion` WHERE id_campaña = 6; 

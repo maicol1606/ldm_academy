@@ -45,7 +45,7 @@ const Banner = () => {
         </div>
         <div className="map-container" style={{ flex: 1 }}>
           <div className="text-center mb-3">
-            <h5 className="bg-primary text-white rounded-pill px-4 py-2" style={{ fontSize: '1.1rem' }}>
+            <h5 className="" style={{ fontSize: '1.1rem' }}>
               ¡Aquí queda!
             </h5>
           </div>

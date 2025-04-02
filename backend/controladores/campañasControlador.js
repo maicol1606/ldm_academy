@@ -62,11 +62,12 @@ exports.eliminarCampana = (req, res) => {
 
 exports.actualizarCampana = (req, res) => {
     const id = req.params.id;
-    const nom_campana = req.body.nom_campana;
+    const nom_campana = req.body.nom_campaña;
     const descripcion = req.body.descripcion;
     const fecha = req.body.fecha;
     const cupos = req.body.cupos;
     const id_docente = req.body.id_docente;
+
     const query = 'UPDATE campañas SET nom_campaña = ?, descripcion = ?, fecha = ?, cupos = ?, id_docente = ? WHERE id_campaña = ?';
     db.query(query, [nom_campana, descripcion, fecha, cupos, id_docente, id], (error, results) => {
         if (error) {

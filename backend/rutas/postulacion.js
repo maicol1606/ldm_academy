@@ -4,6 +4,8 @@ const postulacionControlador = require('../controladores/postulacionControlador'
 
 router.get('/mostrarPostulaciones', postulacionControlador.mostrarPostulaciones);
 
+router.get('/mostrarPostulacion/:id', postulacionControlador.mostrarPostulacionesUsuario);
+
 router.post('/agregarPostulacion', postulacionControlador.agregarPostulacion);
 
 router.delete('/eliminarPostulacion/:id', postulacionControlador.eliminarPostulacion);
