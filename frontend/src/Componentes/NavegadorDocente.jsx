@@ -51,7 +51,7 @@ const NavegadorDocente = () => {
           <i className="bi bi-house fs-4"></i>
           <span className="d-block">Inicio</span>
         </a>
-        <a href="/asignar-horas" className="nav-link py-3" title="Asignar Horas">
+        <a href="/asignarhoras" className="nav-link py-3" title="Asignar Horas">
           <i className="bi bi-clock fs-4"></i>
           <span className="d-block">Asignar Horas</span>
         </a>
