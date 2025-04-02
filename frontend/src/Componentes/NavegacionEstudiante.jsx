@@ -81,8 +81,8 @@ export default function NavegacionEstudiante() {
                         { icon: 'bi-clock', text: 'Ver horas', link: '/horas' },
                         { icon: 'bi-info-circle', text: 'Información de la campaña', link: '/InformacionCampaña' },
                         { icon: 'bi-list-task', text: 'Lista de campañas', link: '/ListCampañas' },
-                        { icon: 'bi-bell', text: 'Notificaciones', link: '/NotificacionesAdmin' },
-                        { icon: 'bi-clipboard2-check', text: 'Certificados', link: '/CertificadoAdmin' },
+                        { icon: 'bi-bell', text: 'Notificaciones', link: '/Notificaciones' },
+                        { icon: 'bi-clipboard2-check', text: 'Certificados', link: '/GenCertificados' },
                         { icon: 'bi-box-arrow-right', text: 'Cerrar sesion', link: '/' },
                     ].map((item, index) => (
                         <li

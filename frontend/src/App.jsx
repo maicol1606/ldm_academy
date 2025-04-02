@@ -26,7 +26,7 @@ const CertificadoAdmin = lazy(() => import('./Paginas/Administrador/CertificadoA
 //estudiante 
 const BuscarCampañas = lazy(() => import('./Paginas/estudiante/BuscarCampañas'));
 const Campañas = lazy(() => import('./Paginas/estudiante/Campañas'));
-const Certificados = lazy(() => import('./Paginas/estudiante/Certificados'));
+const GenCertificados = lazy(() => import('./Paginas/estudiante/GenCertificados'));
 const PerfilEstudiante = lazy(() => import('./Paginas/estudiante/PerfilEstudiante'));
 const Horas = lazy(() => import('./Paginas/estudiante/Horas'));
 const HomeEstudiante = lazy(() => import('./Paginas/estudiante/HomeEstudiante'));
@@ -95,7 +95,7 @@ function App() {
           <Route path='/postularse' element={<Postularse />} />
           <Route path="/Horas" element={<Horas />} />
           <Route path='/notificaciones' element={<Notificaciones />} />
-          <Route path='/certificado' element={<Certificados />} />
+          <Route path='/GenCertificados' element={<GenCertificados />} />
           <Route path='/InformacionCampaña' element={<InformacionCampaña />} />
           <Route path='/ListCampañas' element={<ListCampañas />}></Route>
         </Route>
