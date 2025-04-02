@@ -4,49 +4,41 @@ import { Card, Button, Row, Col, Badge, Container } from 'react-bootstrap';
 
 const ListCampañas = () => {
   const [campañas] = useState([
-    {
-      nombre: "Comedor",
-      postulados: 5,
-      participantes: 3,
-      descripcion: "Repartir almuerzos y supervisar que los estudiantes no desperdicien comida.",
-    },
-    {
-      nombre: "Salón",
-      postulados: 2,
-      participantes: 8,
-      descripcion: "Mantener el orden en los salones y colaborar con actividades.",
-    },
-    {
-      nombre: "Biblioteca",
-      postulados: 4,
-      participantes: 2,
-      descripcion: "Organizar libros y ayudar a estudiantes con consultas.",
-    },
-    {
-      nombre: "Enfermería",
-      postulados: 3,
-      participantes: 1,
-      descripcion: "Asistir al personal de salud en tareas básicas.",
-    },
-    {
-      nombre: "Coordinación",
-      postulados: 6,
-      participantes: 4,
-      descripcion: "Ayudar en la gestión administrativa y tareas del coordinador.",
-    },
-    {
-      nombre: "Orientación",
-      postulados: 3,
-      participantes: 2,
-      descripcion: "Asistir en actividades de orientación y apoyo a estudiantes.",
-    },
+    { nombre: "Comedor", postulados: 5, participantes: 3, descripcion: "Repartir almuerzos y supervisar que los estudiantes no desperdicien comida." },
+    { nombre: "Salón", postulados: 2, participantes: 8, descripcion: "Mantener el orden en los salones y colaborar con actividades." },
+    { nombre: "Biblioteca", postulados: 4, participantes: 2, descripcion: "Organizar libros y ayudar a estudiantes con consultas." },
+    { nombre: "Enfermería", postulados: 3, participantes: 1, descripcion: "Asistir al personal de salud en tareas básicas." },
+    { nombre: "Coordinación", postulados: 6, participantes: 4, descripcion: "Ayudar en la gestión administrativa y tareas del coordinador." },
+    { nombre: "Orientación", postulados: 3, participantes: 2, descripcion: "Asistir en actividades de orientación y apoyo a estudiantes." }
   ]);
 
   const [campañasPostuladas, setCampañasPostuladas] = useState([]);
 
+  const enviarNotificacion = async (nombreCampaña) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/notificaciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mensaje: `Un estudiante se ha postulado a la campaña ${nombreCampaña}`,
+          rol_destino: "Docente", //
+        }),
+      });
+
+      if (response.ok) {
+        console.log(`Notificación enviada para la campaña ${nombreCampaña}`);
+      } else {
+        console.error("Error al enviar la notificación");
+      }
+    } catch (error) {
+      console.error("Error de conexión", error);
+    }
+  };
+
   const handlePostularse = (nombreCampaña) => {
     if (!campañasPostuladas.includes(nombreCampaña)) {
       setCampañasPostuladas([...campañasPostuladas, nombreCampaña]);
+      enviarNotificacion(nombreCampaña); // Llamamos la función para notificar
     }
   };
 
