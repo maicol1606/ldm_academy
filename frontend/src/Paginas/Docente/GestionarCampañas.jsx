@@ -88,7 +88,7 @@ const GestionarCampañas = () => {
                 <td>{campaña.descripcion}</td>
                 <td>{campaña.cupos}</td>
                 <td>{moment(campaña.fecha).format('DD/MM/YYYY')}</td>
-                <td>{docentes.find(docente => docente.id_usuario === campaña.id_docente).nombre} {docentes.find(docente => docente.id_usuario === campaña.id_docente).apellido}</td>
+                <td>{docentes.find(docente => docente.id_usuario === campaña.id_docente)?.nombre} {docentes.find(docente => docente.id_usuario === campaña.id_docente)?.apellido}</td>
                 <td>
                   <button className="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#nuevaCampañaModal" onClick={() => setNuevaCampaña(campaña)}>
                     Editar

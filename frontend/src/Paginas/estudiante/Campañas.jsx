@@ -84,7 +84,7 @@ export default function InfoCampañas() {
                       <p className="card-text">{campana.descripcion}</p>
                       <p><span className="fw-bold text-primary">Fecha de inicio: </span> {moment(campana.fecha_inicio).format('DD/MM/YYYY')}</p>
                       <p><span className="fw-bold text-primary">Cupos disponibles: </span>{campana.cupos}</p>
-                      <p><span className="fw-bold text-primary">Docente:</span> {docentes.find((docente) => docente.id_usuario === campana.id_docente).nombre} {docentes.find((docente) => docente.id_usuario === campana.id_docente).apellidos}</p>  
+                      <p><span className="fw-bold text-primary">Docente:</span>{docentes.find((docente) => docente.id_usuario == campana.id_docente)?.nombre} {docentes.find((docente) => docente.id_usuario == campana.id_docente)?.apellido}</p>
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="btn-group">
                           <button
