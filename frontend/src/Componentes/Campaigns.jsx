@@ -33,7 +33,7 @@ const Campaigns = () => {
       <div >
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">
           {campanas.map((campana, index) => (
-            <div className='col'>
+            <div className='col' key={campana.id || index}>
               <article>
                 <a href="#" className=""><img width={100} height={100} src={`/img/campañas/${campana.imagen}`} alt={campana.nom_campaña} /></a>
                 <h3>{campana.nom_campaña}</h3>

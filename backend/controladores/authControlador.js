@@ -100,7 +100,7 @@ exports.enviarCodigo = (req, res) => {
             // Enviar el correo con el código de verificación
             const emailOptions = {
                 from: "lulo06817@gmail.com",
-                to: "lorencamilatrianasuspes@gmail.com",
+                to: "" + correo,   
                 subject: "Recuperar contraseña",
                 html: `
                 <div class="container" style="background-color: #1805A6FF; color: #fff; padding: 80px;">

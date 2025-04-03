@@ -21,7 +21,7 @@ export default function OlvidarContrasena() {
                     title: 'Correo Enviado',
                     text: 'Revise su correo electronico',
                 }).then(() => {
-                    Navigate('/login')
+                    Navigate('/Recuperar')
                     localStorage.setItem('correo', correo)
                 })
         } catch (error) {
@@ -61,6 +61,7 @@ export default function OlvidarContrasena() {
                                     <label htmlFor="floatingInput">Correo Electronico</label>
                                 </div>
                                 <button
+                                    onClick={handleSubmit}
                                     className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
                                     type="submit"
                                 >

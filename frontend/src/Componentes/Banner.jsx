@@ -12,16 +12,16 @@ const Banner = () => {
   };
 
   return (
-    <section id="banner" className="d-flex flex-column align-items-center text-center p-5 bg-light">
+    <section id="banner" className="d-flex flex-column align-items-center text-center ">
       <div className="d-flex align-items-start justify-content-between w-100" style={{ maxWidth: '1200px' }}>
         <div className="content text-start" style={{ flex: 1, marginRight: '20px' }}>
           <header>
-            <h1 className="display-5 fw-bold mb-3" style={{ textAlign: 'left', marginLeft: '-20px' }}>
+            <h1 className="display-5 fw-bold mb-3" style={{ textAlign: 'left', marginLeft: '-20px', color: 'black' }}>
               ¿Listo para iniciar tu servicio social?
             </h1>
-            <p className="lead text-secondary">¡Todo estudiante debe hacerlo!</p>
+            <p className="lead text-black">¡Todo estudiante debe hacerlo!</p>
           </header>
-          <p className="text-muted">
+          <p className="text-black">
             El servicio social constituye una actividad que permite al estudiante en formación
             retribuir a la sociedad, contribuyendo con propuestas de solución y aplicación de
             conocimientos integrales hacia los sectores más desfavorecidos.
@@ -30,13 +30,9 @@ const Banner = () => {
             <li className="mt-3">
               <button
                 onClick={handlePostulateClick}
-                className="btn btn-lg"
-                style={{
-                  backgroundColor: '#6cace4', // Azul suave
-                  color: '#fff', // Texto blanco
-                  boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                  fontWeight: 'bold',
-                }}
+                className="btn border-color-black text-black rounded-3"
+                style={{ backgroundColor: '#f8f9fa', padding: '10px 50px', fontSize: '1rem' }}
+              
               >
                 Ver
               </button>
@@ -45,7 +41,7 @@ const Banner = () => {
         </div>
         <div className="map-container" style={{ flex: 1 }}>
           <div className="text-center mb-3">
-            <h5 className="" style={{ fontSize: '1.1rem' }}>
+            <h5 className="" style={{ fontSize: '1.1rem', color: 'black' }}>
               ¡Aquí queda!
             </h5>
           </div>
@@ -69,15 +65,11 @@ const Banner = () => {
               oportunidad de contribuir al bienestar de tu comunidad mientras desarrollas habilidades
               clave para tu formación.
             </p>
-            <div className="text-center mt-4">
+            <div className="text-center ">
               <button
                 onClick={closeModal}
-                className="btn me-2"
-                style={{
-                  backgroundColor: '#ff6f61', // Rojo suave
-                  color: '#fff', // Texto blanco
-                  fontWeight: 'bold',
-                }}
+                className="btn border-color-black text-black rounded-3"
+                style={{ backgroundColor: '#f8f9fa', padding: '10px 50px', fontSize: '1rem' }}
               >
                 Cerrar
               </button>

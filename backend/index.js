@@ -1,6 +1,8 @@
-const express = require('express');
+import express from 'express';
 const db = require('./config/db');
 const app = express();
+import swaggerUI from 'swagger-ui-express';
+import swaggerDocumentaction from './swagger.json' assert { type: 'json' };
 const port = 3000; // Puedes cambiar el puerto si lo deseas
 const estudiantesRutas = require('./rutas/estudiantes');
 const docentesRutas = require('./rutas/docentes');
@@ -12,6 +14,7 @@ const asistenciaRutas = require('./rutas/asistencia');
 const cors = require('cors');
 
 app.use(express.json());
+app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocumentaction));
 
 app.use(express.urlencoded({ extended: true }));
 
