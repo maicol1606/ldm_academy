@@ -1,87 +1,102 @@
 import React, { useState } from 'react';
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Table, Button, Card, ListGroup } from 'react-bootstrap';
+import { Card, Button, Form, Alert } from 'react-bootstrap';
+import { Trash, CheckCircle, Bell } from 'react-bootstrap-icons';
 
 const NotificacionesAdmin = () => {
-  const [notifications] = useState([
+  const [notifications, setNotifications] = useState([
     {
       id: '1123132132',
       name: 'Zinzu Chan Lee',
       campaign: 'Comedor',
       avatar: './assets/avatar/avatar1.png',
+      date: 'Hoy'
     },
     {
       id: '278454152',
       name: 'Jeta Saru',
       campaign: 'Enfermería',
       avatar: './assets/avatar/avatar3.png',
+      date: 'Hoy'
     },
     {
       id: '345654654',
       name: 'Sonal Gharti',
       campaign: 'Salón',
       avatar: './assets/avatar/avatar4.png',
+      date: 'Ayer'
     },
   ]);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [alert, setAlert] = useState('');
+
+  const handleAccept = (name) => {
+    setAlert(`Has aceptado a ${name}`);
+    setTimeout(() => setAlert(''), 3000);
+  };
+
+  const filteredNotifications = notifications.filter(n =>
+    n.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <section className="container-fluid">
+    <section className="container-fluid bg-light min-vh-100">
       <div className="row">
         <NavegacionAdmin />
         <div className="col-md-10 offset-md-2 p-4">
-          <h1 className="mb-4 text-primary">Notificaciones</h1>
+          <h4 className="fw-bold">Vienvenido, administrador</h4>
+          <p className="text-muted">Tienes {notifications.length} notificaciones por revisar</p>
 
-          {/* Lista de Notificaciones */}
-          <Card className="mb-4 shadow-sm">
-            <Card.Header className="bg-primary text-white">Notificaciones recientes</Card.Header>
-            <ListGroup variant="flush">
-              {notifications.map((notification) => (
-                <ListGroup.Item key={notification.id} className="d-flex align-items-center">
-                  <img src={notification.avatar} alt="Avatar" className="rounded-circle me-3" width="50" height="50" />
-                  <div>
-                    <h5 className="mb-0">{notification.name}</h5>
-                    <small className="text-muted">Se ha postulado a {notification.campaign}</small>
-                  </div>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Card>
+          <div className="d-flex justify-content-between align-items-center my-3">
+            <h5 className="fw-bold">Notificaciones</h5>
+            <Form.Control
+              type="text"
+              placeholder="Buscar por nombre..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-50"
+            />
+            <Button variant="outline-primary" size="sm" className="ms-3">Marcar todo como leído</Button>
+          </div>
 
-          {/* Tabla de Notificaciones */}
-          <Table striped bordered hover responsive className="shadow-sm">
-            <thead className="table-primary">
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Campaña</th>
-                <th>Ver Perfil</th>
-                <th>Aceptar</th>
-                <th>Rechazar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notifications.map((notification) => (
-                <tr key={notification.id}>
-                  <td>{notification.id}</td>
-                  <td className="d-flex align-items-center">
-                    <img src={notification.avatar} alt="Avatar" className="rounded-circle me-2" width="40" height="40" />
-                    {notification.name}
-                  </td>
-                  <td>{notification.campaign}</td>
-                  <td>
-                    <Button variant="info" size="sm">Ver Perfil</Button>
-                  </td>
-                  <td>
-                    <Button variant="success" size="sm">Aceptar</Button>
-                  </td>
-                  <td>
-                    <Button variant="danger" size="sm">Rechazar</Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          {alert && (
+            <Alert variant="success" className="mt-2">
+              {alert}
+            </Alert>
+          )}
+
+          {['Hoy', 'Ayer'].map((fecha) => (
+            <div key={fecha}>
+              <h6 className="text-muted mt-4">{fecha}</h6>
+              {filteredNotifications
+                .filter(n => n.date === fecha)
+                .map((notification) => (
+                  <Card key={notification.id} className="mb-3 shadow-sm border-0">
+                    <Card.Body className="d-flex align-items-center justify-content-between">
+                      <div className="d-flex align-items-center">
+                        <div className="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style={{ width: 40, height: 40 }}>
+                          <Bell />
+                        </div>
+                        <div>
+                          <h6 className="mb-0">{notification.name} se postuló a {notification.campaign}</h6>
+                          <small className="text-muted">Revisa su perfil para más información</small>
+                        </div>
+                      </div>
+                      <div className="d-flex gap-2">
+                        <Button variant="outline-success" size="sm" onClick={() => handleAccept(notification.name)}>
+                          <CheckCircle />
+                        </Button>
+                        <Button variant="outline-danger" size="sm">
+                          <Trash />
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>
