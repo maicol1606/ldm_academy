@@ -10,7 +10,7 @@ const Header = () => {
       {/* Logo */}
       <div className="mb-4 text-center">
         <img
-          src="https://via.placeholder.com/50"
+          src="/public/logo.png" // Cambia la ruta según la ubicación de tu logo
           alt="Logo"
           width="50"
           height="50"

@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); // Importa 'expre
 const db = require('./config/db');
 const app = express();
 const port = 3000; // Puedes cambiar el puerto si lo deseas

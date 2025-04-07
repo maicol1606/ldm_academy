@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function OlvidarContrasena() {
+
+    const navigate = useNavigate()
 
     const [correo, setCorreo] = useState('')
 
@@ -14,16 +16,16 @@ export default function OlvidarContrasena() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post('http://localhost:3000/api/auth/enviarCodigo', {correo: correo})
+            const res = await axios.post('http://localhost:3000/api/auth/enviarCodigo', { correo: correo })
             console.log(res)
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Correo Enviado',
-                    text: 'Revise su correo electronico',
-                }).then(() => {
-                    Navigate('/login')
-                    localStorage.setItem('correo', correo)
-                })
+            Swal.fire({
+                icon: 'success',
+                title: 'Correo Enviado',
+                text: 'Revise su correo electronico',
+            }).then(() => {
+                localStorage.setItem('correo', correo)
+                navigate('/recuperar')
+            })
         } catch (error) {
             Swal.fire({
                 icon: 'error',
