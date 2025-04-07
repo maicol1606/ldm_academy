@@ -12,6 +12,9 @@ exports.obtenerEstudiantes = (req, res) => {
     });
 };
 
+//SELECT * from usuarios where id_rol = 2 inner join postulacion on usuarios.id_usuario = postulacion.id_usuario
+//SELECT * from usuarios inner join postulacion on usuarios.id_usuario = postulacion.id_usuario where id_rol = 2; 
+
 exports.actualizarEstudiante = (req, res) => {
     const id = req.params.id;
     const nombre = req.body.nombre;
