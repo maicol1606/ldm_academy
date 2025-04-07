@@ -103,17 +103,18 @@ exports.enviarCodigo = (req, res) => {
                 to: correo,
                 subject: "Recuperar contraseña",
                 html: `
-                <div class="container" style="background-color: #1805A6FF; color: #fff; padding: 80px;">
+                <div class="container" style="background-color:rgb(41, 62, 247); color: white; padding: 80px;">
                     <div class="imagen" style="text-align: center;">
                     </div>
                     <h1>Recuperación de Contraseña</h1>
                     <p style="font-size: 25px;">Tu código de verificación es:</p>
-                    <h2 style="font-size: 40px; font-weight: bold; color: #FFFFFF;">${codigo}</h2>
+                    <h2 style="font-size: 40px; font-weight: bold; color:rgb(43, 60, 207);">${codigo}</h2>
                     <p>Por favor, ingrésalo en el formulario de recuperación de contraseña.</p>
                     <p>Este código caducará en 1 hora.</p>
                     <p>Si no solicitaste este cambio, ignora este mensaje.</p>
                     <p>Gracias,</p>
                     <p>El equipo de soporte</p>
+
                 </div>
                 `,
             }

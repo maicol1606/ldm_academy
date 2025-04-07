@@ -1,22 +1,36 @@
-import React, { useState } from 'react';
+
+import axios from 'axios';
 import NavegadorDocente from '../../Componentes/NavegadorDocente';
 import { FaUserClock, FaClock, FaPlus, FaExclamationTriangle, FaEdit, FaInfoCircle, FaCheckCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
 
 const estudiantesMock = [
-  { id: 1, nombre: 'Juan Pérez', numeroIdentificacion: '123456789', foto: 'https://via.placeholder.com/50', asistencia: [], novedades: '' },
-  { id: 2, nombre: 'María Rodríguez', numeroIdentificacion: '987654321', foto: 'https://via.placeholder.com/50', asistencia: [], novedades: '' },
-  { id: 3, nombre: 'Carlos López', numeroIdentificacion: '456123789', foto: 'https://via.placeholder.com/50', asistencia: [], novedades: '' },
+  
 ];
 
 const AsignarHoras = () => {
-  const [estudiantes, setEstudiantes] = useState(estudiantesMock);
+  const [estudiantes, setEstudiantes] = useState([]);
   const [estudianteSeleccionado, setEstudianteSeleccionado] = useState(null);
   const [nuevasHoras, setNuevasHoras] = useState(0);
   const [reporteActivo, setReporteActivo] = useState(false);
   const [reporteNovedad, setReporteNovedad] = useState('');
   const [justificacionReasignacion, setJustificacionReasignacion] = useState('');
   const [reasignandoHoras, setReasignandoHoras] = useState(false);
+
+
+  useEffect(() => {
+    const fetchEstudiantes = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes/${idCampaña}');
+        setEstudiantes(res.data); // usa los datos de la BD
+      } catch (error) {
+        console.error('Error al obtener estudiantes:', error);
+      }
+    };
+
+    fetchEstudiantes();
+  }, []);
 
   const seleccionarEstudiante = (id) => {
     const estudiante = estudiantes.find((e) => e.id === id);
