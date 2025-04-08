@@ -1,36 +1,62 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Importamos iconos para mejorar visualmente
+import Swal from 'sweetalert2';
+
 
 const EstudianteList = () => {
-  const [usuarios, setUsuarios] = useState([]);
+  const [estudiantes, setEstudiantes] = useState([]);
   
-  // Simulamos la obtención de datos desde una API o base de datos
   useEffect(() => {
-    // Aquí puedes hacer una llamada a una API para obtener los usuarios
-    // Esto es solo un ejemplo con datos simulados.
-    const fetchUsuarios = async () => {
-      const data = [
-        { id_usuario: 1, nombre: 'Juan', apellido: 'Pérez', correo: 'juan@example.com', telefono: '123456789', curso: 'Matemáticas' },
-        { id_usuario: 2, nombre: 'Ana', apellido: 'García', correo: 'ana@example.com', telefono: '987654321', curso: 'Física' },
-        // Agregar más usuarios según sea necesario
-      ];
-      setUsuarios(data);
+    const fetchEstudiantes = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes');
+        setEstudiantes(res.data); // usa los datos de la BD
+      } catch (error) {
+        console.error('Error al obtener estudiantes:', error);
+      }
     };
 
-    fetchUsuarios();
+    fetchEstudiantes();
   }, []);
+
+  const eliminarEstudiante = async (id) => {
+    try {
+          const confirm = await Swal.fire({
+            title: '¿Estás seguro de borrar al estudiante?',
+            text: "No podrás revertir esta operación",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, borrar'
+          });
+          if (confirm.isConfirmed) {
+            const res = await axios.delete(`http://localhost:3000/api/estudiantes/eliminarEstudiante/${id}`);
+            if (res.status === 200) {
+              Swal.fire({
+                title: 'Estudiante borrado',
+                text: 'El estudiante ha sido borrado',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(() => {
+                navigate(0);
+              })
+            }
+          }
+        } catch (error) {
+          console.log(error);
+          Swal.fire('Error', 'Error al eliminar al estudiante', 'error');
+        }
+      };
 
   const handleEdit = (id) => {
     // Aquí puedes agregar la lógica para redirigir a una página de edición
     console.log(`Editar usuario con ID: ${id}`);
   };
 
-  const handleDelete = (id) => {
-    // Aquí puedes agregar la lógica para eliminar el usuario
-    console.log(`Eliminar usuario con ID: ${id}`);
-    setUsuarios(usuarios.filter(usuario => usuario.id_usuario !== id));  // Simula la eliminación
-  };
+
 
   return (
     <div className="container-fluid p-4">
@@ -50,7 +76,7 @@ const EstudianteList = () => {
             </tr>
           </thead>
           <tbody>
-            {usuarios.map((usuario, index) => (
+            {estudiantes.map((usuario, index) => (
               <tr key={usuario.id_usuario} className="align-middle">
                 <td>{index + 1}</td>
                 <td>{usuario.nombre}</td>
@@ -64,7 +90,7 @@ const EstudianteList = () => {
                   </button>
                 </td>
                 <td>
-                  <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(usuario.id_usuario)}>
+                  <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => eliminarEstudiante(usuario.id_usuario)}>
                     <FaTrash />
                   </button>
                 </td>

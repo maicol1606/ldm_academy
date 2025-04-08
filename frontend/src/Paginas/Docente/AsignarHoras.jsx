@@ -22,7 +22,7 @@ const AsignarHoras = () => {
   useEffect(() => {
     const fetchEstudiantes = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes/${idCampaña}');
+        const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes');
         setEstudiantes(res.data); // usa los datos de la BD
       } catch (error) {
         console.error('Error al obtener estudiantes:', error);
