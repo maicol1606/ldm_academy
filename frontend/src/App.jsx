@@ -19,7 +19,7 @@ const EstudianteList = lazy(() => import('./Paginas/Administrador/EstudianteList
 const EstudianteNew = lazy(() => import('./Paginas/Administrador/EstudianteNew'));
 const DocenteList = lazy(() => import('./Paginas/Administrador/DocenteList'));
 const DocenteNew = lazy(() => import('./Paginas/Administrador/DocenteNew'));
-const NotificaionesAdmin = lazy(() => import('./Paginas/Administrador/NotificaionesAdmin'));
+const NotificacionesAdmin = lazy(() => import('./Paginas/Administrador/NotificacionesAdmin'));
 const CertificadoAdmin = lazy(() => import('./Paginas/Administrador/CertificadoAdmin'));
 
 
@@ -81,7 +81,7 @@ function App() {
           <Route path='/DocenteList' element={<DocenteList />} />
           <Route path='/DocenteNew' element={<DocenteNew />} />
           <Route path='/EstudianteNew' element={<EstudianteNew />} />
-          <Route path='/NotificaionesAdmin' element={<NotificaionesAdmin />} />
+          <Route path='/NotificacionesAdmin' element={<NotificacionesAdmin />} />
           <Route path='/CertificadoAdmin' element={<CertificadoAdmin />} />
         </Route>
 
