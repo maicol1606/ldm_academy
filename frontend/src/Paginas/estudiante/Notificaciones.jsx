@@ -3,44 +3,25 @@ import NavegacionEstudiante from '../../Componentes/NavegacionEstudiante';
 import { Form, Table, Badge } from 'react-bootstrap';
 
 export default function Notificaciones() {
-  const estudianteNombre = 'Carlos Ruiz'; 
+  const [estudianteNombre, setEstudianteNombre] = useState('');
   const fechaActual = new Date().toLocaleDateString();
 
-  const todasNotificaciones = [
-    {
-      id: 1,
-      nombre: 'Carlos Ruiz',
-      campaña: 'Comedor',
-      numIdentificacion: '1234567890',
-      estado: 'Aceptada',
-      fecha: 'Hoy',
-    },
-    {
-      id: 2,
-      nombre: 'Carlos Ruiz',
-      campaña: 'Biblioteca',
-      numIdentificacion: '1234567890',
-      estado: 'Rechazada',
-      fecha: 'Ayer',
-    },
-    {
-      id: 3,
-      nombre: 'Ana Gómez',
-      campaña: 'Enfermería',
-      numIdentificacion: '9876543210',
-      estado: 'Aceptada',
-      fecha: 'Hoy',
-    },
-  ];
+  useEffect(() => {
+    // Simulamos que el nombre del estudiante viene del localStorage
+    const nombre = localStorage.getItem('nombreEstudiante') || 'Estudiante';
+    setEstudianteNombre(nombre);
+  }, []);
 
- 
+  const todasNotificaciones = []; // Aquí ya no hay datos simulados
+
+  // Filtramos las notificaciones que pertenecen al estudiante logueado
   const notificacionesEstudiante = todasNotificaciones.filter(
     (n) => n.nombre === estudianteNombre
   );
 
   const [filtroCampaña, setFiltroCampaña] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
-  const [notificacionesFiltradas, setNotificacionesFiltradas] = useState(notificacionesEstudiante);
+  const [notificacionesFiltradas, setNotificacionesFiltradas] = useState([]);
 
   useEffect(() => {
     let resultado = notificacionesEstudiante;
@@ -56,9 +37,16 @@ export default function Notificaciones() {
     }
 
     setNotificacionesFiltradas(resultado);
-  }, [filtroCampaña, filtroEstado]);
+  }, [filtroCampaña, filtroEstado, estudianteNombre]);
 
-  const campañas = ['Comedor', 'Enfermería', 'Biblioteca', 'Coordinación', 'Orientación', 'Salón'];
+  const campañas = [
+    { nombre: 'Comedor', postulados: 0, activos: 0 },
+    { nombre: 'Enfermería', postulados: 0, activos: 0 },
+    { nombre: 'Biblioteca', postulados: 0, activos: 0 },
+    { nombre: 'Coordinación', postulados: 0, activos: 0 },
+    { nombre: 'Orientación', postulados: 0, activos: 0 },
+    { nombre: 'Salón', postulados: 0, activos: 0 },
+  ];
 
   return (
     <div>
@@ -68,14 +56,15 @@ export default function Notificaciones() {
         <p className="text-center text-muted">{fechaActual}</p>
 
         <div className="row mt-4">
+          {/* Columna izquierda - campañas */}
           <div className="col-md-3">
             <h5>Lista de Campañas</h5>
-            {campañas.map((nombre, index) => (
+            {campañas.map((campaña, index) => (
               <div className="border rounded p-2 mb-2 bg-light shadow-sm" key={index}>
-                <strong>{nombre}</strong>
+                <strong>{campaña.nombre}</strong>
                 <div className="text-muted" style={{ fontSize: '14px' }}>
-                  Postulados: {Math.floor(Math.random() * 10) + 1}<br />
-                  Activos: {Math.floor(Math.random() * 5) + 1}
+                  Postulados: {campaña.postulados}<br />
+                  Activos: {campaña.activos}
                 </div>
               </div>
             ))}
@@ -95,7 +84,7 @@ export default function Notificaciones() {
               >
                 <option value="">Todas las campañas</option>
                 {campañas.map((campaña, index) => (
-                  <option key={index} value={campaña}>{campaña}</option>
+                  <option key={index} value={campaña.nombre}>{campaña.nombre}</option>
                 ))}
               </Form.Select>
             </div>
