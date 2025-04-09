@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const estudiantesControlador = require('../controladores/estudiantesControlador');
 
-router.get('/obtenerEstudiantes', estudiantesControlador.obtenerEstudiantes);
+router.get('/obtenerEstudiantes/', estudiantesControlador.obtenerEstudiantes);
 
 router.put('/actualizarEstudiante/:id', estudiantesControlador.actualizarEstudiante);
 
