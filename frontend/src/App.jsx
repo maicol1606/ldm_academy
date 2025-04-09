@@ -11,7 +11,7 @@ import RutaPublica from './Componentes/RutaPublica';
 
 //admin
 const AdminHome = lazy(() => import('./Paginas/Administrador/AdminHome'));
-const AdminMenu = lazy(() => import('./Paginas/Administrador/AdminMenu'));
+
 const CampaignList = lazy(() => import('./Paginas/Administrador/CampaignList'));
 const CampaignNew = lazy(() => import('./Paginas/Administrador/CampaignNew'));
 const CampaignSearch = lazy(() => import('./Paginas/Administrador/CampaignSearch'));
@@ -73,7 +73,6 @@ function App() {
         {/* Rutas para el admin */}
         <Route element={<RutaPrivada requiredRol={1} />}>
           <Route path='/admin/' exact element={<AdminHome />} />
-          <Route path="/admin/menu" element={<AdminMenu />} />
           <Route path="/campaignList" element={<CampaignList />} />
           <Route path="/CampaignNew" element={<CampaignNew />} />
           <Route path='/CampaignSearch' element={<CampaignSearch />} />
