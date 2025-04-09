@@ -87,7 +87,7 @@ export default function NavegacionAdmin() {
 
                     <ul className="list-unstyled mt-4">
                         <li><Link to="/" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-house-door me-2"></i> Página de Inicio</Link></li>
-                        <li><Link to="/NotificaionesAdmin" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-bell me-2"></i> Notificaciones</Link></li>
+                        <li><Link to="/NotificacionesAdmin" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-bell me-2"></i> Notificaciones</Link></li>
                         {[{
                             title: 'Estudiantes', icon: 'bi-person', links: [{ to: '/EstudianteNew', text: 'Agregar Estudiante', icon: 'bi-person-plus' }, { to: '/EstudianteList', text: 'Lista de Estudiantes', icon: 'bi-person-lines-fill' }] },
                             { title: 'Docentes', icon: 'bi-person-badge', links: [{ to: '/DocenteNew', text: 'Agregar Docente', icon: 'bi-person-plus' }, { to: '/DocenteList', text: 'Lista de Docentes', icon: 'bi-person-lines-fill' }] },

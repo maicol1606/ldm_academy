@@ -27,9 +27,24 @@ const NavegadorDocente = () => {
   };
 
   const students = [
-    { id: 1, name: "Juan Pérez", image: "/img/students/juan.png" },
-    { id: 2, name: "Ana Gómez", image: "/img/students/ana.png" }
+    {
+      id: 1,
+      name: "Juan Pérez",
+      idNumber: "1029384756",
+      course: "10-B",
+      horaPostulacion: "08:30 AM",
+      estado: "Aceptado"
+    },
+    {
+      id: 2,
+      name: "Laura Gómez",
+      idNumber: "1092837465",
+      course: "11-A",
+      horaPostulacion: "09:15 AM",
+      estado: "Rechazado"
+    }
   ];
+  
 
   return (
     <div className="d-flex flex-column bg-light vh-100" style={{ width: "250px" }}>
@@ -65,46 +80,46 @@ const NavegadorDocente = () => {
         </button>
       </nav>
 
-      {/* Modal de notificaciones */}
       {showNotifications && (
-        <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} tabIndex="-1">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Notificaciones</h5>
-                <button type="button" className="btn-close" onClick={toggleNotifications}></button>
-              </div>
-              <div className="modal-body">
-                <p>No tienes nuevas notificaciones.</p>
-                <h6 className="mt-3">Estudiantes postulados a las campañas</h6>
-                {students.map((student) => (
-                  <div key={student.id} className="d-flex align-items-center mb-3">
-                    <img
-                      src={student.image}
-                      alt={student.name}
-                      className="rounded-circle"
-                      style={{ width: "40px", height: "40px", cursor: "pointer" }}
-                      onClick={() => navigate(`/perfil-estudiante/${student.id}`)}
-                    />
-                    <span
-                      className="ms-2"
-                      style={{ cursor: "pointer", fontWeight: "bold" }}
-                      onClick={() => navigate(`/perfil-estudiante/${student.id}`)}
-                    >
-                      {student.name}
-                    </span>
-                    <div className="ms-auto">
-                      <button className="btn btn-success btn-sm me-2" onClick={() => handleAccept(student.name)}>Aceptar</button>
-                      <button className="btn btn-danger btn-sm" onClick={() => handleReject(student.name)}>Rechazar</button>
-                    </div>
-                  </div>
-                ))}
-                {notificationMessage && <div className="alert alert-info mt-3">{notificationMessage}</div>}
-              </div>
-            </div>
-          </div>
+  <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} tabIndex="-1">
+    <div className="modal-dialog modal-lg">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Notificaciones</h5>
+          <button type="button" className="btn-close" onClick={toggleNotifications}></button>
         </div>
-      )}
+        <div className="modal-body">
+          <h6>Estudiantes postulados a campañas</h6>
+          <table className="table table-striped mt-3">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Identificación</th>
+                <th>Curso</th>
+                <th>Hora de postulación</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map((student) => (
+                <tr key={student.id}>
+                  <td>{student.name}</td>
+                  <td>{student.idNumber}</td>
+                  <td>{student.course}</td>
+                  <td>{student.horaPostulacion}</td>
+                  <td className={student.estado === "Aceptado" ? "text-success" : "text-danger"}>
+                    {student.estado}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Footer con icono de notificaciones */}
       <div className="mt-auto text-center p-3 border-top">
