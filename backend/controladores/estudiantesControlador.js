@@ -1,16 +1,23 @@
 const db = require('../config/db');
 
 exports.obtenerEstudiantes = (req, res) => {
-    db.query('SELECT * FROM usuarios where id_rol = 2 and estado = 1', (error, results) => {
+    const query = `
+        SELECT usuarios.*, postulacion.id_campaña 
+        FROM usuarios 
+        INNER JOIN postulacion ON usuarios.id_usuario = postulacion.id_usuario 
+        WHERE usuarios.id_rol = 2 AND usuarios.estado = 1
+    `;
+    
+    db.query(query, (error, results) => {
         if (error) {
             console.error('Error al obtener los estudiantes:', error);
             res.status(500).json({ error: 'Error al obtener los estudiantes' });
         } else {
             res.status(200).send(results);
         }
-        
     });
 };
+
 
 //SELECT * from usuarios where id_rol = 2 inner join postulacion on usuarios.id_usuario = postulacion.id_usuario
 //SELECT * from usuarios inner join postulacion on usuarios.id_usuario = postulacion.id_usuario where id_rol = 2; 

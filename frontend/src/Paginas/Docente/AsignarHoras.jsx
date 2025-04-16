@@ -4,94 +4,124 @@ import { FaUserClock, FaClock, FaPlus, FaExclamationTriangle, FaEdit, FaInfoCirc
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 
-const estudiantesMock = [
-  
-];
 
 const AsignarHoras = () => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [mostrarDetalle, setMostrarDetalle] = useState(false);
   const [estudianteSeleccionado, setEstudianteSeleccionado] = useState(null);
 
+  
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-  const [nuevasHoras, setNuevasHoras] = useState(0);
-  const [reporteActivo, setReporteActivo] = useState(false);
-  const [reporteNovedad, setReporteNovedad] = useState('');
-  const [justificacionReasignacion, setJustificacionReasignacion] = useState('');
-  const [reasignandoHoras, setReasignandoHoras] = useState(false);
+  const [horaInicio, setHoraInicio] = useState('');
+  const [horaFin, setHoraFin] = useState('');
+  const [novedades, setNovedades] = useState('');
+  const [nuevasHoras, setNuevasHoras] = useState('');
+  const [fecha, setFecha] = useState('');
 
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState('');
+  const [tipoModal, setTipoModal] = useState('success');
 
   useEffect(() => {
-    const fetchEstudiantes = async () => {
+    const obtenerEstudiantes = async () => {
       try {
         const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes');
-        setEstudiantes(res.data); // usa los datos de la BD
-      } catch (error) {
-        console.error('Error al obtener estudiantes:', error);
+        console.log("Estudiantes obtenidos:", res.data); 
+        setEstudiantes(res.data);
+      } catch (err) {
+        console.error(err);
       }
     };
+    obtenerEstudiantes();
+  }, []); 
 
-    fetchEstudiantes();
-  }, []);
-
-  const seleccionarEstudiante = (id_usuario) => {
-    const estudiante = estudiantes.find((e) => e.id_usuario === id_usuario);
-    setEstudianteSeleccionado(estudiante);
-    setMostrarDetalle(true);
+  const seleccionarEstudiante = (idUsuario) => {
+    const estudiante = estudiantes.find(e => e.id_usuario === idUsuario);
+    if (estudiante) {
+      setEstudianteSeleccionado(estudiante);
+      setMostrarDetalle(true);
+    }
   };
   
+  const enviarAsistencia = async () => {
+    if (!horaInicio || !horaFin || isNaN(nuevasHoras) || nuevasHoras < 1 || nuevasHoras > 6) {
+      setTipoModal('error');
+      setModalMensaje("Completa todos los campos correctamente.");
+      setMostrarModal(true);
+      return;
+    }
+   
 
+
+  
+    try {
+      await axios.post('http://localhost:3000/api/asistencia/agregarAsistencia', {
+        id_usuario: estudianteSeleccionado.id_usuario,
+        id_campaña: estudianteSeleccionado.id_campaña,
+        fecha,// Este campo debe existir en los datos del estudiante
+        hora_Inicio: horaInicio,
+        hora_fin: horaFin,
+        horas: nuevasHoras,
+        novedades
+      });
+  
+      setTipoModal('success');
+      setModalMensaje("Asistencia registrada correctamente.");
+      setMostrarModal(true);
+      setMostrarFormulario(false);
+  
+      // Limpieza y recarga de datos
+
+      setHoraInicio('');
+      setHoraFin('');
+      setNovedades('');
+      setNuevasHoras('');
+      
+      const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes');
+      setEstudiantes(res.data);
+      const actualizado = res.data.find(e => e.id_usuario === estudianteSeleccionado.id_usuario);
+      setEstudianteSeleccionado(actualizado);
+    } catch (error) {
+      console.error(error);
+      setTipoModal('error');
+      setModalMensaje("Error al registrar asistencia.");
+      setMostrarModal(true);
+    }
+  };
   const handleHorasChange = (e) => {
-    setNuevasHoras(parseInt(e.target.value));
+    const valor = parseInt(e.target.value);
+    if (!isNaN(valor) && valor >= 1 && valor <= 6) {
+      setNuevasHoras(valor);
+    } else {
+      setNuevasHoras('');
+    }
   };
-
-  const asignarHoras = () => {
-    if (!estudianteSeleccionado) {
-      alert('Debe seleccionar un estudiante.');
-      return;
-    }
-
-    const hoy = new Date().toLocaleDateString();
-    const totalHorasHoy = estudianteSeleccionado.asistencia.reduce((total, a) => total + (a.dia === hoy ? a.horas : 0), 0);
-
-    if (totalHorasHoy > 0 && !reasignandoHoras) {
-      setReasignandoHoras(true);
-      return;
-    }
-
-    if (reasignandoHoras && !justificacionReasignacion.trim()) {
-      alert('Debe justificar la reasignación de horas.');
-      return;
-    }
-
-    if (totalHorasHoy + nuevasHoras > 6) {
-      alert('No puedes asignar más de 6 horas por día.');
-      return;
-    }
-
-    const nuevaAsistencia = {
-      dia: hoy,
-      horas: nuevasHoras,
-      horario: '8:00 AM - 12:00 PM',
-      justificacion: reasignandoHoras ? justificacionReasignacion : null,
-    };
-
-    const nuevosEstudiantes = estudiantes.map((e) =>
-      e.id === estudianteSeleccionado.id
-        ? { ...e, asistencia: [...e.asistencia, nuevaAsistencia] }
-        : e
-    );
-
-    setEstudiantes(nuevosEstudiantes);
-    setEstudianteSeleccionado({ ...estudianteSeleccionado, asistencia: [...estudianteSeleccionado.asistencia, nuevaAsistencia] });
-    setNuevasHoras(0);
-    setJustificacionReasignacion('');
-    setReasignandoHoras(false);
-    alert('Horas asignadas correctamente.');
-  };
-
+  
+ 
   return (
     <>
+    {mostrarModal && (
+  <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+    <div className="modal-dialog modal-dialog-centered">
+      <div className={`modal-content border-${tipoModal === 'success' ? 'success' : 'danger'}`}>
+        <div className={`modal-header bg-${tipoModal === 'success' ? 'success' : 'danger'} text-white`}>
+          <h5 className="modal-title">
+            {tipoModal === 'success' ? 'Éxito' : 'Error'}
+          </h5>
+          <button className="btn-close" onClick={() => setMostrarModal(false)}></button>
+        </div>
+        <div className="modal-body">
+          <p>{modalMensaje}</p>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-secondary" onClick={() => setMostrarModal(false)}>Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+   
       {/* Modal de información del estudiante */}
       {mostrarDetalle && estudianteSeleccionado && (
         <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -100,6 +130,15 @@ const AsignarHoras = () => {
               <div className="modal-header">
                 <h5 className="modal-title"><FaInfoCircle /> Información del Estudiante</h5>
                 <button className="btn-close" onClick={() => setMostrarDetalle(false)}></button>
+                <div className="modal-footer">
+                  <button className="btn btn-success" onClick={() => {
+                  setMostrarFormulario(true);
+                  setMostrarDetalle(false); // Opcional: cerrar el detalle cuando abres el form
+                  }}>
+                  <FaPlus /> Registrar Asistencia
+                  </button>
+                  <button className="btn btn-secondary" onClick={() => setMostrarDetalle(false)}>Cerrar</button>
+                  </div>
               </div>
               <div className="modal-body">
                 <h6>Nombre: {estudianteSeleccionado.nombre}</h6>
@@ -111,7 +150,7 @@ const AsignarHoras = () => {
                 <ul className="list-group">
                   {estudianteSeleccionado.asistencia?.map((a, index) => (
                     <li key={index} className="list-group-item">
-                      Día: {a.dia} | Horas: {a.horas} | ID Asistencia: {a.id_asistencia} | ID Campaña: {a.id_campana}
+                      fecha: {a.dia} | Hora de inicio: {a.horas} | ID Asistencia: {a.id_asistencia} | ID Campaña: {a.id_campana}
                       {a.novedades && <div className="text-muted">Novedades: {a.novedades}</div>}
                     </li>
                   ))}
@@ -150,75 +189,47 @@ const AsignarHoras = () => {
             </div>
           </div>
   
-          {/* Sección de tarjetas con info del estudiante */}
-          {estudianteSeleccionado && (
-  <div className="d-flex flex-wrap justify-content-center gap-3">
-    {/* Asignar horas */}
-    <div className="card text-center p-3 shadow-sm" style={{ width: '250px' }}>
-      <FaClock size={40} className="mx-auto text-primary" />
-      <h5 className="mt-2">Asignar Horas</h5>
-      <input
-        type="number"
-        className="form-control my-2"
-        value={nuevasHoras}
-        onChange={handleHorasChange}
-        min="1"
-        max="6"
-      />
-      <button className="btn btn-success" onClick={asignarHoras}>
-        Confirmar
-      </button>
-      {reasignandoHoras && (
-        <div className="mt-2">
-          <textarea
-            className="form-control"
-            placeholder="Justifique la reasignación"
-            value={justificacionReasignacion}
-            onChange={(e) => setJustificacionReasignacion(e.target.value)}
-          />
-        </div>
-      )}
-    </div>
+          {mostrarFormulario && (
+            <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content p-3">
+                  <div className="modal-header">
+                    <h5 className="modal-title"><FaPlus /> Registrar Asistencia</h5>
+                    <button className="btn-close" onClick={() => setMostrarFormulario(false)}></button>
+                    </div>
+                    <div className="modal-body">
+                      <form onSubmit={(e) => { e.preventDefault(); enviarAsistencia(); }}>
+                        <div className="mb-3">
+                          <label>fecha</label>
+                          <input type="date" className="form-control" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
+                          </div>
+                          <div className="mb-3">
+                          <label>Hora de Inicio</label>
+                          <input type="time" className="form-control" value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} required />
+                          </div>
+                          <div className="mb-3">
+                            <label>Hora de Fin</label>
+                            <input type="time" className="form-control" value={horaFin} onChange={(e) => setHoraFin(e.target.value)} required />
+                            </div>
+                            <div className="mb-3">
+                              <label>Horas</label>
+                              <input type="number" className="form-control" value={nuevasHoras} onChange={handleHorasChange} min="1" max="6" required />
+                              </div>
+                              <div className="mb-3">
+                                <label>Novedades (opcional)</label>
+                                <textarea className="form-control" value={novedades} onChange={(e) => setNovedades(e.target.value)} />
 
-    {/* Total de horas */}
-    <div className="card text-center p-3 shadow-sm" style={{ width: '250px' }}>
-      <FaClock size={40} className="mx-auto text-info" />
-      <h5 className="mt-2">Total de Horas</h5>
-      <p className="fs-4">
-        {estudianteSeleccionado.asistencia?.reduce((total, a) => total + a.horas, 0) || 120} horas
-      </p>
-    </div>
-
-    {/* Horas hechas */}
-    <div className="card text-center p-3 shadow-sm" style={{ width: '250px' }}>
-      <FaCheckCircle size={40} className="mx-auto text-success" />
-      <h5 className="mt-2">Horas Hechas</h5>
-      <p className="fs-4">
-        {estudianteSeleccionado.asistencia?.length || 0} días con asistencia
-      </p>
-    </div>
-
-    {/* Novedades */}
-    <div className="card text-center p-3 shadow-sm" style={{ width: '250px' }}>
-      <FaExclamationTriangle size={40} className="mx-auto text-danger" />
-      <h5 className="mt-2">Novedades</h5>
-      {estudianteSeleccionado.novedades ? (
-        <p>{estudianteSeleccionado.novedades}</p>
-      ) : (
-        <p className="text-muted">Sin novedades</p>
-      )}
-      <button className="btn btn-warning mt-2" onClick={() => setReporteActivo(true)}>
-        Reportar
-      </button>
-    </div>
-  </div>
-)}
-
-        </div>
-      </div>  
-    </>
-  );
-};
-
-
+                                </div>
+                                <button className="btn btn-primary" type="submit">Guardar Asistencia</button>
+                                </form>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                              )}
+                              </div>
+                              </div>  
+                              </>
+                           );
+                          };
 export default AsignarHoras;

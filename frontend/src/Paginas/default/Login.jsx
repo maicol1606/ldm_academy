@@ -28,10 +28,15 @@ export default function Login() {
                     icon: 'success',
                     title: response.data.title,
                     text: response.data.message,
+                    
                 }).then(() => {
                     const token = response.data.token;
-                    localStorage.setItem('token', token);
                     const rol = response.data.rol;
+                    const idUsuario = response.data.id_usuario;
+
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('id_usuario', idUsuario); // 👈 Aquí
+
                     switch (rol) {
                         case 1:
                             navigate('/admin');

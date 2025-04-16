@@ -50,6 +50,7 @@ exports.login = (req, res) => {
     const contrasena = req.body.contrasena;
     const query = 'SELECT * FROM usuarios WHERE correo = ? and estado = 1';
 
+
     db.query(query, [correo], (error, results) => {
         if (error) {
             console.error('Error al obtener el usuario:', error);
@@ -62,7 +63,8 @@ exports.login = (req, res) => {
 
             if (contrasenaValida) {
                 const token = jwt.sign({ id: usuario.id_usuario, rol: usuario.id_rol }, secret, { expiresIn: '3h' });
-                res.status(200).send({ token: token, title: 'Inicio de sesión exitoso', rol: usuario.id_rol });
+                res.status(200).send({ token: token, title: 'Inicio de sesión exitoso', rol: usuario.id_rol,id_usuario: usuario.id_usuario, nombre: usuario.nombre,
+                    foto: usuario.foto, apellido: usuario.apellido });
             } else {
                 res.status(401).send({ error: 'Credenciales incorrectas' });
             }
