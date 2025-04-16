@@ -1,20 +1,17 @@
-const e = require('express');
 const db = require('../config/db');
 
 const obtenerEstadisticas = (req, res) => {
   const query = `
     SELECT 
-      COUNT(*) AS total,
-      SUM(estado = 2) AS postulados,
-      SUM(estado = 1) AS enProceso,
-      SUM(estado = 0) AS finalizados
-    FROM usuarios
-    WHERE id_rol = 2;
+      (SELECT COUNT(*) FROM usuarios WHERE id_rol = 2 ) AS total,
+      (SELECT COUNT(*) FROM postulacion) AS postulados,
+      (SELECT COUNT(*) FROM usuarios WHERE id_rol = 2 AND estado = 1) AS enProceso,
+      (SELECT COUNT(*) FROM usuarios WHERE id_rol = 2 AND estado = 0) AS finalizados
   `;
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error en la consulta:', err);
+      console.error(' Error en la consulta:', err);
       return res.status(500).json({ error: 'Error al obtener estadísticas' });
     }
 
@@ -23,7 +20,6 @@ const obtenerEstadisticas = (req, res) => {
     res.json({ total, postulados, enProceso, finalizados });
   });
 };
-
 
 module.exports = {
   obtenerEstadisticas,
