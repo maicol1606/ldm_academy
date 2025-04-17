@@ -52,7 +52,6 @@ const Login: React.FC = () => {
             onPress: () => {
               const { token, rol } = response.data;
 
-              // Aquí podrías guardar el token con AsyncStorage si es necesario
 
               switch (rol) {
                 case 1:
@@ -106,7 +105,7 @@ const Login: React.FC = () => {
         <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>¿Aún no tienes una cuenta? Regístrate</Text>
       </TouchableOpacity>
 
