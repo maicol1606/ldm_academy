@@ -64,13 +64,12 @@ export default function NavegacionAdmin() {
     className="offcanvas offcanvas-start text-white"
     tabIndex="-1"
     id="offcanvasAdmin"
-    style={{ width: '280px', backgroundColor: '#000' }} // Fondo negro
+    style={{ width: '200px', backgroundColor: '#000' }} // Fondo negro
     onShow={() => setMenuOpen(true)}
     onHide={() => setMenuOpen(false)}
 >
 
                 <div className="offcanvas-header border-bottom">
-                    <h5 className="offcanvas-title">Menú Administrador</h5>
                     <button type="button" className="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
                 </div>
                 <div className="offcanvas-body">
@@ -93,7 +92,6 @@ export default function NavegacionAdmin() {
                             { title: 'Docentes', icon: 'bi-person-badge', links: [{ to: '/DocenteNew', text: 'Agregar Docente', icon: 'bi-person-plus' }, { to: '/DocenteList', text: 'Lista de Docentes', icon: 'bi-person-lines-fill' }] },
                             { title: 'Campañas', icon: 'bi-flag', links: [{ to: '/CampaignNew', text: 'Crear Campaña', icon: 'bi-plus-circle' }, { to: '/CampaignList', text: 'Lista de Campañas', icon: 'bi-list' }] },
                             { title: 'Certificados', icon: 'bi-file-earmark-check', links: [{ to: '/CertificadoAdmin', text: 'Lista de Certificados', icon: 'bi-file-earmark' }] },
-                            { title: 'Estadísticas', icon: 'bi-graph-up', links: [{ to: '/EnProceso', text: 'En proceso', icon: 'bi-clock-history' }, { to: '/Estadisticas', text: 'Finalizadas', icon: 'bi-check2-circle' }] },
                         ].map((item, index) => (
                             <li key={index} className="mb-3">
                                 <a href="#" className="text-white text-decoration-none d-flex align-items-center p-2 rounded" onClick={() => toggleMenu(item.title)}>

@@ -11,7 +11,7 @@ const EstudianteList = () => {
   useEffect(() => {
     const fetchEstudiantes = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/estudiantes/obtenerEstudiantes');
+        const res = await axios.get('http://localhost:3000/api/estudiantes/llamarEstudiantes');
         setEstudiantes(res.data); // usa los datos de la BD
       } catch (error) {
         console.error('Error al obtener estudiantes:', error);
@@ -62,6 +62,7 @@ const EstudianteList = () => {
     <div className="container-fluid p-4">
       <NavegacionAdmin />
       <div className="table-responsive">
+        <h3 className=''>Listado de estudiantes en plataforma</h3>
         <table className="table table-hover table-striped text-center">
           <thead className="thead-dark">
             <tr>
