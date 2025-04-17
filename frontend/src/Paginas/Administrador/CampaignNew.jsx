@@ -1,145 +1,163 @@
 import React, { useState } from "react";
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function CampaignNew() {
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [studentsRequired, setStudentsRequired] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [teacher, setTeacher] = useState("");
-  const [schedule, setSchedule] = useState("");
+  const token = localStorage.getItem('token');
+  const id_user = JSON.parse(atob(token.split(".")[1])).id;
 
-  const handleSubmit = (e) => {
+  const [Campaña, setCampaña] = useState({
+    nom_campana: '',
+    descripcion: '',
+    fecha: '',
+    cupos: '',
+    id_docente: id_user,
+    foto: null
+  });
+  console.log(Campaña);
+  const handleChange = (e) => {
+    setCampaña({
+      ...Campaña,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setCampaña((prevCampaña) => ({
+      ...prevCampaña,
+      foto: file
+    }));
+  };
+    
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Nueva campaña agregada:\nDescripción: ${description}\nUbicación: ${location}\nEstudiantes requeridos: ${studentsRequired}\nInicio: ${startDate}\nDocente: ${teacher}\nJornada: ${schedule}`);
-    setDescription("");
-    setLocation("");
-    setStudentsRequired("");
-    setStartDate("");
-    setTeacher("");
-    setSchedule("");
+
+    const formData = new FormData();
+    formData.append('nom_campana', Campaña.nom_campana);
+    formData.append('descripcion', Campaña.descripcion);
+    formData.append('fecha', Campaña.fecha);
+    formData.append('cupos', Campaña.cupos);
+    formData.append('id_docente', Campaña.id_docente);
+    formData.append('foto', Campaña.foto);
+
+    try{ 
+      const res= await axios.post('http://localhost:3000/api/campanas/agregarCampana', formData);
+      if(res.status === 200){
+        Swal.fire({
+          title: res.data.title,
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+
+        setCampaña({
+          nom_campana: '',
+          descripcion: '',
+          fecha: '',
+          cupos: '',
+          id_docente: id_user,
+          foto: null
+        });
+
+      }else{
+        Swal.fire({
+          title: 'Error al crear la campaña',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: error.response.data.title, 
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    
   };
 
   return (
     <div className="container-fluid bg-light min-vh-100">
       <NavegacionAdmin />
-      <div className="container mt-4">
+      <div className="container mt-4 ">
         <div className="card shadow-lg p-4">
           <h2 className="text-center text-primary mb-4">
             <i className="far fa-address-card"></i> &nbsp; Nueva Campaña
           </h2>
-          <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-            <div className="form-group">
-              <label htmlFor="campaign_description">Descripción</label>
-              <textarea
-                className="form-control"
-                id="campaign_description"
-                rows="3"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              ></textarea>
-            </div>
+          <form onSubmit={handleSubmit} className='p-5'>
+          <div className="form-group">
+            <label htmlFor="nombreCampaña">Nombre de la campaña</label>
+            <input
+              onChange={handleChange}
+              type="text"
+              className="form-control"
+              id="nombreCampaña"
+              name='nom_campana'
+              value={Campaña.nom_campana}
 
-            <div className="form-group mt-3">
-              <label htmlFor="campaign_location">Ubicación</label>
-              <select
-                className="form-control"
-                id="campaign_location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                required
-              >
-                <option value="" disabled>Seleccione el lugar</option>
-                <option value="Coordinación">Coordinación</option>
-                <option value="Salón">Salón</option>
-                <option value="Comedor">Comedor</option>
-                <option value="Orientación">Orientación</option>
-                <option value="Biblioteca">Biblioteca</option>
-              </select>
-            </div>
+              placeholder="Ingrese el nombre de la campaña"
+            />
+          </div>
 
-            <div className="form-group mt-3">
-              <label htmlFor="students_required">Estudiantes requeridos</label>
-              <input
-                type="number"
-                className="form-control"
-                id="students_required"
-                value={studentsRequired}
-                onChange={(e) => setStudentsRequired(e.target.value)}
-                required
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="numEstudiantes">Número de cupos</label>
+            <input
+              onChange={handleChange}
+              type="number"
+              className="form-control"
+              id="numEstudiantes"
+              name='cupos'
+              value={Campaña.cupos}
 
-            <div className="form-group mt-3">
-              <label htmlFor="start_date">Inicio de la campaña</label>
-              <input
-                type="date"
-                className="form-control"
-                id="start_date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                required
-              />
-            </div>
+              placeholder="Ingrese el número de estudiantes"
+            />
+          </div>
 
-            <div className="form-group mt-3">
-              <label htmlFor="teacher">Docente a cargo</label>
-              <select
-                className="form-control"
-                id="teacher"
-                value={teacher}
-                onChange={(e) => setTeacher(e.target.value)}
-                required
-              >
-                <option value="" disabled>Seleccione un docente</option>
-                <option value="Docente 1">Docente 1</option>
-                <option value="Docente 2">Docente 2</option>
-                <option value="Docente 3">Docente 3</option>
-              </select>
-            </div>
+          <div className="form-group">
+            <label htmlFor="descrpcion">Descripcion de la campaña</label>
+            <textarea
+              onChange={handleChange}
+              className="form-control"
+              id="descrpcion"
+              name='descripcion'
+              rows="3"
+              value={Campaña.descripcion}
+              placeholder="Ingrese la descripción"
+            ></textarea>
+          </div>
 
-            <div className="form-group mt-3">
-              <label>Jornada</label>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="schedule"
-                  id="morning"
-                  value="Mañana"
-                  onChange={(e) => setSchedule(e.target.value)}
-                  required
-                />
-                <label className="form-check-label" htmlFor="morning">
-                  Mañana
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="schedule"
-                  id="afternoon"
-                  value="Tarde"
-                  onChange={(e) => setSchedule(e.target.value)}
-                  required
-                />
-                <label className="form-check-label" htmlFor="afternoon">
-                  Tarde
-                </label>
-              </div>
-            </div>
+          <div className="form-group">
+            <label htmlFor="fecha">Fecha de Inicio</label>
+            <input
+              onChange={handleChange}
+              type="date"
+              className="form-control"
+              id="fecha"
+              name='fecha'
+              value={Campaña.fecha}
 
-            <div className="text-center mt-4">
-              <button type="reset" className="btn btn-secondary me-2">
-                <i className="fas fa-paint-roller"></i> &nbsp; Limpiar
-              </button>
-              <button type="submit" className="btn btn-primary">
-                <i className="far fa-save"></i> &nbsp; Guardar
-              </button>
-            </div>
-          </form>
+              placeholder="Ingrese la fecha"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="fotoCampaña">Subir foto de la campaña</label>
+            <input
+              type="file"
+              className="form-control-file"
+              id="fotoCampaña"
+              name='foto'
+
+              accept='image/*'
+              onChange={handleFileChange}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary mt-3">
+            Crear Campaña
+          </button>
+        </form>
         </div>
       </div>
     </div>
