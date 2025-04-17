@@ -30,6 +30,40 @@ exports.llamarEstudiantes = (req, res) => {
     });
 };
 
+exports.obtenerAsistenciaEstudiante = (req, res) => {
+    const id = req.params.id;
+    const query = `
+        SELECT 
+  u.id_usuario AS id_usuario,
+  CONCAT(u.nombre, ' ', u.apellido) AS nombre_completo,
+  a.horas,
+  a.fecha,
+  a.novedades
+FROM usuarios u
+JOIN asistencia a ON u.id_usuario = a.id_usuario
+WHERE u.id_usuario = ?;
+    `;
+  
+    db.query(query, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error al obtener datos' });
+  
+        if (results.length === 0) return res.status(404).json({ error: 'Estudiante no encontrado' });
+  
+        // Estructura clara del estudiante con su historial de asistencia
+        const estudiante = {
+            id_usuario: results[0].id_usuario,
+            nombre: results[0].nombre,
+            apellido: results[0].apellido,
+            asistencia: results.map(r => ({
+                horas: r.horas,
+                dia: r.fecha, // Aquí estamos usando 'fecha' en lugar de 'dia' para mayor claridad
+                novedades: r.novedades
+            }))
+        };
+  
+        res.json(estudiante);
+    });
+};
 
 
 //SELECT * from usuarios where id_rol = 2 inner join postulacion on usuarios.id_usuario = postulacion.id_usuario

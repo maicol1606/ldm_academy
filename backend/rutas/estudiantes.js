@@ -15,4 +15,6 @@ router.get('/conteoEstudiantes', estudiantesControlador.conteoEstudiantes);
 router.get('/mostrarHorasEstudiante/:id/:fecha', estudiantesControlador.mostrarHorasEstudiante);
 
 router.get('/llamarEstudiantes', estudiantesControlador.llamarEstudiantes);
+
+router.get('/asistenciaEstudiante/:id', estudiantesControlador.obtenerAsistenciaEstudiante);
 module.exports = router;

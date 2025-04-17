@@ -4,6 +4,7 @@ const asistenciaControlador = require('../controladores/asistenciaControlador');
 
 router.get('/mostrarAsistencias/:id', asistenciaControlador.mostrarAsistenciasPorEstudiante);
 
+
 router.post('/agregarAsistencia', asistenciaControlador.agregarAsistencia);
 
 router.delete('/eliminarAsistencia/:id', asistenciaControlador.eliminarAsistencia);

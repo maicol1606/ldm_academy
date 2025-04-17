@@ -14,4 +14,6 @@ router.get('/conteoDocentes', docentesControlador.conteoDocentes);
 
 router.post('/agregarHoras/:id', docentesControlador.agregarHoras);
 
+router.post('/agregarDocente', docentesControlador.agregarDocente);
+
 module.exports = router;

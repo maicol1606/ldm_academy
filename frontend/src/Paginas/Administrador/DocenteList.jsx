@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Importamos iconos para mejorar visualmente
+import Swal from 'sweetalert2';
 
 const EstudianteList = () => {
   const [usuarios, setUsuarios] = useState([]);
