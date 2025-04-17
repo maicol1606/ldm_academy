@@ -180,7 +180,7 @@ const AsignarHoras = () => {
                     <img src={estudiante.foto} className="rounded-circle mx-auto mb-2" alt="Perfil" style={{ width: '50px' }} />
                     <h6 className="mb-0">{estudiante.nombre}</h6>
                     <p className="text-muted">Numero: {estudiante.id_usuario}</p>
-                    <button className="btn btn-info btn-sm mt-2" onClick={() => seleccionarEstudiante(estudiante.id_usuario)}>
+                    <button className=" btn btn-primary" onClick={() => seleccionarEstudiante(estudiante.id_usuario)}>
                       <FaInfoCircle /> Ver Detalles
                     </button>
                   </div>
@@ -194,7 +194,7 @@ const AsignarHoras = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content p-3">
                   <div className="modal-header">
-                    <h5 className="modal-title"><FaPlus /> Registrar Asistencia</h5>
+                    <h5 className="modal-title "><FaPlus /> Registrar Asistencia</h5>
                     <button className="btn-close" onClick={() => setMostrarFormulario(false)}></button>
                     </div>
                     <div className="modal-body">
