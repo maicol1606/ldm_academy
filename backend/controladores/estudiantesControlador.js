@@ -19,17 +19,17 @@ exports.obtenerEstudiantes = (req, res) => {
 };
 
 exports.llamarEstudiantes = (req, res) => {
-    const query =
-        ' SELECT  * from usuarios where usuarios id_rol 2';
+    const query = 'SELECT * FROM usuarios WHERE id_rol = 2 and estado = 1';
     db.query(query, (error, results) => {
         if (error) {
             console.error('Error al obtener los estudiantes:', error);
             res.status(500).json({ error: 'Error al obtener los estudiantes' });
         } else {
-            res.status(200).send(results);
+            res.status(200).json(results); // usa .json en vez de .send por consistencia
         }
     });
 };
+
 
 
 //SELECT * from usuarios where id_rol = 2 inner join postulacion on usuarios.id_usuario = postulacion.id_usuario

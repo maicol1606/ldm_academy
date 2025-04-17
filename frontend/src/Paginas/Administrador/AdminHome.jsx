@@ -20,7 +20,7 @@ const EstadisticasDashboard = () => {
       });
 
     // Cargar estudiantes
-    axios.get("http://localhost:3000/api/estudiantes/obtenerEstudiantes")
+    axios.get("http://localhost:3000/api/estudiantes/llamarEstudiantes")
       .then(res => setEstudiantes(res.data))
       .catch(err => {
         console.error("Error al obtener estudiantes:", err);
