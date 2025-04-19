@@ -1,50 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cerrarSesion from '../hooks/cerrarSesion.JS';
 import { Link, useNavigate } from "react-router-dom";
 
 const NavegadorDocente = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notifications, setNotifications] = useState([]); 
   const CerrarSesion = cerrarSesion(); 
   const navigate = useNavigate();
 
+  // Toggle para mostrar u ocultar el modal del perfil
   const toggleProfileModal = () => {
     setShowProfileModal(!showProfileModal);
   };
 
+  // Toggle para mostrar u ocultar las notificaciones
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
-    setNotificationMessage("");
   };
 
-  const handleAccept = (studentName) => {
-    setNotificationMessage(`Se aceptó la notificación de ${studentName}.`);
-  };
+  // Hacer la llamada a la API cuando el componente se monta
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        // Realiza una solicitud a tu API para obtener las notificaciones
+        const response = await fetch('http://localhost:3000/api/notificaciones');
+        const data = await response.json();
 
-  const handleReject = (studentName) => {
-    setNotificationMessage(`Se rechazó la notificación de ${studentName}.`);
-  };
+        // Verificar los datos que recibimos
+        console.log(data);
 
-  const students = [
-    {
-      id: 1,
-      name: "Juan Pérez",
-      idNumber: "1029384756",
-      course: "10-B",
-      horaPostulacion: "08:30 AM",
-      estado: "Aceptado"
-    },
-    {
-      id: 2,
-      name: "Laura Gómez",
-      idNumber: "1092837465",
-      course: "11-A",
-      horaPostulacion: "09:15 AM",
-      estado: "Rechazado"
-    }
-  ];
-  
+        // Suponiendo que la API devuelve un array de objetos con notificaciones
+        setNotifications(data);
+      } catch (error) {
+        console.error('Error al obtener las notificaciones', error);
+      }
+    };
+
+    fetchNotifications();
+  }, []); // El arreglo vacío asegura que solo se ejecute una vez al montar el componente
 
   return (
     <div className="d-flex flex-column bg-light vh-100" style={{ width: "250px" }}>
@@ -80,46 +74,55 @@ const NavegadorDocente = () => {
         </button>
       </nav>
 
+      {/* Modal de notificaciones */}
       {showNotifications && (
-  <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} tabIndex="-1">
-    <div className="modal-dialog modal-lg">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">Notificaciones</h5>
-          <button type="button" className="btn-close" onClick={toggleNotifications}></button>
+        <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} tabIndex="-1">
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Notificaciones</h5>
+                <button type="button" className="btn-close" onClick={toggleNotifications}></button>
+              </div>
+              <div className="modal-body">
+                <h6>Estudiantes postulados a campañas</h6>
+                <table className="table table-striped mt-3">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Nombre</th>
+                      <th>Campaña</th>
+                      <th>Hora de postulación</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {notifications.length > 0 ? (
+                      notifications.map((notification) => {
+                        console.log(notification); // Verifica cada notificación
+                        return (
+                          <tr key={notification.id}>
+                            <td>{notification.id}</td>
+                            <td>{notification.nombre_estudiante}</td>
+                            <td>{notification.campaña}</td>
+                            <td>{notification.fecha_postulacion}</td>
+                            <td className={notification.estado === "Aceptado" ? "text-success" : "text-danger"}>
+                              {notification.estado}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan="5" className="text-center">No hay notificaciones</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="modal-body">
-          <h6>Estudiantes postulados a campañas</h6>
-          <table className="table table-striped mt-3">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Identificación</th>
-                <th>Curso</th>
-                <th>Hora de postulación</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((student) => (
-                <tr key={student.id}>
-                  <td>{student.name}</td>
-                  <td>{student.idNumber}</td>
-                  <td>{student.course}</td>
-                  <td>{student.horaPostulacion}</td>
-                  <td className={student.estado === "Aceptado" ? "text-success" : "text-danger"}>
-                    {student.estado}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
 
       {/* Footer con icono de notificaciones */}
       <div className="mt-auto text-center p-3 border-top">
