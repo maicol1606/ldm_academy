@@ -16,7 +16,7 @@ type RootStackParamList = {
   Admin: undefined;
   HomeEstudiante: undefined;
   HomeDocentes: undefined;
-  Registro: undefined;
+  Register: undefined;
   OlvidarContrasena: undefined;
 };
 
@@ -32,6 +32,7 @@ const Login: React.FC = () => {
     correo: '',
     contrasena: '',
   });
+  const [loading, setLoading] = useState(false);  // Loading state
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -43,15 +44,15 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true); // Set loading state to true
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', user);
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/login', user);
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
           {
             text: 'Continuar',
             onPress: () => {
               const { token, rol } = response.data;
-
 
               switch (rol) {
                 case 1:
@@ -73,6 +74,8 @@ const Login: React.FC = () => {
     } catch (error: any) {
       const title = error?.response?.data?.title || 'Error';
       Alert.alert(title, 'Error al iniciar sesión');
+    } finally {
+      setLoading(false); // Set loading state to false after request is done
     }
   };
 
@@ -97,8 +100,14 @@ const Login: React.FC = () => {
         style={styles.input}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Ingresar</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSubmit}
+        disabled={loading}  // Disable button while loading
+      >
+        <Text style={styles.buttonText}>
+          {loading ? 'Cargando...' : 'Ingresar'}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('OlvidarContrasena')}>
