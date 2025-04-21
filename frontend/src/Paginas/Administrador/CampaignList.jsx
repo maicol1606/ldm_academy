@@ -102,6 +102,7 @@ export default function CampaignList() {
     }
   };
 
+
   return (
     <div className="container-fluid bg-light min-vh-100">
       <NavegacionAdmin />

@@ -1,61 +1,70 @@
 import React, { useState } from "react";
+import axios from "axios";
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const CertificadoAdmin = () => {
-  const [certificacion, setCertificacion] = useState("");
-  const [asistencia, setAsistencia] = useState("");
-  const [mostrarDatos, setMostrarDatos] = useState(false);
-  const [mostrarEstudiante, setMostrarEstudiante] = useState(false);
+  
+  const [datos, setDatosEstudiante] = useState(null);
+  const [descripcion, setDescripcion] = useState("");
+  const [mostrar, setMostrarEstudiante] = useState(false);
 
-  const datosCampaña = {
-    nombre: "Comedor",
-    estudiantes: 5,
-    fechaCreacion: "10 de marzo de 2024",
-    docente: "Carlos Pérez",
-  };
+  const [idUsuario, setIdUsuario] = useState("");
 
-  const datosEstudiante = {
-    nombre: "Joel",
-    horasCumplidas: 120,
-    faltas: 5,
-    promedioHoras: 4,
-    inicioServicio: "15 de enero de 2024",
-    finServicio: "15 de junio de 2024",
-  };
-
-  const handleCertificacionChange = (e) => {
-    setCertificacion(e.target.value);
-    if (e.target.value.length === 6) {
-      setMostrarDatos(true);
-    } else {
-      setMostrarDatos(false);
-    }
-  };
-
-  const handleAsistenciaChange = (e) => {
-    setAsistencia(e.target.value);
-    if (e.target.value.length === 6) {
-      setMostrarEstudiante(true);
+  const handleBuscarEstudiante = async (e) => {
+    const valor = e.target.value;
+    setIdUsuario(valor);
+  
+    if (valor.length === 4) {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/asistencia/obtenerAsistencias/${valor}`);
+        setDatosEstudiante(response.data);
+        setMostrarEstudiante(true);
+      } catch (error) {
+        console.error("Error al obtener datos del estudiante:", error);
+        setMostrarEstudiante(false);
+      }
     } else {
       setMostrarEstudiante(false);
     }
   };
 
   const generarPDF = () => {
+    if (!datos) return;
+
     const doc = new jsPDF();
     doc.setFontSize(18);
     doc.text("Certificación de Servicio Social", 50, 20);
     doc.setFontSize(12);
-    doc.text(`Nombre del Estudiante: ${datosEstudiante.nombre}`, 20, 40);
-    doc.text(`Horas Cumplidas: ${datosEstudiante.horasCumplidas}`, 20, 50);
-    doc.text(`Faltas: ${datosEstudiante.faltas}`, 20, 60);
-    doc.text(`Promedio de Horas: ${datosEstudiante.promedioHoras}`, 20, 70);
-    doc.text(`Inicio del Servicio: ${datosEstudiante.inicioServicio}`, 20, 80);
-    doc.text(`Fin del Servicio: ${datosEstudiante.finServicio}`, 20, 90);
-    doc.save("certificado.pdf");
+    doc.text(`Nombre del Estudiante: ${datos.nombre}`, 20, 40);
+    doc.text(`Horas Cumplidas: ${datos.horasCumplidas}`, 20, 50);
+    doc.text(`Promedio de Horas: ${datos.promedioHoras}`, 20, 60);
+    doc.text(`Inicio del Servicio: ${datos.inicioServicio}`, 20, 70);
+    doc.text(`Fin del Servicio: ${datos.finServicio}`, 20, 80);
+    doc.text(`Campaña: ${datos.campaña}`, 20, 90);
+    doc.text(`Docente: ${datos.docente}`, 20, 100);
+    doc.text(`Descripción: ${descripcion}`, 20, 110);
+    doc.save(`Certificado_${datos.nombre}.pdf`);
+
+    registrarCertificado();
   };
+
+  const registrarCertificado = async () => {
+    try {
+      const payload = {
+        id_usuario: idUsuario, // ✅ aquí va idUsuario
+        id_campaña: datos.id_campaña, // asegúrate que `id_campaña` venga en los datos
+        descripcion,
+      };
+      await axios.post("http://localhost:3000/api/certificados/agregarCertificado", payload);
+      alert("Certificado registrado correctamente.");
+    } catch (error) {
+      console.error("Error al registrar certificado:", error);
+      alert("Error al registrar certificado.");
+    }
+  };
+  
 
   return (
     <div className="container-fluid bg-light min-vh-100">
@@ -68,50 +77,45 @@ const CertificadoAdmin = () => {
           <form autoComplete="off">
             <fieldset>
               <legend className="text-secondary">
-                <i className="far fa-file-alt"></i> &nbsp; Datos de Certificación
+                <i className="far fa-file-alt"></i> Datos del Estudiante
               </legend>
               <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="ID único de certificación"
-                  maxLength="6"
-                  value={certificacion}
-                  onChange={handleCertificacionChange}
-                />
-              </div>
-              {mostrarDatos && (
+  <input
+    type="text"
+    className="form-control"
+    placeholder="ID del usuario (estudiante)"
+    maxLength="6"
+    value={idUsuario}
+    onChange={handleBuscarEstudiante}
+  />
+</div>
+
+              {mostrar && datos && (
                 <div className="border p-3 rounded bg-white">
-                  <p><strong>Campaña:</strong> {datosCampaña.nombre}</p>
-                  <p><strong>Estudiantes inscritos:</strong> {datosCampaña.estudiantes}</p>
-                  <p><strong>Fecha de creación:</strong> {datosCampaña.fechaCreacion}</p>
-                  <p><strong>Docente a cargo:</strong> {datosCampaña.docente}</p>
-                </div>
-              )}
-              <div className="mb-3 mt-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="ID único de asistencia"
-                  maxLength="6"
-                  value={asistencia}
-                  onChange={handleAsistenciaChange}
-                />
-              </div>
-              {mostrarEstudiante && (
-                <div className="border p-3 rounded bg-white">
-                  <p><strong>Nombre del Estudiante:</strong> {datosEstudiante.nombre}</p>
-                  <p><strong>Horas cumplidas:</strong> {datosEstudiante.horasCumplidas}</p>
-                  <p><strong>Faltas:</strong> {datosEstudiante.faltas}</p>
-                  <p><strong>Promedio de horas por día:</strong> {datosEstudiante.promedioHoras}</p>
-                  <p><strong>Fecha de inicio:</strong> {datosEstudiante.inicioServicio}</p>
-                  <p><strong>Fecha de fin:</strong> {datosEstudiante.finServicio}</p>
-                  <textarea className="form-control" placeholder="Descripción ante novedad" rows="3"></textarea>
+                  <p><strong>Nombre:</strong> {datos.nombre}</p>
+                  <p><strong>Horas cumplidas:</strong> {datos.horasCumplidas}</p>
+                  <p><strong>Promedio diario:</strong> {datos.promedioHoras}</p>
+                  <p><strong>Inicio:</strong> {datos.inicioServicio}</p>
+                  <p><strong>Fin:</strong> {datos.finServicio}</p>
+                  <p><strong>Campaña:</strong> {datos.campaña}</p>
+                  <p><strong>Docente:</strong> {datos.docente}</p>
+                  <textarea
+                    className="form-control"
+                    placeholder="Descripción ante novedad"
+                    rows="3"
+                    value={descripcion}
+                    onChange={(e) => setDescripcion(e.target.value)}
+                  ></textarea>
                 </div>
               )}
             </fieldset>
             <div className="text-center mt-4">
-              <button type="button" className="btn btn-primary mx-2" onClick={generarPDF}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={generarPDF}
+                disabled={!mostrar}
+              >
                 <i className="fas fa-file-download"></i> GENERAR CERTIFICADO
               </button>
             </div>

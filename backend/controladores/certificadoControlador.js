@@ -1,19 +1,19 @@
 const db = require('../config/db');
-exports.agregarCertificado = (req, res) => {
-    const id_asistencia = req.body.id_asistencia;
-    const id_certificado = req.body.id_certificado;
-    const observaciones = req.body.observaciones;
-    const id_usuario = req.body.id_usuario;
-    const query = 'INSERT INTO certificados (id_asistencia, id_certificado, observaciones, id_usuario) VALUES (?, ?, ?, ?)';
-    db.query(query, [id_asistencia, id_certificado, observaciones, id_usuario], (error, results) => {
-        if (error) {
-            console.error('Error al agregar el certificado:', error);
-            res.status(500).json({ error: 'Error al agregar el certificado' });
-        } else {
-            res.status(200).json({ message: 'Certificado agregado correctamente' });
-        }
-    });
-}
+exports.agregarCertificado = async (req, res) => {
+    const { id_usuario, id_campaña, descripcion } = req.body;
+  const fecha_generacion = new Date();
+
+  try {
+    await db.query(
+      "INSERT INTO certificado (id_usuario, id_campaña, fecha_generacion, descripcion) VALUES (?, ?, ?, ?)",
+      [id_usuario, id_campaña, fecha_generacion, descripcion]
+    );
+    res.status(200).json({ message: "Certificado registrado exitosamente." });
+  } catch (error) {
+    console.error("Error al registrar certificado:", error);
+    res.status(500).json({ error: "Error al registrar el certificado." });
+  }
+};
 
 exports.mostrarCertificados = (req, res) => {
     db.query('SELECT * FROM certificados', (error, results) => {

@@ -1,5 +1,6 @@
 const e = require('express');
 const db = require('../config/db');
+const moment = require('moment');  // Si decides usar moment.js para manejar fechas.
 
 exports.mostrarAsistenciasPorEstudiante = (req, res) => {
     const idUsuario = req.params.id;
@@ -15,9 +16,57 @@ exports.mostrarAsistenciasPorEstudiante = (req, res) => {
     });
   };
 
-  
-  
+exports.obtenerAsistenciasPorEstudiante = async (req, res) => {
+  const { id_usuario } = req.params;
 
+  try {
+    const [rows] = await db.query(`
+      SELECT a.*, 
+             c.nom_campaña AS campaña_nombre, 
+             c.fecha, 
+             ud.nombre AS docente_nombre, 
+             ue.nombre AS estudiante_nombre 
+      FROM asistencia a 
+      JOIN campañas c ON a.id_campaña = c.id_campaña 
+      JOIN usuarios ud ON c.id_docente = ud.id_usuario 
+      JOIN usuarios ue ON a.id_usuario = ue.id_usuario 
+      WHERE a.id_usuario = ?
+      ORDER BY a.fecha ASC
+    `, [id_usuario]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "No se encontraron asistencias para este estudiante." });
+    }
+
+    const totalHoras = rows.reduce((acc, curr) => acc + curr.horas, 0);
+    const promedioHoras = (totalHoras / rows.length).toFixed(2);
+    const inicioServicio = moment(rows[0].fecha).format('YYYY-MM-DD'); // Formateo de fecha
+    const finServicio = moment(rows[rows.length - 1].fecha).format('YYYY-MM-DD'); // Formateo de fecha
+
+    res.json({
+      nombre: rows[0].estudiante_nombre,
+      horasCumplidas: totalHoras,
+      promedioHoras,
+      inicioServicio,
+      finServicio,
+      campaña: {
+        nombre: rows[0].campaña_nombre,
+        fechaCreacion: moment(rows[0].fecha).format('YYYY-MM-DD'), // Formateo de fecha
+        docente: rows[0].docente_nombre
+      },
+      asistencias: rows.map(row => ({
+        fecha: moment(row.fecha).format('YYYY-MM-DD'), // Formateo de fecha
+        horas: row.horas,
+        campaña: row.campaña_nombre
+      })) // Lista detallada de asistencias
+    });
+
+  } catch (error) {
+    console.error("Error al obtener asistencias:", error);
+    res.status(500).json({ error: "Error en el servidor." });
+  }
+};
+  
 
 exports.agregarAsistencia = (req, res) => {
     const id_campaña = req.body.id_campaña;
