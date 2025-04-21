@@ -4,7 +4,7 @@ import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Importamos iconos para mejorar visualmente
 import Swal from 'sweetalert2';
 
-const EstudianteList = () => {
+const DocenteList = () => {
   const [usuarios, setUsuarios] = useState([]);
   
   // Simulamos la obtención de datos desde una API o base de datos
@@ -86,4 +86,4 @@ const EstudianteList = () => {
   );
 };
 
-export default EstudianteList;
+export default DocenteList;

@@ -24,7 +24,6 @@ const Home = () => {
   const [postulaciones, setPostulaciones] = useState<any[]>([]);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  // ✅ Mostrar modal solo una vez
   useEffect(() => {
     const checkIfAlertShown = async () => {
       try {
@@ -41,7 +40,7 @@ const Home = () => {
     checkIfAlertShown();
   }, []);
 
-  // ✅ Obtener campañas
+  // 
   useEffect(() => {
     const fetchData = async () => {
       try {

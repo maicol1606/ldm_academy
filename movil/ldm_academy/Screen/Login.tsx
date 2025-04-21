@@ -13,7 +13,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
   Home: undefined;
-  Admin: undefined;
+  AdminHome: undefined; // Corregido aquí
   HomeEstudiante: undefined;
   HomeDocentes: undefined;
   Register: undefined;
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     correo: '',
     contrasena: '',
   });
-  const [loading, setLoading] = useState(false);  // Loading state
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true); // Set loading state to true
+    setLoading(true);
     try {
       const response = await axios.post('http://192.168.1.11:3000/api/auth/login', user);
       if (response.status === 200) {
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
 
               switch (rol) {
                 case 1:
-                  navigation.navigate('Admin');
+                  navigation.navigate('AdminHome'); // ✅ Corrección aquí
                   break;
                 case 2:
                   navigation.navigate('HomeEstudiante');
@@ -75,7 +75,7 @@ const Login: React.FC = () => {
       const title = error?.response?.data?.title || 'Error';
       Alert.alert(title, 'Error al iniciar sesión');
     } finally {
-      setLoading(false); // Set loading state to false after request is done
+      setLoading(false);
     }
   };
 
@@ -103,7 +103,7 @@ const Login: React.FC = () => {
       <TouchableOpacity
         style={styles.button}
         onPress={handleSubmit}
-        disabled={loading}  // Disable button while loading
+        disabled={loading}
       >
         <Text style={styles.buttonText}>
           {loading ? 'Cargando...' : 'Ingresar'}
