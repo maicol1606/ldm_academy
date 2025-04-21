@@ -47,8 +47,13 @@ const Register: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    if (!user.nombre || !user.apellido || !user.correo || !user.contrasena || !user.telefono || !user.curso) {
+      Alert.alert('Error', 'Por favor, complete todos los campos');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/registar', user);
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/registar', user);
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
           {
@@ -61,7 +66,8 @@ const Register: React.FC = () => {
       }
     } catch (error: any) {
       const title = error?.response?.data?.title || 'Error';
-      Alert.alert(title, 'Error al registrar el usuario');
+      const message = error?.response?.data?.message || 'Error al registrar el usuario';
+      Alert.alert(title, message);
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import cerrarSesion from '../hooks/cerrarSesion.js';
@@ -6,15 +6,17 @@ import cerrarSesion from '../hooks/cerrarSesion.js';
 export default function NavegacionAdmin() {
     const [activeMenu, setActiveMenu] = useState(null);
     const [showProfileModal, setShowProfileModal] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
     const CerrarSesion = cerrarSesion();
+
     const [profileData, setProfileData] = useState({
         name: 'Administrador',
         email: 'admin@gmail.com',
         role: 'Administrador',
         profilePicture: '/img/navegacion/Avatar2.png',
     });
-    const [isEditing, setIsEditing] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = (menu) => {
         setActiveMenu(activeMenu === menu ? null : menu);
@@ -45,6 +47,23 @@ export default function NavegacionAdmin() {
     const handleEditProfile = () => setIsEditing(true);
     const handleSaveProfile = () => setIsEditing(false);
 
+    // ✅ Eventos manuales de Bootstrap con useEffect
+    useEffect(() => {
+        const offcanvasElement = document.getElementById('offcanvasAdmin');
+        if (offcanvasElement) {
+            const handleShow = () => setMenuOpen(true);
+            const handleHide = () => setMenuOpen(false);
+
+            offcanvasElement.addEventListener('show.bs.offcanvas', handleShow);
+            offcanvasElement.addEventListener('hide.bs.offcanvas', handleHide);
+
+            return () => {
+                offcanvasElement.removeEventListener('show.bs.offcanvas', handleShow);
+                offcanvasElement.removeEventListener('hide.bs.offcanvas', handleHide);
+            };
+        }
+    }, []);
+
     return (
         <div>
             {!menuOpen && (
@@ -60,15 +79,12 @@ export default function NavegacionAdmin() {
                 </button>
             )}
 
-<div
-    className="offcanvas offcanvas-start text-white"
-    tabIndex="-1"
-    id="offcanvasAdmin"
-    style={{ width: '200px', backgroundColor: '#000' }} // Fondo negro
-    onShow={() => setMenuOpen(true)}
-    onHide={() => setMenuOpen(false)}
->
-
+            <div
+                className="offcanvas offcanvas-start text-white"
+                tabIndex="-1"
+                id="offcanvasAdmin"
+                style={{ width: '200px', backgroundColor: '#000' }}
+            >
                 <div className="offcanvas-header border-bottom">
                     <button type="button" className="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
                 </div>
@@ -117,7 +133,9 @@ export default function NavegacionAdmin() {
                         </li>
                     </ul>
                 </div>
-                {/* Modal de Perfil */}
+            </div>
+
+            {/* Modal de Perfil */}
             <Modal show={showProfileModal} onHide={handleCloseProfileModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{isEditing ? 'Editar Perfil' : 'Perfil de Administrador'}</Modal.Title>
@@ -125,22 +143,22 @@ export default function NavegacionAdmin() {
                 <Modal.Body>
                     <div className="text-center mb-3">
                         <img
-                            src={profileData.profilePicture} // Foto de perfil
+                            src={profileData.profilePicture}
                             className="rounded-circle w-50 mx-auto d-block mb-3"
                             alt="Foto de perfil"
                         />
-                        {isEditing ? (
+                        {isEditing && (
                             <input
                                 type="file"
                                 accept="image/*"
                                 className="form-control mb-3"
                                 onChange={handleProfilePictureChange}
                             />
-                        ) : null}
+                        )}
                     </div>
                     <div>
                         {isEditing ? (
-                            <div>
+                            <>
                                 <div className="mb-3">
                                     <label className="form-label">Nombre</label>
                                     <input
@@ -161,13 +179,13 @@ export default function NavegacionAdmin() {
                                         onChange={handleInputChange}
                                     />
                                 </div>
-                            </div>
+                            </>
                         ) : (
-                            <div>
+                            <>
                                 <p><strong>Nombre:</strong> {profileData.name}</p>
                                 <p><strong>Correo Electrónico:</strong> {profileData.email}</p>
                                 <p><strong>Rol:</strong> {profileData.role}</p>
-                            </div>
+                            </>
                         )}
                     </div>
                 </Modal.Body>
@@ -177,17 +195,12 @@ export default function NavegacionAdmin() {
                             Guardar
                         </button>
                     ) : (
-                        <button className="btn btn-warning" onClick={handleEditProfile}>
-                            Editar Perfil
+                        <button className="btn btn-secondary" onClick={handleEditProfile}>
+                            Editar
                         </button>
                     )}
-                    <button className="btn btn-secondary" onClick={handleCloseProfileModal}>
-                        Cerrar
-                    </button>
                 </Modal.Footer>
             </Modal>
-            </div>
         </div>
-        
     );
 }

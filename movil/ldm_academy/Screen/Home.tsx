@@ -24,7 +24,6 @@ const Home = () => {
   const [postulaciones, setPostulaciones] = useState<any[]>([]);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  // ✅ Mostrar modal solo una vez
   useEffect(() => {
     const checkIfAlertShown = async () => {
       try {
@@ -41,13 +40,13 @@ const Home = () => {
     checkIfAlertShown();
   }, []);
 
-  // ✅ Obtener campañas
+  // 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [campanasResponse, postulacionesResponse] = await Promise.all([
-          axios.get('http://10.0.2.2:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://10.0.2.2:3000/api/postulaciones'),
+          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
+          axios.get('http://192.168.1.11:3000/api/postulaciones'),
         ]);
         setCampanas(campanasResponse.data);
         setPostulaciones(postulacionesResponse.data);
@@ -118,7 +117,7 @@ const Home = () => {
               <View key={index} style={styles.campaignItem}>
                 {campana.imagen && (
                   <Image
-                    source={{ uri: `http://10.0.2.2:3000/img/campañas/${campana.imagen}` }}
+                    source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
                     style={styles.campaignImage}
                   />
                 )}

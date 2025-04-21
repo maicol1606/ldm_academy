@@ -13,10 +13,10 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
   Home: undefined;
-  Admin: undefined;
+  AdminHome: undefined; // Corregido aquí
   HomeEstudiante: undefined;
   HomeDocentes: undefined;
-  Registro: undefined;
+  Register: undefined;
   OlvidarContrasena: undefined;
 };
 
@@ -32,6 +32,7 @@ const Login: React.FC = () => {
     correo: '',
     contrasena: '',
   });
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -43,8 +44,9 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', user);
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/login', user);
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
           {
@@ -52,11 +54,9 @@ const Login: React.FC = () => {
             onPress: () => {
               const { token, rol } = response.data;
 
-              // Aquí podrías guardar el token con AsyncStorage si es necesario
-
               switch (rol) {
                 case 1:
-                  navigation.navigate('Admin');
+                  navigation.navigate('AdminHome'); // ✅ Corrección aquí
                   break;
                 case 2:
                   navigation.navigate('HomeEstudiante');
@@ -74,6 +74,8 @@ const Login: React.FC = () => {
     } catch (error: any) {
       const title = error?.response?.data?.title || 'Error';
       Alert.alert(title, 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,15 +100,21 @@ const Login: React.FC = () => {
         style={styles.input}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Ingresar</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSubmit}
+        disabled={loading}
+      >
+        <Text style={styles.buttonText}>
+          {loading ? 'Cargando...' : 'Ingresar'}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('OlvidarContrasena')}>
         <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>¿Aún no tienes una cuenta? Regístrate</Text>
       </TouchableOpacity>
 
