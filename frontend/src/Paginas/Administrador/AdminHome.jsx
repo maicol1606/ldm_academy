@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
-
+import "./App.css"; // Asegúrate de tener este archivo CSS para estilos adicionales
 
 const EstadisticasDashboard = () => {
   const [datos, setDatos] = useState({
-
+    total: 0,
+    finalizados: 0,
+    enProceso: 0,
+    postulados: 0,
   });
-
+  
   const [estudiantes, setEstudiantes] = useState([]);
 
   useEffect(() => {
@@ -16,7 +19,6 @@ const EstadisticasDashboard = () => {
       .then(res => setDatos(res.data))
       .catch(err => {
         console.error("Error al cargar estadísticas:", err);
-
       });
 
     // Cargar estudiantes
@@ -29,15 +31,15 @@ const EstadisticasDashboard = () => {
   }, []);
 
   return (
-    <div>
+    <div className=" ">
       <NavegacionAdmin />
       <div className="container mt-5">
         <h2 className="text-center mb-4">Panel de Estadísticas</h2>
 
         <div className="row">
           <div className="col-md-3">
-            <div className="card text-white bg-dark mb-3">
-              <div className="card-header">Total de Estudiantes</div>
+            <div className="card bg-card-blue mb-3">
+              <div className="card-header text-center font-weight-bold">Total de Estudiantes</div>
               <div className="card-body">
                 <h5 className="card-title text-center">{datos.total}</h5>
               </div>
@@ -45,8 +47,8 @@ const EstadisticasDashboard = () => {
           </div>
 
           <div className="col-md-3">
-            <div className="card text-white bg-success mb-3">
-              <div className="card-header">Finalizados</div>
+            <div className="card bg-success mb-3">
+              <div className="card-header text-center font-weight-bold">Finalizados</div>
               <div className="card-body">
                 <h5 className="card-title text-center">{datos.finalizados}</h5>
               </div>
@@ -54,8 +56,8 @@ const EstadisticasDashboard = () => {
           </div>
 
           <div className="col-md-3">
-            <div className="card text-white bg-warning mb-3">
-              <div className="card-header">En Proceso</div>
+            <div className="card bg-warning text-dark mb-3">
+              <div className="card-header text-center font-weight-bold">En Proceso</div>
               <div className="card-body">
                 <h5 className="card-title text-center">{datos.enProceso}</h5>
               </div>
@@ -63,8 +65,8 @@ const EstadisticasDashboard = () => {
           </div>
 
           <div className="col-md-3">
-            <div className="card text-white bg-primary mb-3">
-              <div className="card-header">Postulados</div>
+            <div className="card bg-info text-dark mb-3">
+              <div className="card-header text-center font-weight-bold">Postulados</div>
               <div className="card-body">
                 <h5 className="card-title text-center">{datos.postulados}</h5>
               </div>
@@ -74,7 +76,7 @@ const EstadisticasDashboard = () => {
 
         <h2 className="text-center mb-4">Lista de Estudiantes</h2>
         <div className="table-responsive">
-          <table className="table table-hover table-striped text-center">
+          <table className="table table-hover table-striped table-bordered text-center">
             <thead className="thead-dark">
               <tr>
                 <th>#</th>

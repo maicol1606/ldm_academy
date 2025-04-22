@@ -1,0 +1,135 @@
+/*DOCENTES*/
+.bg-docente {
+   
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Animación de fadeIn suave */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fadeInUp {
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+
+
+
+/*ESTADISTICAS*/
+
+
+  
+  
+  .bg-card-blue {
+    background-color: #3498db; /* Azul claro para las tarjetas */
+  }
+  
+  .table {
+    color: #15abd1; /* Color claro para texto en tabla */
+  }
+  
+  thead {
+    background-color: #34495e; /* Fondo oscuro para encabezado de tabla */
+  }
+  
+  thead th {
+    color: rgb(255, 255, 255);
+  }
+  
+  .card-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  
+  .card-body {
+    font-size: 1.2rem;
+  }
+  
+  .text-light {
+    color: #ecf0f1;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #2e85be; /* Color de hover en filas de la tabla */
+  }
+
+/*ESTUDIANTES LIST*/
+  .bg-blue {
+    background-color: #95bcf0;
+  }
+  
+  .table-dark-blue {
+    background-color: #84abdf;
+    color: #f0f4f8;
+  }
+  
+  .table-dark-blue th,
+  .table-dark-blue td {
+    vertical-align: middle;
+  }
+  
+  .thead-blue {
+    background-color: #1f4068;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #476c9b;
+    transition: background-color 0.3s ease;
+  }
+  
+  
+  button.btn {
+    transition: transform 0.2s ease;
+  }
+  
+  button.btn:hover {
+    transform: scale(1.1);
+  } 
+  .bg-dark-blue {
+    background-color: #0f172a;
+  }
+  
+  .card.student-card {
+    background: linear-gradient(to bottom right, #3a6cf7, #5f88e2);
+    color: #fff;
+    border-radius: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .card.student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card-title {
+    font-weight: 600;
+  }
+  
+  .btn-outline-info {
+    border-color: #38bdf8;
+    color: #38bdf8;
+  }
+  
+  .btn-outline-info:hover {
+    background-color: #38cbf8;
+    color: #000000;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #ef4444;
+    color: #fff;
+  }
