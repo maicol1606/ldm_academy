@@ -12,11 +12,32 @@ export default function NavegacionAdmin() {
     const CerrarSesion = cerrarSesion();
 
     const [profileData, setProfileData] = useState({
-        name: 'Administrador',
-        email: 'admin@gmail.com',
-        role: 'Administrador',
+        nombre: '',
+        correo: '',
+        telefono: '',
+        rol: 'Administrador',
         profilePicture: '/img/navegacion/Avatar2.png',
     });
+
+    useEffect(() => {
+        // Obtener los datos del usuario al cargar el componente
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('api/docente/obtenerDocentes');
+                const data = await response.json();
+                setProfileData((prev) => ({
+                    ...prev,
+                    nombre: data.nombre,
+                    correo: data.correo,
+                    telefono: data.telefono,
+                }));
+            } catch (error) {
+                console.error('Error al obtener los datos del usuario:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const toggleMenu = (menu) => {
         setActiveMenu(activeMenu === menu ? null : menu);
@@ -45,9 +66,32 @@ export default function NavegacionAdmin() {
     };
 
     const handleEditProfile = () => setIsEditing(true);
-    const handleSaveProfile = () => setIsEditing(false);
 
-    // ✅ Eventos manuales de Bootstrap con useEffect
+    const handleSaveProfile = async () => {
+        try {
+            const response = await fetch('/api/docente', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nombre: profileData.nombre,
+                    correo: profileData.correo,
+                    telefono: profileData.telefono,
+                }),
+            });
+
+            if (response.ok) {
+                setIsEditing(false);
+                console.log('Perfil actualizado correctamente.');
+            } else {
+                console.error('Error al guardar los cambios del perfil');
+            }
+        } catch (error) {
+            console.error('Error de red al guardar el perfil:', error);
+        }
+    };
+
     useEffect(() => {
         const offcanvasElement = document.getElementById('offcanvasAdmin');
         if (offcanvasElement) {
@@ -97,17 +141,44 @@ export default function NavegacionAdmin() {
                             alt="Foto de perfil"
                             onClick={handleProfileClick}
                         />
-                        <p className="h6">{profileData.name}</p>
+                        <p className="h6">{profileData.nombre}</p>
                     </div>
 
                     <ul className="list-unstyled mt-4">
                         <li><Link to="/" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-house-door me-2"></i> Página de Inicio</Link></li>
                         <li><Link to="/NotificacionesAdmin" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-bell me-2"></i> Notificaciones</Link></li>
-                        {[{
-                            title: 'Estudiantes', icon: 'bi-person', links: [{ to: '/EstudianteNew', text: 'Agregar Estudiante', icon: 'bi-person-plus' }, { to: '/EstudianteList', text: 'Lista de Estudiantes', icon: 'bi-person-lines-fill' }] },
-                            { title: 'Docentes', icon: 'bi-person-badge', links: [{ to: '/DocenteNew', text: 'Agregar Docente', icon: 'bi-person-plus' }, { to: '/DocenteList', text: 'Lista de Docentes', icon: 'bi-person-lines-fill' }] },
-                            { title: 'Campañas', icon: 'bi-flag', links: [{ to: '/CampaignNew', text: 'Crear Campaña', icon: 'bi-plus-circle' }, { to: '/CampaignList', text: 'Lista de Campañas', icon: 'bi-list' }] },
-                            { title: 'Certificados', icon: 'bi-file-earmark-check', links: [{ to: '/CertificadoAdmin', text: 'Lista de Certificados', icon: 'bi-file-earmark' }] },
+                        {[
+                            {
+                                title: 'Estudiantes',
+                                icon: 'bi-person',
+                                links: [
+                                    { to: '/EstudianteNew', text: 'Agregar Estudiante', icon: 'bi-person-plus' },
+                                    { to: '/EstudianteList', text: 'Lista de Estudiantes', icon: 'bi-person-lines-fill' }
+                                ]
+                            },
+                            {
+                                title: 'Docentes',
+                                icon: 'bi-person-badge',
+                                links: [
+                                    { to: '/DocenteNew', text: 'Agregar Docente', icon: 'bi-person-plus' },
+                                    { to: '/DocenteList', text: 'Lista de Docentes', icon: 'bi-person-lines-fill' }
+                                ]
+                            },
+                            {
+                                title: 'Campañas',
+                                icon: 'bi-flag',
+                                links: [
+                                    { to: '/CampaignNew', text: 'Crear Campaña', icon: 'bi-plus-circle' },
+                                    { to: '/CampaignList', text: 'Lista de Campañas', icon: 'bi-list' }
+                                ]
+                            },
+                            {
+                                title: 'Certificados',
+                                icon: 'bi-file-earmark-check',
+                                links: [
+                                    { to: '/CertificadoAdmin', text: 'Lista de Certificados', icon: 'bi-file-earmark' }
+                                ]
+                            }
                         ].map((item, index) => (
                             <li key={index} className="mb-3">
                                 <a href="#" className="text-white text-decoration-none d-flex align-items-center p-2 rounded" onClick={() => toggleMenu(item.title)}>
@@ -164,8 +235,8 @@ export default function NavegacionAdmin() {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        name="name"
-                                        value={profileData.name}
+                                        name="nombre"
+                                        value={profileData.nombre}
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -174,17 +245,28 @@ export default function NavegacionAdmin() {
                                     <input
                                         type="email"
                                         className="form-control"
-                                        name="email"
-                                        value={profileData.email}
+                                        name="correo"
+                                        value={profileData.correo}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Teléfono</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="telefono"
+                                        value={profileData.telefono}
                                         onChange={handleInputChange}
                                     />
                                 </div>
                             </>
                         ) : (
                             <>
-                                <p><strong>Nombre:</strong> {profileData.name}</p>
-                                <p><strong>Correo Electrónico:</strong> {profileData.email}</p>
-                                <p><strong>Rol:</strong> {profileData.role}</p>
+                                <p><strong>Nombre:</strong> {profileData.nombre}</p>
+                                <p><strong>Correo Electrónico:</strong> {profileData.correo}</p>
+                                <p><strong>Teléfono:</strong> {profileData.telefono}</p>
+                                <p><strong>Rol:</strong> {profileData.rol}</p>
                             </>
                         )}
                     </div>
