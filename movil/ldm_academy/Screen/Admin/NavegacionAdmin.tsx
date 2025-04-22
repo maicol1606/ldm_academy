@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, Modal, TextInput, StyleSheet, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Modal,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 interface ProfileData {
   name: string;
@@ -10,232 +20,188 @@ interface ProfileData {
   profilePicture: string;
 }
 
+interface OptionItem {
+  key: string;
+  title: string;
+  icon: string;
+  color?: string;
+  subOptions?: { label: string; route: string }[];
+  route?: string;
+}
+
 export default function NavegacionAdmin() {
   const navigation = useNavigation<any>();
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [showSubOptions, setShowSubOptions] = useState<{ visible: boolean; options: { label: string; route: string }[] }>({
+    visible: false,
+    options: [],
+  });
   const [profileData, setProfileData] = useState<ProfileData>({
     name: 'Administrador',
     email: 'admin@gmail.com',
     role: 'Administrador',
     profilePicture: 'https://via.placeholder.com/150',
   });
+  const [isEditing, setIsEditing] = useState(false);
 
-  const toggleMenu = (menu: string) => {
-    setActiveMenu(activeMenu === menu ? null : menu);
-  };
+  const optionItems: OptionItem[] = [
+    { key: 'inicio', title: 'Inicio', icon: 'home-outline', route: 'AdminHome' },
+    { key: 'notificaciones', title: 'Notificaciones', icon: 'notifications-outline', route: 'NotificacionesAdmin' },
+    {
+      key: 'estudiantes',
+      title: 'Estudiantes',
+      icon: 'people-outline',
+      subOptions: [
+        { label: 'Ver lista', route: 'EstudianteList' },
+        { label: 'Agregar', route: 'EstudianteNew' },
+      ],
+    },
+    {
+      key: 'docentes',
+      title: 'Docentes',
+      icon: 'school-outline',
+      subOptions: [
+        { label: 'Ver lista', route: 'DocenteList' },
+        { label: 'Agregar', route: 'DocenteNew' },
+      ],
+    },
+    {
+      key: 'campañas',
+      title: 'Campañas',
+      icon: 'megaphone-outline',
+      subOptions: [
+        { label: 'Ver campañas', route: 'CampaignList' },
+        { label: 'Crear campaña', route: 'CampaignNew' },
+      ],
+    },
+    {
+      key: 'salir',
+      title: 'Cerrar sesión',
+      icon: 'exit-outline',
+      color: '#ff5252',
+      route: 'Login',
+    },
+  ];
 
   const handleInputChange = (name: keyof ProfileData, value: string) => {
     setProfileData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleOptionPress = (item: OptionItem) => {
+    if (item.subOptions) {
+      setShowSubOptions({ visible: true, options: item.subOptions });
+    } else if (item.route) {
+      navigation.navigate(item.route);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Sidebar */}
-      <View style={styles.sidebar}>
-        <TouchableOpacity onPress={() => setShowProfileModal(true)} style={styles.avatarContainer}>
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => setShowProfileModal(true)} style={styles.profileButton}>
           <Image source={{ uri: profileData.profilePicture }} style={styles.avatar} />
-          <Text style={styles.name}>{profileData.name}</Text>
         </TouchableOpacity>
-
-        <ScrollView style={styles.menu}>
-          <MenuItem icon="home-outline" label="Inicio" onPress={() => navigation.navigate('AdminHome')} />
-          <MenuItem icon="notifications-outline" label="Notificaciones" onPress={() => navigation.navigate('NotificacionesAdmin')} />
-
-          <MenuGroup title="Estudiantes" active={activeMenu === 'Estudiantes'} onToggle={() => toggleMenu('Estudiantes')} items={[
-            { label: 'Agregar Estudiante', route: 'EstudianteNew' },
-            { label: 'Lista de Estudiantes', route: 'EstudianteList' },
-          ]} />
-
-          <MenuGroup title="Docentes" active={activeMenu === 'Docentes'} onToggle={() => toggleMenu('Docentes')} items={[
-            { label: 'Agregar Docente', route: 'DocenteNew' },
-            { label: 'Lista de Docentes', route: 'DocenteList' },
-          ]} />
-
-          <MenuGroup title="Campañas" active={activeMenu === 'Campañas'} onToggle={() => toggleMenu('Campañas')} items={[
-            { label: 'Crear Campaña', route: 'CampaignNew' },
-            { label: 'Lista de Campañas', route: 'CampaignList' },
-          ]} />
-
-          <MenuItem icon="exit-outline" label="Cerrar Sesión" onPress={() => console.log('Cerrar sesión')} />
-        </ScrollView>
+        <Text style={styles.headerTitle}>Hola, {profileData.name}</Text>
       </View>
 
-      {/* Modal de Perfil */}
-      <Modal visible={showProfileModal} animationType="slide" onRequestClose={() => setShowProfileModal(false)}>
-        <View style={styles.modalContent}>
-          <Image source={{ uri: profileData.profilePicture }} style={styles.modalAvatar} />
-          {isEditing ? (
-            <>
-              <TextInput
-                style={styles.input}
-                value={profileData.name}
-                onChangeText={(text) => handleInputChange('name', text)}
-                placeholder="Nombre"
-              />
-              <TextInput
-                style={styles.input}
-                value={profileData.email}
-                onChangeText={(text) => handleInputChange('email', text)}
-                placeholder="Correo"
-                keyboardType="email-address"
-              />
-              <TouchableOpacity style={styles.button} onPress={() => setIsEditing(false)}>
-                <Text style={styles.buttonText}>Guardar</Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <>
-              <Text style={styles.modalText}>{profileData.name}</Text>
-              <Text style={styles.modalText}>{profileData.email}</Text>
-              <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
-                <Text style={styles.buttonText}>Editar</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          <TouchableOpacity style={[styles.button, styles.closeButton]} onPress={() => setShowProfileModal(false)}>
-            <Text style={styles.buttonText}>Cerrar</Text>
+      {/* Scroll horizontal de tarjetas */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+        {optionItems.map((item) => (
+          <TouchableOpacity
+            key={item.key}
+            style={[styles.card, item.color ? { backgroundColor: item.color } : {}]}
+            onPress={() => handleOptionPress(item)}
+          >
+            <Icon name={item.icon} size={30} color={item.color ? '#fff' : '#333'} />
+            <Text style={[styles.cardText, item.color ? { color: '#fff' } : {}]}>{item.title}</Text>
           </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      {/* Modal de subopciones */}
+      <Modal visible={showSubOptions.visible} transparent animationType="fade">
+        <TouchableOpacity
+          style={styles.overlay}
+          onPress={() => setShowSubOptions({ visible: false, options: [] })}
+        >
+          <View style={styles.subOptionBox}>
+            {showSubOptions.options.map((opt, i) => (
+              <TouchableOpacity
+                key={i}
+                style={styles.subOption}
+                onPress={() => {
+                  setShowSubOptions({ visible: false, options: [] });
+                  navigation.navigate(opt.route);
+                }}
+              >
+                <Text style={styles.subOptionText}>{opt.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Modal de perfil */}
+      <Modal visible={showProfileModal} animationType="slide" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Image source={{ uri: profileData.profilePicture }} style={styles.modalAvatar} />
+            {isEditing ? (
+              <>
+                <TextInput style={styles.input} value={profileData.name} onChangeText={(text) => handleInputChange('name', text)} />
+                <TextInput style={styles.input} value={profileData.email} onChangeText={(text) => handleInputChange('email', text)} />
+                <TouchableOpacity style={styles.modalButton} onPress={() => setIsEditing(false)}>
+                  <Text style={styles.modalButtonText}>Guardar</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <Text style={styles.modalText}>{profileData.name}</Text>
+                <Text style={styles.modalText}>{profileData.email}</Text>
+                <TouchableOpacity style={styles.modalButton} onPress={() => setIsEditing(true)}>
+                  <Text style={styles.modalButtonText}>Editar</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            <TouchableOpacity style={[styles.modalButton, { backgroundColor: '#ccc' }]} onPress={() => setShowProfileModal(false)}>
+              <Text style={[styles.modalButtonText, { color: '#000' }]}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
-    </View>
-  );
-}
-
-function MenuItem({ icon, label, onPress }: { icon: string, label: string, onPress: () => void }) {
-  return (
-    <TouchableOpacity style={styles.menuItem} onPress={onPress}>
-      <Icon name={icon} size={22} color="#fff" style={styles.menuIcon} />
-      <Text style={styles.menuText}>{label}</Text>
-    </TouchableOpacity>
-  );
-}
-
-function MenuGroup({
-  title,
-  active,
-  onToggle,
-  items,
-}: {
-  title: string;
-  active: boolean;
-  onToggle: () => void;
-  items: { label: string; route: string }[];
-}) {
-  const navigation = useNavigation<any>();
-  return (
-    <View style={{ marginBottom: 10 }}>
-      <TouchableOpacity style={styles.menuItem} onPress={onToggle}>
-        <Icon name={active ? 'chevron-down-outline' : 'chevron-forward-outline'} size={20} color="#fff" style={styles.menuIcon} />
-        <Text style={styles.menuText}>{title}</Text>
-      </TouchableOpacity>
-      {active && (
-        <View style={styles.subMenu}>
-          {items.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.subMenuItem} onPress={() => navigation.navigate(item.route)}>
-              <Text style={styles.subMenuText}>{item.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#f5f5f5',
-  },
-  sidebar: {
-    width: 250,
-    backgroundColor: '#1a1a1a',
-    paddingTop: 40,
-    paddingHorizontal: 15,
-  },
-  avatarContainer: {
-    alignItems: 'center',
-    marginBottom: 25,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 8,
-    borderWidth: 2,
-    borderColor: '#fff',
-  },
-  name: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  menu: {
-    flex: 1,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 5,
-  },
-  menuIcon: {
-    marginRight: 10,
-  },
-  menuText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  subMenu: {
-    marginLeft: 25,
-    marginTop: 5,
-  },
-  subMenuItem: {
-    paddingVertical: 8,
-  },
-  subMenuText: {
-    color: '#ccc',
-    fontSize: 14,
-  },
-  modalContent: {
-    padding: 20,
+  container: { flex: 1, backgroundColor: '#f2f2f2' },
+  header: { flexDirection: 'row', alignItems: 'center', padding: 16, backgroundColor: '#1a73e8' },
+  profileButton: { marginRight: 12 },
+  avatar: { width: 42, height: 42, borderRadius: 21, borderWidth: 2, borderColor: '#fff' },
+  headerTitle: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  scrollContainer: { padding: 16, flexDirection: 'row' },
+  card: {
     backgroundColor: '#fff',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  modalAvatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    alignSelf: 'center',
-    marginBottom: 20,
-  },
-  modalText: {
-    textAlign: 'center',
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#aaa',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 15,
-  },
-  button: {
-    backgroundColor: '#000',
-    padding: 12,
-    borderRadius: 8,
+    padding: 20,
+    borderRadius: 12,
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'center',
+    marginRight: 16,
+    width: 140,
+    height: 120,
+    elevation: 4,
   },
-  closeButton: {
-    backgroundColor: '#555',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+  cardText: { marginTop: 10, fontWeight: '600', fontSize: 14 },
+  overlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' },
+  subOptionBox: { backgroundColor: '#fff', padding: 20, borderRadius: 12, width: '80%' },
+  subOption: { paddingVertical: 10 },
+  subOptionText: { fontSize: 16, textAlign: 'center' },
+  modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' },
+  modalContent: { backgroundColor: '#fff', padding: 20, borderRadius: 12, width: '80%', alignItems: 'center' },
+  modalAvatar: { width: 90, height: 90, borderRadius: 45, marginBottom: 16 },
+  modalText: { fontSize: 16, marginVertical: 4 },
+  input: { borderBottomWidth: 1, width: '100%', marginBottom: 10, padding: 6 },
+  modalButton: { backgroundColor: '#1a73e8', padding: 10, borderRadius: 8, marginTop: 10, width: '100%' },
+  modalButtonText: { color: '#fff', textAlign: 'center' },
 });

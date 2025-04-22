@@ -13,7 +13,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
   Home: undefined;
-  AdminHome: undefined; // Corregido aquí
+  AdminHome: undefined; 
   HomeEstudiante: undefined;
   HomeDocentes: undefined;
   Register: undefined;
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
 
               switch (rol) {
                 case 1:
-                  navigation.navigate('AdminHome'); // ✅ Corrección aquí
+                  navigation.navigate('AdminHome'); 
                   break;
                 case 2:
                   navigation.navigate('HomeEstudiante');

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import axios from "axios";
-
-// Si tienes un componente de navegación personalizado
 import NavegacionAdmin from "./NavegacionAdmin";
 
 interface Estadisticas {
@@ -42,11 +40,11 @@ const AdminHome: React.FC = () => {
     <ScrollView style={styles.container}>
       <NavegacionAdmin />
 
-      <Text style={styles.header}>Panel de Estadísticas</Text>
+      <Text style={styles.header}>📊 Panel de Estadísticas</Text>
 
       <View style={styles.statsContainer}>
-        <View style={[styles.card, { backgroundColor: "#343a40" }]}>
-          <Text style={styles.cardTitle}>Total de Estudiantes</Text>
+        <View style={[styles.card, { backgroundColor: "#6c757d" }]}>
+          <Text style={styles.cardTitle}>Total Estudiantes</Text>
           <Text style={styles.cardValue}>{datos.total ?? 0}</Text>
         </View>
 
@@ -66,11 +64,17 @@ const AdminHome: React.FC = () => {
         </View>
       </View>
 
-      <Text style={styles.header}>Lista de Estudiantes</Text>
+      <Text style={styles.header}>📋 Lista de Estudiantes</Text>
 
       <View style={styles.table}>
         {estudiantes.map((usuario, index) => (
-          <View key={usuario.id_usuario} style={styles.tableRow}>
+          <View
+            key={usuario.id_usuario}
+            style={[
+              styles.tableRow,
+              { backgroundColor: index % 2 === 0 ? "#f8f9fa" : "#e9ecef" },
+            ]}
+          >
             <Text style={styles.cell}>{index + 1}</Text>
             <Text style={styles.cell}>{usuario.nombre}</Text>
             <Text style={styles.cell}>{usuario.apellido}</Text>
@@ -88,50 +92,62 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#f1f3f5",
   },
   header: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
-    marginVertical: 12,
+    marginVertical: 16,
     textAlign: "center",
+    color: "#343a40",
   },
   statsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 24,
   },
   card: {
     width: "48%",
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 12,
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 16,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   cardTitle: {
     color: "#fff",
     fontSize: 16,
     marginBottom: 8,
+    fontWeight: "600",
   },
   cardValue: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
   },
   table: {
     marginTop: 10,
+    borderRadius: 10,
+    overflow: "hidden",
   },
   tableRow: {
     flexDirection: "row",
     flexWrap: "wrap",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    paddingVertical: 8,
+    borderBottomColor: "#dee2e6",
   },
   cell: {
     width: "33%",
     padding: 4,
     fontSize: 14,
+    color: "#212529",
   },
 });
 
