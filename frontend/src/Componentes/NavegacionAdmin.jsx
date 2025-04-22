@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import cerrarSesion from '../hooks/cerrarSesion.js';
 
 export default function NavegacionAdmin() {
@@ -20,19 +21,19 @@ export default function NavegacionAdmin() {
     });
 
     useEffect(() => {
-        // Obtener los datos del usuario al cargar el componente
         const fetchUserData = async () => {
             try {
-                const response = await fetch('api/docente/obtenerDocentes');
-                const data = await response.json();
-                setProfileData((prev) => ({
-                    ...prev,
-                    nombre: data.nombre,
-                    correo: data.correo,
-                    telefono: data.telefono,
+                const res = await axios.get('http://localhost:3000/api/docentes/obtenerPerfilDocente', {
+                    withCredentials: true
+                });
+                setProfileData((prevData) => ({
+                    ...prevData,
+                    nombre: res.data.nombre,
+                    correo: res.data.correo,
+                    telefono: res.data.telefono
                 }));
             } catch (error) {
-                console.error('Error al obtener los datos del usuario:', error);
+                console.error('Error al obtener datos del perfil:', error);
             }
         };
 
@@ -50,8 +51,8 @@ export default function NavegacionAdmin() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setProfileData((prevData) => ({ ...prevData, [name]: value }));
+        const { nombre, value } = e.target;
+        setProfileData((prevData) => ({ ...prevData, [nombre]: value }));
     };
 
     const handleProfilePictureChange = (e) => {
@@ -147,39 +148,34 @@ export default function NavegacionAdmin() {
                     <ul className="list-unstyled mt-4">
                         <li><Link to="/" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-house-door me-2"></i> Página de Inicio</Link></li>
                         <li><Link to="/NotificacionesAdmin" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-bell me-2"></i> Notificaciones</Link></li>
-                        {[
-                            {
-                                title: 'Estudiantes',
-                                icon: 'bi-person',
-                                links: [
-                                    { to: '/EstudianteNew', text: 'Agregar Estudiante', icon: 'bi-person-plus' },
-                                    { to: '/EstudianteList', text: 'Lista de Estudiantes', icon: 'bi-person-lines-fill' }
-                                ]
-                            },
-                            {
-                                title: 'Docentes',
-                                icon: 'bi-person-badge',
-                                links: [
-                                    { to: '/DocenteNew', text: 'Agregar Docente', icon: 'bi-person-plus' },
-                                    { to: '/DocenteList', text: 'Lista de Docentes', icon: 'bi-person-lines-fill' }
-                                ]
-                            },
-                            {
-                                title: 'Campañas',
-                                icon: 'bi-flag',
-                                links: [
-                                    { to: '/CampaignNew', text: 'Crear Campaña', icon: 'bi-plus-circle' },
-                                    { to: '/CampaignList', text: 'Lista de Campañas', icon: 'bi-list' }
-                                ]
-                            },
-                            {
-                                title: 'Certificados',
-                                icon: 'bi-file-earmark-check',
-                                links: [
-                                    { to: '/CertificadoAdmin', text: 'Lista de Certificados', icon: 'bi-file-earmark' }
-                                ]
-                            }
-                        ].map((item, index) => (
+                        {[{
+                            title: 'Estudiantes',
+                            icon: 'bi-person',
+                            links: [
+                                { to: '/EstudianteNew', text: 'Agregar Estudiante', icon: 'bi-person-plus' },
+                                { to: '/EstudianteList', text: 'Lista de Estudiantes', icon: 'bi-person-lines-fill' }
+                            ]
+                        }, {
+                            title: 'Docentes',
+                            icon: 'bi-person-badge',
+                            links: [
+                                { to: '/DocenteNew', text: 'Agregar Docente', icon: 'bi-person-plus' },
+                                { to: '/DocenteList', text: 'Lista de Docentes', icon: 'bi-person-lines-fill' }
+                            ]
+                        }, {
+                            title: 'Campañas',
+                            icon: 'bi-flag',
+                            links: [
+                                { to: '/CampaignNew', text: 'Crear Campaña', icon: 'bi-plus-circle' },
+                                { to: '/CampaignList', text: 'Lista de Campañas', icon: 'bi-list' }
+                            ]
+                        }, {
+                            title: 'Certificados',
+                            icon: 'bi-file-earmark-check',
+                            links: [
+                                { to: '/CertificadoAdmin', text: 'Lista de Certificados', icon: 'bi-file-earmark' }
+                            ]
+                        }].map((item, index) => (
                             <li key={index} className="mb-3">
                                 <a href="#" className="text-white text-decoration-none d-flex align-items-center p-2 rounded" onClick={() => toggleMenu(item.title)}>
                                     <i className={`bi ${item.icon} me-2`}></i> {item.title}
@@ -206,7 +202,6 @@ export default function NavegacionAdmin() {
                 </div>
             </div>
 
-            {/* Modal de Perfil */}
             <Modal show={showProfileModal} onHide={handleCloseProfileModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{isEditing ? 'Editar Perfil' : 'Perfil de Administrador'}</Modal.Title>
@@ -286,3 +281,4 @@ export default function NavegacionAdmin() {
         </div>
     );
 }
+

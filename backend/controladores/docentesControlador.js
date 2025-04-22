@@ -11,6 +11,25 @@ exports.obtenerDocentes = (req, res) => {
         }
     });
 }
+exports.obtenerPerfilDocente = async (req, res) => {
+    try {
+        const docenteId = req.usuario.id; // Este valor viene del middleware de autenticación
+
+        // Selecciona explícitamente los campos que deseas devolver
+        const docente = await Docente.findById(docenteId)
+            .select('nombre correo telefono');
+
+        if (!docente) {
+            return res.status(404).json({ mensaje: 'Docente no encontrado' });
+        }
+
+        res.json({ docente });
+    } catch (error) {
+        console.error('Error al obtener perfil del docente:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+};
+
 
 exports.agregarDocente = (req, res) => {
     const nombre = req.body.nombre;

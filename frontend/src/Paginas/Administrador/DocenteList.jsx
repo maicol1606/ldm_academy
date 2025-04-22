@@ -14,7 +14,7 @@ const EstudianteList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEstudiantes = async () => {
+    const fetchDocente = async () => {
       try {
         const res = await axios.get('http://localhost:3000/api/docentes/obtenerDocentes');
         setEstudiantes(res.data);
@@ -23,7 +23,7 @@ const EstudianteList = () => {
       }
     };
 
-    fetchEstudiantes();
+    fetchDocente();
   }, []);
 
   const eliminarEstudiante = async (id) => {

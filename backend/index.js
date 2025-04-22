@@ -13,6 +13,12 @@ const estadísticasRutas = require('./rutas/estadisticas');
 const rutasNotificaciones = require('./rutas/notificaciones');
 const cors = require('cors');
 
+app.use(cors({
+  origin: 'http://localhost:5173', // Origen permitido
+  credentials: true                // Permitir envío de cookies o tokens
+}));
+
+
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
