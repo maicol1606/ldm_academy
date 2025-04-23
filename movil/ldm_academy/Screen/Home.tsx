@@ -45,8 +45,8 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const [campanasResponse, postulacionesResponse] = await Promise.all([
-          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://192.168.1.11:3000/api/postulaciones'),
+          axios.get('http://192.168.104.49:3000/api/campanas/mostrarCampanas'),
+          axios.get('http://192.168.104.49:3000/api/postulaciones'),
         ]);
         setCampanas(campanasResponse.data);
         setPostulaciones(postulacionesResponse.data);
@@ -117,7 +117,7 @@ const Home = () => {
               <View key={index} style={styles.campaignItem}>
                 {campana.imagen && (
                   <Image
-                    source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
+                    source={{ uri: `http://192.168.104.49:3000/img/campañas/${campana.imagen}` }}
                     style={styles.campaignImage}
                   />
                 )}

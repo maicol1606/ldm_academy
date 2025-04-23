@@ -13,7 +13,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-exports.registar = (req, res) => {
+exports.registrar = (req, res) => {
+    console.log(req.body)
+    if (!req.body.nombre || !req.body.apellido || !req.body.correo){
+        return res.status(400).send({title: 'Todos los campos son obligatorios'})
+    }
+
     const nombre = req.body.nombre;
     const apellido = req.body.apellido;
     const correo = req.body.correo;
@@ -29,7 +34,7 @@ exports.registar = (req, res) => {
             res.status(500).send({ error: 'Error al obtener el usuario' });
         } else if (results.length > 0) {
             res.status(400).send({ title: 'El correo ya está registrado' });
-        }
+        }       
         else {
             const query = 'INSERT INTO usuarios (nombre, apellido, correo, contrasena, telefono, curso , id_rol) VALUES ( ?, ?, ?, ?, ?, ?,2)';
             db.query(query, [nombre, apellido, correo, contrasenaEncriptada, telefono, curso], (error, results) => {

@@ -23,8 +23,8 @@ export default function CampaignList() {
     const fetchData = async () => {
       try {
         const [campanasRes, docentesRes] = await Promise.all([
-          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes'),
+          axios.get('http://192.168.104.49:3000/api/campanas/mostrarCampanas'),
+          axios.get('http://192.168.104.49:3000/api/docentes/obtenerDocentes'),
         ]);
         setCampañas(campanasRes.data);
         setDocentes(docentesRes.data);
@@ -51,7 +51,7 @@ export default function CampaignList() {
         formData.append('foto', CampañaEdit.foto);
       }
 
-      const res = await axios.put(`http://192.168.1.11:3000/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`, formData, {
+      const res = await axios.put(`http://192.168.104.49:3000/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (res.status === 200) {
@@ -78,7 +78,7 @@ export default function CampaignList() {
         )
       );
       if (confirm) {
-        const res = await axios.delete(`http://192.168.1.11:3000/api/campanas/eliminarCampana/${id}`);
+        const res = await axios.delete(`http://192.168.104.49:3000/api/campanas/eliminarCampana/${id}`);
         if (res.status === 200) {
           Alert.alert('Success', 'Campaña borrada');
         }

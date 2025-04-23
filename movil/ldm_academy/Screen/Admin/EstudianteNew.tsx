@@ -23,7 +23,7 @@ const EstudianteNew = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://192.168.1.11:3000/api/auth/registar', user);
+      const response = await axios.post('http://192.168.104.49:3000/api/auth/registar', user);
 
       if (response.status === 200) {
         alert('Estudiante creado exitosamente');

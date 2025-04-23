@@ -24,7 +24,7 @@ export default function registar() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/registar', user);
+      const response = await axios.post('http://localhost:3000/api/auth/registrar', user);
 
       if (response.status === 200) {
         Swal.fire({
