@@ -46,7 +46,7 @@ const Login: React.FC = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://192.168.104.49:3000/api/auth/login', user);
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/login', user);
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
           {

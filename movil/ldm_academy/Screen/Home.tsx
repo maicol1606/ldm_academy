@@ -40,16 +40,13 @@ const Home = () => {
     checkIfAlertShown();
   }, []);
 
-  // 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [campanasResponse, postulacionesResponse] = await Promise.all([
-          axios.get('http://192.168.104.49:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://192.168.104.49:3000/api/postulaciones'),
+        const [campanasResponse] = await Promise.all([
+          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
         ]);
         setCampanas(campanasResponse.data);
-        setPostulaciones(postulacionesResponse.data);
       } catch (error) {
         console.log('Error al cargar campañas o postulaciones:', error);
       }
@@ -68,7 +65,6 @@ const Home = () => {
       <ScrollView>
         {/* Encabezado con imagen */}
         <ImageBackground
-          //source={require('../assets/header-image.jpg')}
           style={styles.headerImage}
           imageStyle={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
         >
@@ -107,34 +103,38 @@ const Home = () => {
           </View>
         </Modal>
 
-        {/* Lista de campañas */}
+        {/* Lista de campañas (con ScrollView horizontal) */}
         <View style={styles.campaignsContainer}>
           <Text style={styles.sectionTitle}>Campañas disponibles</Text>
-          {campanas.map((campana, index) => {
-            const postulados = postulaciones.filter(p => p.campana_id === campana.id).length;
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.campaignScroll}>
+            {campanas.map((campana, index) => {
+              const postulados = postulaciones.filter(p => p.campana_id === campana.id).length;
 
-            return (
-              <View key={index} style={styles.campaignItem}>
-                {campana.imagen && (
-                  <Image
-                    source={{ uri: `http://192.168.104.49:3000/img/campañas/${campana.imagen}` }}
+              return (
+                <View key={index} style={styles.campaignItem}>
+                  {campana.imagen && (
+                    <Image
+                    source={{ uri: `/img/campañas/${campana.imagen}` }}
                     style={styles.campaignImage}
+                    onError={(error) => console.log('Error al cargar imagen:', error.nativeEvent.error)}
                   />
-                )}
-                <Text style={styles.campaignName}>{campana.nom_campaña}</Text>
-                <Text>{campana.descripcion}</Text>
-                <Text>Cupos: {campana.cupos}</Text>
-                <Text>Postulados: {postulados}</Text>
-                <Text>Inicio: {formatearFecha(campana.fecha)}</Text>
-                <TouchableOpacity
-                  style={styles.postulateButton}
-                  onPress={() => navigation.navigate('Login')}
-                >
-                  <Text style={styles.postulateText}>Postúlate</Text>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+                  
+                  )}
+                  <Text style={styles.campaignName}>{campana.nom_campaña}</Text>
+                  <Text>{campana.descripcion}</Text>
+                  <Text>Cupos: {campana.cupos}</Text>
+                  <Text>Postulados: {postulados}</Text>
+                  <Text>Inicio: {formatearFecha(campana.fecha)}</Text>
+                  <TouchableOpacity
+                    style={styles.postulateButton}
+                    onPress={() => navigation.navigate('Login')}
+                  >
+                    <Text style={styles.postulateText}>Postúlate</Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
         </View>
       </ScrollView>
 
@@ -237,16 +237,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
   },
+  campaignScroll: {
+    marginBottom: 20,
+  },
   campaignItem: {
     backgroundColor: '#f1f1f1',
     padding: 15,
     borderRadius: 10,
-    marginBottom: 15,
+    marginRight: 10,
+    width: 300, // Ajustar el ancho de las campañas
   },
   campaignImage: {
     width: '100%',
-    height: 120,
-    borderRadius: 10,
+    height: 130,//alto de las campañas
+    borderRadius: 40,
     marginBottom: 10,
   },
   campaignName: {

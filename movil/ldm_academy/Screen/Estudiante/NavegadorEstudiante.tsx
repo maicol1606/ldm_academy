@@ -28,7 +28,7 @@ const NavegadorEstudiante = () => {
 
   const getProfileData = async () => {
     try {
-      const response = await axios.get('http://192.168.104.49:3000/api/estudiantes/profile');
+      const response = await axios.get('http://192.168.1.11:3000/api/estudiantes/profile');
       setStudentData(response.data);
       setProfileImage(response.data.profileImage || '/img/navegacion/Avatar2.png');
     } catch (error) {
@@ -46,7 +46,7 @@ const NavegadorEstudiante = () => {
         correo: studentData.correo,
         profileImage: profileImage 
       };
-      const response = await axios.put('http://192.168.104.49:3000/api/estudiantes/profile', updatedData); 
+      const response = await axios.put('http://192.168.1.11:3000/api/estudiantes/profile', updatedData); 
       alert('Perfil actualizado con éxito');
       setShowEditModal(false); 
     } catch (error) {

@@ -20,7 +20,7 @@ const NotificacionesAdmin = () => {
     setIdEstudiante(id);
 
     axios
-      .get('http://192.168.104.49:3000/api/notificaciones')
+      .get('http://192.168.1.11:3000/api/notificaciones')
       .then((res) => {
         if (Array.isArray(res.data)) {
           setNotifications(res.data);
@@ -35,7 +35,7 @@ const NotificacionesAdmin = () => {
 
   const handleAccept = (id: number) => {
     axios
-      .put(`http://192.168.104.49:3000/api/notificaciones/${id}`, { estado: 'Aceptado' })
+      .put(`http://192.168.1.11:3000/api/notificaciones/${id}`, { estado: 'Aceptado' })
       .then(() => {
         setAlertType('success');
         setAlert('Notificación aceptada correctamente');
@@ -55,7 +55,7 @@ const NotificacionesAdmin = () => {
 
   const handleReject = (id: number) => {
     axios
-      .put(`http://192.168.104.49:3000/api/notificaciones/${id}`, { estado: 'Rechazado' })
+      .put(`http://192.168.1.11:3000/api/notificaciones/${id}`, { estado: 'Rechazado' })
       .then(() => {
         setAlertType('danger');
         setAlert('Notificación rechazada');

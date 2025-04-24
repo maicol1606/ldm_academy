@@ -58,7 +58,7 @@ const HomeEstudiante = ({ navigation }: any) => {
 
   const handlePostular = async () => {
     try {
-      const response = await axios.post('http://192.168.104.49:3000/api/postulacion/agregarPostulacion', postulado);
+      const response = await axios.post('http://192.168.1.11:3000/api/postulacion/agregarPostulacion', postulado);
       if (response.status === 200) {
         Alert.alert('Éxito', 'Has postulado correctamente para la campaña.', [
           {
@@ -88,7 +88,7 @@ const HomeEstudiante = ({ navigation }: any) => {
         return (
           <View key={campana.id_campañas} style={styles.card}>
             <Image
-              source={{ uri: `http://192.168.104.49:3000/img/campañas/${campana.imagen}` }}
+              source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
               style={styles.image}
             />
             <Text style={styles.campaignTitle}>{campana.nom_campaña}</Text>

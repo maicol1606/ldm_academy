@@ -20,7 +20,7 @@ const DocenteNew = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.104.49:3000/api/docentes/agregarDocente', user);
+      const response = await axios.post('http://192.168.1.11:3000/api/docentes/agregarDocente', user);
       
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
