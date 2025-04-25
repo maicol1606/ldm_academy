@@ -3,7 +3,6 @@ import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Alert, Mod
 import axios from 'axios';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const jwt_decode = require('jwt-decode');
 
 const HomeEstudiante = ({ navigation }: any) => {
   const [campanas, setCampanas] = useState<any[]>([]);
@@ -21,33 +20,33 @@ const HomeEstudiante = ({ navigation }: any) => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        if (token) {
-          const decodedToken: any = jwt_decode(token);
-          const idUsuario = decodedToken?.id ?? null;
+        const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
+        const idUsuario = tokenDecoded?.id ?? null;
 
-          const [campanasRes, postulacionesRes, docentesRes] = await Promise.all([
-            axios.get('http://localhost:3000/api/campanas/mostrarCampanas'),
-            axios.get(`http://localhost:3000/api/postulacion/mostrarPostulacion/${idUsuario}`),
-            axios.get('http://localhost:3000/api/docentes/obtenerDocentes'),
-          ]);
+        const [campanasRes, postulacionesRes, docentesRes] = await Promise.all([
+          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
+          axios.get('http://192.168.1.11:3000/api/postulacion/mostrarPostulacion/${idUsuario}'),
+          axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes'),
+        ]);
 
-          setCampanas(campanasRes.data);
-          setPostulaciones(postulacionesRes.data);
-          setDocentes(docentesRes.data);
-          setPostulado(prev => ({ ...prev, id_usuario: idUsuario }));
+        setCampanas(campanasRes.data);
+        setPostulaciones(postulacionesRes.data);
+        setDocentes(docentesRes.data);
+        setPostulado(prev => ({ ...prev, id_usuario: idUsuario }));
 
-          if (postulacionesRes.data.length > 0) {
-            Alert.alert(
-              'Ya postulaste',
-              'Ya has postulado para una campaña.',
-              [
-                {
-                  text: 'Ir a horas',
-                  onPress: () => navigation.navigate('Horas'),
+        if (postulacionesRes.data.length > 0) {
+          Alert.alert(
+            'Ya postulaste',
+            'Ya has postulado para una campaña.',
+            [
+              {
+                text: 'Ir a horas',
+                onPress: () => {
+                  navigation.navigate('Horas'); // Redirige a la pantalla de Horas
                 },
-              ]
-            );
-          }
+              },
+            ]
+          );
         }
       } catch (error) {
         console.log(error);
@@ -59,14 +58,19 @@ const HomeEstudiante = ({ navigation }: any) => {
   const handlePostular = async () => {
     try {
       const response = await axios.post('http://192.168.1.11:3000/api/postulacion/agregarPostulacion', postulado);
+
       if (response.status === 200) {
         Alert.alert('Éxito', 'Has postulado correctamente para la campaña.', [
           {
             text: 'Ir a horas',
-            onPress: () => navigation.navigate('Horas'),
+            onPress: () => {
+              navigation.navigate('Horas'); // Redirige a la pantalla de Horas
+            },
           },
         ]);
-        setTimeout(() => setShowPostuladoModal(false), 300);
+        setTimeout(() => {
+          setShowPostuladoModal(false);
+        }, 300);
       }
     } catch (error: any) {
       Alert.alert('Error', error.response?.data?.error || 'Error al postular');
@@ -86,16 +90,23 @@ const HomeEstudiante = ({ navigation }: any) => {
       {campanas.map((campana, index) => {
         const docente = docentes.find((doc: any) => doc.id_usuario === campana.id_docente);
         return (
-          <View key={campana.id_campañas} style={styles.card}>
+          <View key={campana.id_campañas} style={styles.card}> {/* Aquí se añade la key */}
             <Image
               source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
               style={styles.image}
             />
+
             <Text style={styles.campaignTitle}>{campana.nom_campaña}</Text>
             <Text>{campana.descripcion}</Text>
-            <Text style={styles.detail}><Text style={styles.label}>Inicio:</Text> {moment(campana.fecha_inicio).format('DD/MM/YYYY')}</Text>
-            <Text style={styles.detail}><Text style={styles.label}>Cupos:</Text> {campana.cupos}</Text>
-            <Text style={styles.detail}><Text style={styles.label}>Docente:</Text> {docente?.nombre} {docente?.apellido}</Text>
+            <Text style={styles.detail}>
+              <Text style={styles.label}>Inicio:</Text> {moment(campana.fecha_inicio).format('DD/MM/YYYY')}
+            </Text>
+            <Text style={styles.detail}>
+              <Text style={styles.label}>Cupos:</Text> {campana.cupos}
+            </Text>
+            <Text style={styles.detail}>
+              <Text style={styles.label}>Docente:</Text> {docente?.nombre} {docente?.apellido}
+            </Text>
 
             <View style={styles.buttonGroup}>
               <TouchableOpacity
@@ -107,11 +118,7 @@ const HomeEstudiante = ({ navigation }: any) => {
               >
                 <Text style={styles.btnText}>Postularse</Text>
               </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.verBtn}
-                onPress={() => handleVerInfo(index)}
-              >
+              <TouchableOpacity style={styles.verBtn} onPress={() => handleVerInfo(index)}>
                 <Text style={styles.btnText}>Ver</Text>
               </TouchableOpacity>
             </View>
@@ -119,7 +126,7 @@ const HomeEstudiante = ({ navigation }: any) => {
         );
       })}
 
-      {/* Modal Confirmación de Postulación */}
+      {/* Modal de confirmación */}
       <Modal visible={showPostuladoModal} transparent animationType="fade">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -137,7 +144,7 @@ const HomeEstudiante = ({ navigation }: any) => {
         </View>
       </Modal>
 
-      {/* Modal Información de Campaña */}
+      {/* Modal de información */}
       {showInfoModal && selectedCampaignIndex !== null && (
         <Modal visible={showInfoModal} transparent animationType="slide">
           <View style={styles.modalContainer}>
@@ -197,44 +204,39 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: 'bold',
-    color: '#333',
+    color: '#007bff',
   },
   buttonGroup: {
     flexDirection: 'row',
+    marginTop: 12,
     justifyContent: 'space-between',
-    marginTop: 10,
   },
   postularBtn: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 8,
-    flex: 0.48,
-    alignItems: 'center',
   },
   verBtn: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#28a745',
     padding: 10,
     borderRadius: 8,
-    flex: 0.48,
-    alignItems: 'center',
   },
   btnText: {
     color: 'white',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalContainer: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 20,
   },
   modalContent: {
     backgroundColor: 'white',
-    borderRadius: 12,
     padding: 20,
-    width: '100%',
-    maxWidth: 400,
+    borderRadius: 12,
+    width: '80%',
   },
   modalTitle: {
     fontSize: 20,
@@ -250,19 +252,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cancelBtn: {
-    backgroundColor: '#999',
+    backgroundColor: '#dc3545',
     padding: 10,
     borderRadius: 8,
-    flex: 0.48,
-    alignItems: 'center',
+    flex: 1,
+    marginRight: 10,
   },
   confirmBtn: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#28a745',
     padding: 10,
     borderRadius: 8,
-    flex: 0.48,
-    alignItems: 'center',
+    flex: 1,
   },
 });
 
-export default HomeEstudiante;
+export default HomeEstudiante;
