@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { RootStackParamList } from '../navigation/PublicNavigate';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MapView, { Marker } from 'react-native-maps';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -43,12 +44,10 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [campanasResponse] = await Promise.all([
-          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
-        ]);
+        const campanasResponse = await axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas');
         setCampanas(campanasResponse.data);
       } catch (error) {
-        console.log('Error al cargar campañas o postulaciones:', error);
+        console.log('Error al cargar campañas:', error);
       }
     };
 
@@ -63,7 +62,7 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {/* Encabezado con imagen */}
+        {/* Encabezado */}
         <ImageBackground
           style={styles.headerImage}
           imageStyle={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
@@ -73,7 +72,7 @@ const Home = () => {
           </View>
         </ImageBackground>
 
-        {/* Texto de bienvenida */}
+        {/* Introducción */}
         <View style={styles.introSection}>
           <Text style={styles.introTitle}>¿Listo para iniciar tu servicio social?</Text>
           <Text style={styles.introSubtitle}>¡Todo estudiante debe hacerlo!</Text>
@@ -103,7 +102,7 @@ const Home = () => {
           </View>
         </Modal>
 
-        {/* Lista de campañas (con ScrollView horizontal) */}
+        {/* Lista de campañas */}
         <View style={styles.campaignsContainer}>
           <Text style={styles.sectionTitle}>Campañas disponibles</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.campaignScroll}>
@@ -114,11 +113,12 @@ const Home = () => {
                 <View key={index} style={styles.campaignItem}>
                   {campana.imagen && (
                     <Image
-                    source={{ uri: `/img/campañas/${campana.imagen}` }}
-                    style={styles.campaignImage}
-                    onError={(error) => console.log('Error al cargar imagen:', error.nativeEvent.error)}
-                  />
-                  
+                      source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
+                      style={styles.campaignImage}
+                      onError={() => console.log('Error al cargar la imagen')}
+                      onLoad={() => console.log('Imagen cargada correctamente')}
+                      resizeMode="cover"
+                    />
                   )}
                   <Text style={styles.campaignName}>{campana.nom_campaña}</Text>
                   <Text>{campana.descripcion}</Text>
@@ -136,16 +136,36 @@ const Home = () => {
             })}
           </ScrollView>
         </View>
+
+        {/* Maps*/}
+        <View style={styles.mapContainer}>
+          <Text style={styles.sectionTitle}>Ubicación de referencia</Text>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 4.486698,
+              longitude: -74.108540,
+              latitudeDelta: 0.055,
+              longitudeDelta: 0.055,
+            }}
+          >
+            <Marker
+              coordinate={{ latitude: 4.486698, longitude: -74.108540 }}
+              title="Colegio Fernando González Ochoa"
+              description="Carrera 4D Este #89-55 Sur, Chicó Sur, Usme"
+            />
+          </MapView>
+        </View>
       </ScrollView>
 
       {/* Menú inferior */}
       <View style={styles.bottomMenu}>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Login')}>
-          <Icon name="sign-in-alt" size={24} color="#007bff" />
+          <Icon name="sign-in-alt" size={24} color="#104F92FF" />
           <Text style={styles.menuText}>Iniciar Sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Register')}>
-          <Icon name="user-plus" size={24} color="#28a745" />
+          <Icon name="user-plus" size={24} color="#15299CFF" />
           <Text style={styles.menuText}>Registrarse</Text>
         </TouchableOpacity>
       </View>
@@ -241,47 +261,58 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   campaignItem: {
-    backgroundColor: '#f1f1f1',
-    padding: 15,
+    width: 250,
+    marginRight: 15,
+    backgroundColor: '#fff',
     borderRadius: 10,
-    marginRight: 10,
-    width: 300, // Ajustar el ancho de las campañas
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   campaignImage: {
     width: '100%',
-    height: 130,//alto de las campañas
-    borderRadius: 40,
-    marginBottom: 10,
+    height: 120,
+    borderRadius: 10,
   },
   campaignName: {
-    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginTop: 10,
+    fontSize: 16,
   },
   postulateButton: {
-    backgroundColor: '#90caf9',
-    padding: 10,
-    borderRadius: 8,
-    marginTop: 10,
+    backgroundColor: '#104F92FF',
+    marginTop: 15,
+    paddingVertical: 5,
+    borderRadius: 5,
     alignItems: 'center',
   },
   postulateText: {
     color: '#fff',
     fontWeight: 'bold',
   },
+  mapContainer: {
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  map: {
+    height: 250,
+    borderRadius: 10,
+  },
   bottomMenu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    backgroundColor: '#fff',
     paddingVertical: 10,
     borderTopWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#ffffff',
+    borderTopColor: '#e0e0e0',
   },
   menuItem: {
     alignItems: 'center',
   },
   menuText: {
-    marginTop: 4,
     fontSize: 12,
     color: '#333',
   },

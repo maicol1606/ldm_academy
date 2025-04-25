@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './Screen/Home';
 import Login from './Screen/Login'; 
 import Register from './Screen/Register'; 
+import Recuperar from './Screen/Recuperar';
+import OlvidarContrasena from './Screen/OlvidarContrasena';
 //Admin
 import AdminHome from './Screen/Admin/AdminHome';
 import NavegacionAdmin from './Screen/Admin/NavegacionAdmin';
@@ -31,7 +33,9 @@ export default function App() {
     {/**de fault */}
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="OlvidarContrasena" component={OlvidarContrasena} />
     <Stack.Screen name="Register" component={Register} />
+    <Stack.Screen name="Recuperar" component={Recuperar} />
     {/**admin*/}
     <Stack.Screen name="AdminHome" component={AdminHome} />
     <Stack.Screen name="NavegacionAdmin" component={NavegacionAdmin} />

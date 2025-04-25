@@ -73,7 +73,7 @@ const Login: React.FC = () => {
       }
     } catch (error: any) {
       const title = error?.response?.data?.title || 'Error';
-      console.log(error)
+      console.log(error);
       Alert.alert(title, 'Error al iniciar sesión');
     } finally {
       setLoading(false);
@@ -82,49 +82,51 @@ const Login: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Iniciar Sesión</Text>
 
-      <TextInput
-        placeholder="Correo"
-        value={user.correo}
-        onChangeText={(text) => handleChange('correo', text)}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
+        <TextInput
+          placeholder="Correo"
+          value={user.correo}
+          onChangeText={(text) => handleChange('correo', text)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
 
-      <TextInput
-        placeholder="Contraseña"
-        value={user.contrasena}
-        onChangeText={(text) => handleChange('contrasena', text)}
-        secureTextEntry
-        style={styles.input}
-      />
+        <TextInput
+          placeholder="Contraseña"
+          value={user.contrasena}
+          onChangeText={(text) => handleChange('contrasena', text)}
+          secureTextEntry
+          style={styles.input}
+        />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleSubmit}
-        disabled={loading}
-      >
-        <Text style={styles.buttonText}>
-          {loading ? 'Cargando...' : 'Ingresar'}
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? 'Cargando...' : 'Ingresar'}
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('OlvidarContrasena')}>
-        <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('OlvidarContrasena')}>
+          <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.link}>¿Aún no tienes una cuenta? Regístrate</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.link}>¿Aún no tienes una cuenta? Regístrate</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.buttonSecundario}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Text style={styles.buttonText}>Volver al inicio</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonSecundario}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text style={styles.buttonText}>Volver al inicio</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -134,45 +136,76 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: '#EAF0F6',
     justifyContent: 'center',
-    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+    padding: 20,
+  },
+  card: {
+    width: '100%',
+    maxWidth: 400,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 8,
   },
   title: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: 28,
+    marginBottom: 24,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C3E50',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 15,
+    borderColor: '#d1d1d1',
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 16,
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   button: {
-    backgroundColor: '#007bff',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
+    backgroundColor: '#3498db',
+    paddingVertical: 14,
+    borderRadius: 10,
+    marginBottom: 12,
+    shadowColor: '#3498db',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   buttonSecundario: {
-    backgroundColor: '#6c757d',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 15,
+    backgroundColor: '#95a5a6',
+    paddingVertical: 14,
+    borderRadius: 10,
+    marginTop: 16,
+    shadowColor: '#95a5a6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 3,
   },
   buttonText: {
     color: '#fff',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontSize: 16,
   },
   link: {
-    color: '#007bff',
+    color: '#2980b9',
     textAlign: 'center',
     marginTop: 10,
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
 });

@@ -36,7 +36,6 @@ const Register: React.FC = () => {
     telefono: '',
     curso: '',
   });
-  console.log(user)
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -54,7 +53,6 @@ const Register: React.FC = () => {
     }
 
     try {
-      console.log(user)
       const response = await axios.post('http://192.168.1.11:3000/api/auth/registrar', user);
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
@@ -65,7 +63,6 @@ const Register: React.FC = () => {
         ]);
       } else {
         Alert.alert('Error', 'Error al registrar el usuario');
-        console.log(response)
       }
     } catch (error: any) {
       const title = error?.response?.data?.title || 'Error';
@@ -130,6 +127,10 @@ const Register: React.FC = () => {
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonSecundario} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.buttonText}>Volver al Login</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -177,6 +178,12 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 8,
     marginTop: 10,
+  },
+  buttonSecundario: {
+    backgroundColor: '#6c757d',
+    padding: 14,
+    borderRadius: 8,
+    marginTop: 12,
   },
   buttonText: {
     color: '#fff',
