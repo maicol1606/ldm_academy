@@ -38,7 +38,7 @@ const EstudianteNew = () => {
     try {
       const { confirmarContrasena, ...datosAEnviar } = user;
 
-      const response = await axios.post('http://localhost:3000/api/auth/registar', datosAEnviar);
+      const response = await axios.post('http://localhost:3000/api/auth/registrar', datosAEnviar);
 
       if (response.status === 200) {
         Swal.fire({

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, Modal, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, Modal, TextInput, Image, Alert, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
+import NavegacionAdmin from './NavegacionAdmin';  // Asegúrate de que la ruta sea correcta
 
 export default function CampaignList() {
   const [campañas, setCampañas] = useState([]);
@@ -90,34 +91,37 @@ export default function CampaignList() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <Text style={{ fontSize: 24, textAlign: 'center', marginVertical: 10 }}>Lista de Campañas</Text>
+    <View style={styles.container}>
+      {/* Navegación */}
+      <NavegacionAdmin />
+
+      <Text style={styles.title}>Lista de Campañas</Text>
       
       <FlatList
         data={campañas}
         keyExtractor={(item) => item.id_campaña.toString()}
         renderItem={({ item }) => (
-          <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+          <View style={styles.card}>
             <Image
               source={{ uri: `/img/campañas/${item.imagen}` }}
-              style={{ width: 100, height: 100, borderRadius: 10 }}
+              style={styles.image}
             />
-            <Text style={{ fontWeight: 'bold' }}>{item.nom_campaña}</Text>
-            <Text>{item.descripcion}</Text>
+            <Text style={styles.cardTitle}>{item.nom_campaña}</Text>
+            <Text style={styles.cardDescription}>{item.descripcion}</Text>
             <Text>{item.cupos} cupos disponibles</Text>
             <Text>{moment(item.fecha).format('DD/MM/YYYY')}</Text>
             <Text>
               Docente: {docentes.find(docente => docente.id_usuario === item.id_docente)?.nombre}
             </Text>
 
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={{ marginRight: 10 }}
+                style={styles.button}
                 onPress={() => { setCampañaEdit(item); setModalVisible(true); }}
               >
                 <Button title="Editar" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => eliminarCampaña(item.id_campaña)}>
+              <TouchableOpacity style={styles.button} onPress={() => eliminarCampaña(item.id_campaña)}>
                 <Button title="Eliminar" color="red" />
               </TouchableOpacity>
             </View>
@@ -132,32 +136,32 @@ export default function CampaignList() {
         transparent={true}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%' }}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
             <TextInput
               placeholder="Nombre de la campaña"
               value={CampañaEdit.nom_campaña}
               onChangeText={(value) => handleChangeEdit('nom_campaña', value)}
-              style={{ borderBottomWidth: 1, marginBottom: 10 }}
+              style={styles.input}
             />
             <TextInput
               placeholder="Descripción"
               value={CampañaEdit.descripcion}
               onChangeText={(value) => handleChangeEdit('descripcion', value)}
-              style={{ borderBottomWidth: 1, marginBottom: 10 }}
+              style={styles.input}
             />
             <TextInput
               placeholder="Fecha"
               value={CampañaEdit.fecha}
               onChangeText={(value) => handleChangeEdit('fecha', value)}
-              style={{ borderBottomWidth: 1, marginBottom: 10 }}
+              style={styles.input}
             />
             <TextInput
               placeholder="Cupos"
               keyboardType="numeric"
               value={CampañaEdit.cupos}
               onChangeText={(value) => handleChangeEdit('cupos', value)}
-              style={{ borderBottomWidth: 1, marginBottom: 10 }}
+              style={styles.input}
             />
 
             <Button title="Guardar Cambios" onPress={handleSubmitEdit} />
@@ -168,3 +172,70 @@ export default function CampaignList() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#f8f9fa',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#007bff',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    padding: 15,
+    borderRadius: 10,
+    elevation: 5,
+    marginBottom: 15,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  cardDescription: {
+    marginBottom: 10,
+    color: '#495057',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    flex: 1,
+    margin: 5,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  input: {
+    height: 45,
+    borderColor: '#ced4da',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 10,
+    marginBottom: 20,
+    fontSize: 16,
+    color: '#495057',
+  },
+});
+

@@ -1,145 +1,190 @@
 import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import NavegacionAdmin from "./NavegacionAdmin";
 
-const EstudianteNew = () => {
-  const [user, setUser] = useState({
+interface User {
+  nombre: string;
+  apellido: string;
+  correo: string;
+  contrasena: string;
+  confirmarContrasena: string;
+  telefono: string;
+  curso: string;
+}
+
+const EstudianteNew: React.FC = () => {
+  const [user, setUser] = useState<User>({
     nombre: '',
     apellido: '',
     correo: '',
     contrasena: '',
+    confirmarContrasena: '',
     telefono: '',
     curso: ''
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
+  const handleChange = (name: keyof User, value: string) => {
+    setUser(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    if (user.contrasena !== user.confirmarContrasena) {
+      Alert.alert('Advertencia', 'Las contraseñas no coinciden');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://192.168.1.11:3000/api/auth/registar', user);
+      const { confirmarContrasena, ...datosAEnviar } = user;
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/registrar', datosAEnviar);
 
       if (response.status === 200) {
-        alert('Estudiante creado exitosamente');
-        window.location.href = '/EstudianteNew';
+        Alert.alert('Éxito', response.data.message, [
+          { text: 'OK', onPress: () => console.log('Usuario registrado') },
+        ]);
+        // Opcionalmente puedes limpiar el formulario
+        setUser({
+          nombre: '',
+          apellido: '',
+          correo: '',
+          contrasena: '',
+          confirmarContrasena: '',
+          telefono: '',
+          curso: ''
+        });
       } else {
-        alert('Error al crear el estudiante');
+        Alert.alert('Error', 'Error al crear el estudiante');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Error al crear el estudiante');
+      Alert.alert('Error', error.response?.data?.title || 'Error al crear el estudiante');
     }
   };
 
   return (
-    <div className="container-fluid bg-light min-vh-100 p-4">
-      <NavegacionAdmin />
-      <div className="container bg-white shadow p-4 rounded">
-        <h2 className="text-center text-primary mb-4">Registro de Estudiante</h2>
-        <form autoComplete="off" onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Nombre</label>
-              <input
-                type="text"
-                pattern="^[A-Za-zÁ-ÿÑñ\s]+$"
-                onChange={handleChange}
-                className="form-control"
-                placeholder='Nombre'
-                name="nombre"
-                required
-                maxLength={27}
-                value={user.nombre}
-              />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Apellido</label>
-              <input
-                type="text"
-                pattern="^[A-Za-zÁ-ÿÑñ\s]+$"
-                onChange={handleChange}
-                className="form-control"
-                placeholder='Apellido'
-                name="apellido"
-                required
-                maxLength={40}
-                value={user.apellido}
-              />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Curso</label>
-              <input
-                type="text"
-                pattern="[0-9]{4}"
-                onChange={handleChange}
-                className="form-control"
-                placeholder="Curso"
-                name="curso"
-                required
-                maxLength={4}
-                value={user.curso}
-              />
-            </div>
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Correo</label>
-              <input
-                type="email"
-                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{6,}$"
-                onChange={handleChange}
-                className="form-control"
-                placeholder="Correo"
-                name="correo"
-                required
-                maxLength={40}
-                value={user.correo}
-              />
-            </div>
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Contraseña</label>
-              <input
-                type="password"
-                onChange={handleChange}
-                className="form-control"
-                placeholder="Contraseña"
-                name="contrasena"
-                required
-                maxLength={20}
-                value={user.contrasena}
-              />
-            </div>
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Teléfono</label>
-              <input
-                type="text"
-                pattern="[0-9]{10}"
-                onChange={handleChange}
-                className="form-control"
-                placeholder="Teléfono"
-                name="telefono"
-                required
-                maxLength={10}
-                value={user.telefono}
-              />
-            </div>
-          </div>
-          <div className="text-center mt-4">
-            <button type="button" className="btn btn-secondary me-2">
-              <i className="fas fa-paint-roller"></i> Limpiar
-            </button>
-            <button type="submit" className="btn btn-primary">
-              <i className="far fa-save"></i> Guardar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Registro de Estudiante</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nombre"
+        value={user.nombre}
+        onChangeText={(text) => handleChange('nombre', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Apellido"
+        value={user.apellido}
+        onChangeText={(text) => handleChange('apellido', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Curso (Ej: 901, 1001)"
+        value={user.curso}
+        onChangeText={(text) => handleChange('curso', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Correo Electrónico"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={user.correo}
+        onChangeText={(text) => handleChange('correo', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Teléfono"
+        keyboardType="phone-pad"
+        maxLength={10}
+        value={user.telefono}
+        onChangeText={(text) => handleChange('telefono', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Contraseña"
+        secureTextEntry
+        value={user.contrasena}
+        onChangeText={(text) => handleChange('contrasena', text)}
+      />
+      <TextInput
+        style={[
+          styles.input,
+          user.confirmarContrasena.length > 0 &&
+          (user.contrasena !== user.confirmarContrasena ? styles.inputInvalid : styles.inputValid),
+        ]}
+        placeholder="Confirmar Contraseña"
+        secureTextEntry
+        value={user.confirmarContrasena}
+        onChangeText={(text) => handleChange('confirmarContrasena', text)}
+      />
+
+      {user.confirmarContrasena.length > 0 && user.contrasena !== user.confirmarContrasena && (
+        <Text style={styles.errorText}>Las contraseñas no coinciden.</Text>
+      )}
+      {user.confirmarContrasena.length > 0 && user.contrasena === user.confirmarContrasena && (
+        <Text style={styles.successText}>Las contraseñas coinciden.</Text>
+      )}
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>Guardar</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 export default EstudianteNew;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    backgroundColor: '#f5f7fa',
+    flexGrow: 1,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#007bff',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  inputValid: {
+    borderColor: 'green',
+  },
+  inputInvalid: {
+    borderColor: 'red',
+  },
+  buttonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#007bff',
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 30,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+    marginLeft: 5,
+  },
+  successText: {
+    color: 'green',
+    marginBottom: 10,
+    marginLeft: 5,
+  },
+});

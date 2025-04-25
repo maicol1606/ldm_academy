@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, Alert, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Estudiante {
   id_usuario: number;
@@ -58,14 +59,19 @@ const EstudianteList: React.FC = () => {
 
   const renderItem = ({ item }: { item: Estudiante }) => (
     <View style={styles.row}>
-      <Text style={styles.text}>{item.nombre}</Text>
-      <Text style={styles.text}>{item.apellido}</Text>
-      <Text style={styles.text}>{item.correo}</Text>
-      <Text style={styles.text}>{item.telefono}</Text>
-      <Text style={styles.text}>{item.curso}</Text>
+      <View style={styles.details}>
+        <Text style={styles.textBold}>{item.nombre} {item.apellido}</Text>
+        <Text style={styles.text}>{item.correo}</Text>
+        <Text style={styles.text}>{item.telefono}</Text>
+        <Text style={styles.text}>{item.curso}</Text>
+      </View>
       <View style={styles.actions}>
-        <Button title="Editar" onPress={() => handleEdit(item.id_usuario)} />
-        <Button title="Eliminar" color="red" onPress={() => eliminarEstudiante(item.id_usuario)} />
+        <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id_usuario)}>
+          <Ionicons name="pencil" size={24} color="#fff" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => eliminarEstudiante(item.id_usuario)}>
+          <Ionicons name="trash" size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -86,27 +92,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#f4f4f9',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#333',
+    textAlign: 'center',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
+    padding: 15,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    elevation: 3,  // Shadow for Android
+    shadowColor: '#000',  // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  details: {
+    flex: 1,
+    justifyContent: 'center',
   },
   text: {
-    flex: 1,
-    marginRight: 10,
+    color: '#777',
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  textBold: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
   },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+  },
+  editButton: {
+    backgroundColor: '#4caf50',
+    padding: 10,
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  deleteButton: {
+    backgroundColor: '#f44336',
+    padding: 10,
+    borderRadius: 8,
   },
 });
 
