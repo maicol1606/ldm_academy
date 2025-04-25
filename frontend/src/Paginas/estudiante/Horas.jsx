@@ -19,10 +19,23 @@ const Horas = () => {
   useEffect(() => {
     fetchDatos();
   }, []);
-  const horasRealizadas = asistencias.reduce((total, a) => total + a.horas, 0) || 0;
 
-  const horasTotales = 120; // Asumimos 120 como regla
-  const horasExtra = horasRealizadas > horasTotales ? horasRealizadas - horasTotales : 0;
+  const horasTotales = 120;
+
+  const novedadesInvalidas = ['no porta el carnet', 'no asistió', 'no hace uso del uniforme'];
+
+  // Horas válidas (sin novedad "no")
+  const horasValidas = asistencias
+  .filter(a => !novedadesInvalidas.includes(a.novedades?.toLowerCase()))
+  .reduce((total, a) => total + a.horas, 0) || 0;
+
+const horasConNovedad = asistencias
+  .filter(a => novedadesInvalidas.includes(a.novedades?.toLowerCase()))
+  .reduce((total, a) => total + a.horas, 0) || 0;
+
+const horasExtra = horasValidas > horasTotales ? horasValidas - horasTotales : 0;
+
+const horasNoValidas = horasExtra + horasConNovedad;
 
   
     return (
@@ -37,21 +50,21 @@ const Horas = () => {
                 <div className="card p-3">
                   <FaRegClock size={30} className="mb-2" />
                   <h5>Total de Horas al realizar</h5>
-                  <p>{horasTotales} horas</p>
+                  <p>{horasTotales} horas</p>    
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="card p-3">
                   <FaClock size={30} className="mb-2" />
                   <h5>Horas Realizadas</h5>
-                  <p>{horasRealizadas} horas</p>
+                  <p>{horasValidas} horas</p>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="card p-3">
                   <FaRegCalendarAlt size={30} className="mb-2" />
                   <h5>Horas Extra</h5>
-                  <p>{horasExtra} horas</p>
+                  <p>{horasNoValidas} horas</p>
                 </div>
               </div>
             </div>

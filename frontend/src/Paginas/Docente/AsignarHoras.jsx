@@ -106,6 +106,29 @@ const AsignarHoras = () => {
     }
   };
 
+  const calcularHoras = (inicio, fin) => {
+    if (!inicio || !fin) return;
+  
+    const [hInicio, mInicio] = inicio.split(':').map(Number);
+    const [hFin, mFin] = fin.split(':').map(Number);
+  
+    const minutosInicio = hInicio * 60 + mInicio;
+    const minutosFin = hFin * 60 + mFin;
+  
+    let diferenciaHoras = (minutosFin - minutosInicio) / 60;
+  
+    if (diferenciaHoras <= 0) {
+      setNuevasHoras(0); // o puedes mostrar error
+    } else if (diferenciaHoras > 6) {
+      setNuevasHoras(6); // máximo permitido
+    } else {
+      setNuevasHoras(Math.floor(diferenciaHoras));
+    }
+  };
+  useEffect(() => {
+    calcularHoras(horaInicio, horaFin);
+  }, [horaInicio, horaFin]);
+
   return (
     <>
       {mostrarModal && (
@@ -179,24 +202,33 @@ const AsignarHoras = () => {
       <div className="d-flex">
         <NavegadorDocente />
         <div className="container" style={{ marginLeft: '260px' }}>
-          <h2 className="text-center mb-4">Asignar Horas</h2>
+        <h2 className="text-center mb-4 text-primary fw-bold">
+  <FaClock className="me-2" /> Asignar Horas a Estudiantes
+</h2>
 
           {/* Lista de estudiantes */}
           <div className="card mb-3">
             <div className="card-body">
               <h5 className="card-title"><FaUserClock /> Seleccionar Estudiante</h5>
-              <div className="d-flex flex-wrap">
-                {estudiantes.map((estudiante) => (
-                  <div key={estudiante.id_usuario} className="card m-2 p-2 text-center shadow" style={{ width: '180px', cursor: 'pointer' }}>
-                    <img src={estudiante.foto} className="rounded-circle mx-auto mb-2" alt="Perfil" style={{ width: '50px' }} />
-                    <h6 className="mb-0">{estudiante.nombre}</h6>
-                    <p className="text-muted">Numero: {estudiante.id_usuario}</p>
-                    <button className=" btn btn-primary" onClick={() => seleccionarEstudiante(estudiante.id_usuario)}>
-                      <FaInfoCircle /> Ver Detalles
-                    </button>
-                  </div>
-                ))}
-              </div>
+              <div className="row">
+  {estudiantes.map((estudiante) => (
+    <div key={estudiante.id_usuario} className="col-md-4 mb-4">
+      <div className="card shadow rounded-4 border-0 h-100">
+  <div className="card-body text-center">
+    <FaUserClock size={32} className="text-primary mb-2" />
+    <h5 className="card-title fw-semibold">{estudiante.nombre}</h5>
+    <p className="text-muted mb-2">ID: {estudiante.id_usuario}</p>
+    <button
+      className="btn btn-outline-primary btn-sm rounded-pill"
+      onClick={() => seleccionarEstudiante(estudiante.id_usuario)}
+    >
+      <FaInfoCircle className="me-1" /> Ver Detalles
+    </button>
+  </div>
+</div>
+    </div>
+  ))}
+</div>
             </div>
           </div>
 
@@ -204,37 +236,56 @@ const AsignarHoras = () => {
           {mostrarFormulario && (
             <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
               <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content p-3">
-                  <div className="modal-header">
-                    <h5 className="modal-title "><FaPlus /> Registrar Asistencia</h5>
-                    <button className="btn-close" onClick={() => setMostrarFormulario(false)}></button>
-                  </div>
-                  <div className="modal-body">
-                    <form onSubmit={(e) => { e.preventDefault(); enviarAsistencia(); }}>
-                      <div className="mb-3">
-                        <label>Fecha</label>
-                        <input type="date" className="form-control" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
-                      </div>
-                      <div className="mb-3">
-                        <label>Hora de Inicio</label>
-                        <input type="time" className="form-control" value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} required />
-                      </div>
-                      <div className="mb-3">
-                        <label>Hora de Fin</label>
-                        <input type="time" className="form-control" value={horaFin} onChange={(e) => setHoraFin(e.target.value)} required />
-                      </div>
-                      <div className="mb-3">
-                        <label>Horas</label>
-                        <input type="number" className="form-control" value={nuevasHoras} onChange={handleHorasChange} min="1" max="6" required />
-                      </div>
-                      <div className="mb-3">
-                        <label>Novedades (opcional)</label>
-                        <textarea className="form-control" value={novedades} onChange={(e) => setNovedades(e.target.value)} />
-                      </div>
-                      <button className="btn btn-primary" type="submit">Guardar Asistencia</button>
-                    </form>
-                  </div>
-                </div>
+              <div className="modal-content rounded-4 shadow p-4 border-0">
+  <div className="modal-header bg-success text-white rounded-top-4">
+    <h5 className="modal-title"><FaPlus className="me-2" /> Registrar Asistencia</h5>
+    <button className="btn-close" onClick={() => setMostrarFormulario(false)}></button>
+  </div>
+  <div className="modal-body">
+    <form onSubmit={(e) => { e.preventDefault(); enviarAsistencia(); }}>
+      <div className="row g-3">
+        <div className="col-md-6">
+          <label className="form-label fw-bold">Fecha</label>
+          <input type="date" className="form-control" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label fw-bold">Horas</label>
+          <input
+  type="number"
+  className="form-control"
+  value={nuevasHoras}
+  min="1"
+  max="6"
+  required
+  disabled
+/>
+        </div>
+        <div className="col-md-6">
+          <label className="form-label fw-bold">Hora de Inicio</label>
+          <input type="time" className="form-control" value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} required />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label fw-bold">Hora de Fin</label>
+          <input type="time" className="form-control" value={horaFin} onChange={(e) => setHoraFin(e.target.value)} required />
+        </div>
+        <div className="col-12">
+          <label className="form-label fw-bold">Novedades</label>
+          <select className="form-select" value={novedades} onChange={(e) => setNovedades(e.target.value)}>
+            <option value="">Sin novedad</option>
+            <option value="No porta el carnet">No porta el carnet</option>
+            <option value="no asistió">No asistió</option>
+            <option value="no hace uso del uniforme">No hace uso del uniforme</option>
+          </select>
+        </div>
+        <div className="col-12 text-end">
+          <button className="btn btn-success rounded-pill px-4 mt-3" type="submit">
+            <FaCheckCircle className="me-2" /> Guardar Asistencia
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
               </div>
             </div>
           )}
