@@ -64,6 +64,10 @@ const NavegadorDocente = () => {
           <i className="bi bi-clock fs-4"></i>
           <span className="d-block">Asignar Horas</span>
         </a>
+        <a href="/postulacionesDocente" className="nav-link py-3" title="Notificaciones">
+          <i className="bi bi-clock fs-4"></i>
+          <span className="d-block">Notificaciones</span>
+        </a>
         <Link to="/gestionarCampañas" className="nav-link py-3" title="Gestionar Campaña">
           <i className="bi bi-pencil fs-4"></i>
           <span className="d-block">Gestionar Campaña</span>
@@ -73,13 +77,8 @@ const NavegadorDocente = () => {
           <span className="d-block">Cerrar sesión</span>
         </button>
       </nav>
-
-      {/* Footer con icono de notificaciones */}
-      <div className="mt-auto text-center p-3 border-top">
-        <i className="bi bi-bell fs-4" style={{ cursor: "pointer" }} onClick={toggleNotifications}></i>
-      </div>
-    </div>
+  </div>
   );
 };
-
+      
 export default NavegadorDocente;
