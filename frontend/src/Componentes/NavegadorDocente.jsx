@@ -74,56 +74,6 @@ const NavegadorDocente = () => {
         </button>
       </nav>
 
-      {/* Modal de notificaciones */}
-      {showNotifications && (
-        <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} tabIndex="-1">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Notificaciones</h5>
-                <button type="button" className="btn-close" onClick={toggleNotifications}></button>
-              </div>
-              <div className="modal-body">
-                <h6>Estudiantes postulados a campañas</h6>
-                <table className="table table-striped mt-3">
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Nombre</th>
-                      <th>Campaña</th>
-                      <th>Hora de postulación</th>
-                      <th>Estado</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {notifications.length > 0 ? (
-                      notifications.map((notification) => {
-                        console.log(notification); // Verifica cada notificación
-                        return (
-                          <tr key={notification.id}>
-                            <td>{notification.id}</td>
-                            <td>{notification.nombre_estudiante}</td>
-                            <td>{notification.campaña}</td>
-                            <td>{notification.fecha_postulacion}</td>
-                            <td className={notification.estado === "Aceptado" ? "text-success" : "text-danger"}>
-                              {notification.estado}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="text-center">No hay notificaciones</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Footer con icono de notificaciones */}
       <div className="mt-auto text-center p-3 border-top">
         <i className="bi bi-bell fs-4" style={{ cursor: "pointer" }} onClick={toggleNotifications}></i>

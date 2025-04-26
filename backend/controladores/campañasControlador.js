@@ -2,6 +2,16 @@ const db = require('../config/db');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: "lulo06817@gmail.com",
+        pass: "bhkl iubb afws zrfo"
+    }
+});
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

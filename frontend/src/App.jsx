@@ -42,6 +42,7 @@ const CrearCampaña = lazy(() => import('./Paginas/Docente/CrearCampaña'));
 const GestionarCampañas = lazy(() => import('./Paginas/Docente/GestionarCampañas'));
 const HomeDocentes = lazy(() => import('./Paginas/Docente/HomeDocentes'));
 const PerfilDocente = lazy(() => import('./Paginas/Docente/PerfilDocente'));
+const PostulacionesDocente = lazy(() => import('./Paginas/Docente/PostulacionesDocente'));
 
 
 //conponentes
@@ -106,6 +107,7 @@ function App() {
           <Route path='/crearCampaña' element={<CrearCampaña />} />
           <Route path='/gestionarCampañas' element={<GestionarCampañas />} />
           <Route path='/homeDocentes' element={<HomeDocentes />} />
+          <Route path='/postulacionesDocente' element={<PostulacionesDocente />} />
         </Route>
 
         {/* Rutas para el default */}

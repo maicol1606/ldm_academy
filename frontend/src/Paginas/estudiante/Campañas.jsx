@@ -60,11 +60,13 @@ export default function InfoCampañas() {
     id_campaña: '',
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // Función para manejar la postulación
   const handlePostular  = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post('http://localhost:3000/api/postulacion/agregarPostulacion', postulado);
-
       if (response.status === 200) {
         Swal.fire({
           icon: 'success',
@@ -82,6 +84,9 @@ export default function InfoCampañas() {
         title: 'Error al postular',
         text: error.response.data.error,
       });
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,6 +142,7 @@ export default function InfoCampañas() {
                         <div className="btn-group">
                           <button
                             type="button"
+                            disabled={isLoading}
                             className="btn btn-sm btn-outline-primary transition-all duration-200 hover:bg-primary hover:text-white"
                             onClick={() => setShowPostuladoModal(true) || setPostulado({ id_campaña: campana.id_campaña, id_usuario: idUsuario })}
                           >
@@ -186,12 +192,15 @@ export default function InfoCampañas() {
                   Cancelar
                 </button>
                 <button
+                  disabled={isLoading}
                   type="button"
                   className="btn btn-primary"
                   onClick={handlePostular}
 
                 >
-                  Confirmar
+                  {isLoading ? <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div> : 'Confirmar'}
                 </button>
               </div>
             </div>
