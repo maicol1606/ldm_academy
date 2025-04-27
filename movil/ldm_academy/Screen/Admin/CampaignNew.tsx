@@ -1,183 +1,200 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  StyleSheet, 
+  Alert, 
+  Image, 
+  TouchableOpacity, 
+  ScrollView 
+} from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
-import { showMessage } from 'react-native-flash-message';
+import * as ImagePicker from 'expo-image-picker';
+import NavegadorAdmin from './NavegacionAdmin';
 
 export default function CampaignNew() {
-  const navigation = useNavigation();
-  const [campaign, setCampaign] = useState({
+  const [Campaña, setCampaña] = useState({
     nom_campana: '',
     descripcion: '',
     fecha: '',
     cupos: '',
-    foto: null,
+    id_docente: '', // AQUI el id deberías traerlo de AsyncStorage o similar
+    foto: null as any
   });
 
-  const [imageUri, setImageUri] = useState(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  // Solicitar permisos para acceder a la galería o cámara
-  const requestPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Lo siento, necesitamos permisos para acceder a la galería de imágenes.');
-    }
+  const handleChange = (name: string, value: string) => {
+    setCampaña(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const pickImage = async () => {
-    await requestPermission();
-    const result = await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImageUri(result.uri);
-      setCampaign({ ...campaign, foto: result.uri });
+    if (!result.canceled) {
+      const asset = result.assets[0];
+      setPreview(asset.uri);
+      setCampaña(prev => ({
+        ...prev,
+        foto: {
+          uri: asset.uri,
+          type: asset.type,
+          name: asset.fileName || 'photo.jpg'
+        }
+      }));
     }
-  };
-
-  const handleChange = (name: string, value: string) => {
-    setCampaign({
-      ...campaign,
-      [name]: value,
-    });
   };
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append('nom_campana', campaign.nom_campana);
-    formData.append('descripcion', campaign.descripcion);
-    formData.append('fecha', campaign.fecha);
-    formData.append('cupos', campaign.cupos);
-
-    if (campaign.foto) {
-      const uri = campaign.foto;
-      const fileName = uri.split('/').pop();
-      const fileType = uri.split('.').pop();
-      const file = {
-        uri,
-        name: fileName,
-        type: `image/${fileType}`,
-      };
-      formData.append('foto', file);
+    formData.append('nom_campana', Campaña.nom_campana);
+    formData.append('descripcion', Campaña.descripcion);
+    formData.append('fecha', Campaña.fecha);
+    formData.append('cupos', Campaña.cupos);
+    formData.append('id_docente', Campaña.id_docente);
+    if (Campaña.foto) {
+      formData.append('foto', {
+        uri: Campaña.foto.uri,
+        name: Campaña.foto.name,
+        type: 'image/jpeg'
+      } as any);
     }
 
     try {
-      const response = await axios.post('http://192.168.1.11:3000/api/campanas/agregarCampana', formData);
-      if (response.status === 200) {
-        showMessage({
-          message: response.data.title,
-          type: 'success',
-        });
-        // Resetear el formulario
-        setCampaign({
+      const res = await axios.post('http://192.168.1.11:3000/api/campanas/agregarCampana', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (res.status === 200) {
+        Alert.alert('Éxito', res.data.title);
+        setCampaña({
           nom_campana: '',
           descripcion: '',
           fecha: '',
           cupos: '',
-          foto: null,
+          id_docente: '',
+          foto: null
         });
-        setImageUri(null);
+        setPreview(null);
       } else {
-        showMessage({
-          message: 'Error al crear la campaña',
-          type: 'danger',
-        });
+        Alert.alert('Error', 'Error al crear la campaña');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      showMessage({
-        message: 'Error de conexión o al procesar los datos',
-        type: 'danger',
-      });
+      Alert.alert('Error', error.response?.data?.message || 'No se pudo crear la campaña');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Nueva Campaña</Text>
+    <View style={styles.screen}>
+      <NavegadorAdmin />
+      
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Nueva Campaña</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre de la campaña"
-        value={campaign.nom_campana}
-        onChangeText={(text) => handleChange('nom_campana', text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Número de cupos"
-        value={campaign.cupos}
-        keyboardType="numeric"
-        onChangeText={(text) => handleChange('cupos', text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Descripción"
-        value={campaign.descripcion}
-        onChangeText={(text) => handleChange('descripcion', text)}
-        multiline
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Fecha de inicio"
-        value={campaign.fecha}
-        onChangeText={(text) => handleChange('fecha', text)}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Nombre de la campaña"
+          value={Campaña.nom_campana}
+          onChangeText={(text) => handleChange('nom_campana', text)}
+        />
 
-      <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
-        <Text style={styles.imageButtonText}>Seleccionar Imagen</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Número de cupos"
+          keyboardType="numeric"
+          value={Campaña.cupos}
+          onChangeText={(text) => handleChange('cupos', text)}
+        />
 
-      {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
+        <TextInput
+          style={[styles.input, { height: 100 }]}
+          placeholder="Descripción"
+          value={Campaña.descripcion}
+          multiline
+          numberOfLines={4}
+          onChangeText={(text) => handleChange('descripcion', text)}
+        />
 
-      <View style={styles.buttonsContainer}>
-        <Button title="Limpiar" onPress={() => setCampaign({ nom_campana: '', descripcion: '', fecha: '', cupos: '', foto: null })} />
-        <Button title="Guardar" onPress={handleSubmit} />
-      </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Fecha (YYYY-MM-DD)"
+          value={Campaña.fecha}
+          onChangeText={(text) => handleChange('fecha', text)}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={pickImage}>
+          <Text style={styles.buttonText}>Seleccionar Foto</Text>
+        </TouchableOpacity>
+
+        {preview && (
+          <Image source={{ uri: preview }} style={styles.image} />
+        )}
+
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>Guardar</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
+  },
+  container: {
     padding: 20,
-    backgroundColor: '#fff',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1D4ED8',
+    color: '#007bff',
     marginBottom: 20,
-    textAlign: 'center',
   },
   input: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
+  },
+  button: {
+    backgroundColor: '#6c757d',
     padding: 10,
-    marginVertical: 10,
+    borderRadius: 10,
+    marginBottom: 15,
   },
-  imageButton: {
-    backgroundColor: '#1D4ED8',
-    padding: 12,
-    borderRadius: 8,
-    marginVertical: 10,
-  },
-  imageButtonText: {
+  buttonText: {
     color: '#fff',
-    textAlign: 'center',
+    fontWeight: 'bold',
   },
-  imagePreview: {
-    width: '100%',
+  image: {
+    width: 200,
     height: 200,
-    marginVertical: 20,
+    marginBottom: 20,
     borderRadius: 10,
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  submitButton: {
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 10,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

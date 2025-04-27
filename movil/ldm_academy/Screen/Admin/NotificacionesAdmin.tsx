@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import axios from 'axios';
-import NavegacionAdmin from './NavegacionAdmin'; // Ajusta la ruta si es necesario
+import NavegacionAdmin from './NavegacionAdmin'; 
 
 interface Notificacion {
   id: number;
