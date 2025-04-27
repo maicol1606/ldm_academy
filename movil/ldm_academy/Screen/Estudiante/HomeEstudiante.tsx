@@ -3,8 +3,17 @@ import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Alert, Mod
 import axios from 'axios';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+const jwtDecode = require('jwt-decode');
+import NavegadorEstudiante from './NavegadorEstudiante';
+import { NavigationProp } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';  
 
-const HomeEstudiante = ({ navigation }: any) => {
+
+interface HomeEstudianteProps {
+  navigation: NavigationProp<any, any>; 
+}
+
+const HomeEstudiante: React.FC<HomeEstudianteProps> = ({ navigation }) => {  
   const [campanas, setCampanas] = useState<any[]>([]);
   const [docentes, setDocentes] = useState<any[]>([]);
   const [postulaciones, setPostulaciones] = useState<any[]>([]);
@@ -20,12 +29,12 @@ const HomeEstudiante = ({ navigation }: any) => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
+        const tokenDecoded = token ? jwtDecode(token) : null;
         const idUsuario = tokenDecoded?.id ?? null;
 
         const [campanasRes, postulacionesRes, docentesRes] = await Promise.all([
           axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://192.168.1.11:3000/api/postulacion/mostrarPostulacion/${idUsuario}'),
+          axios.get(`http://192.168.1.11:3000/api/postulacion/mostrarPostulacion/${idUsuario}`),
           axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes'),
         ]);
 
@@ -42,7 +51,7 @@ const HomeEstudiante = ({ navigation }: any) => {
               {
                 text: 'Ir a horas',
                 onPress: () => {
-                  navigation.navigate('Horas'); // Redirige a la pantalla de Horas
+                  navigation.navigate('Horas');
                 },
               },
             ]
@@ -64,7 +73,7 @@ const HomeEstudiante = ({ navigation }: any) => {
           {
             text: 'Ir a horas',
             onPress: () => {
-              navigation.navigate('Horas'); // Redirige a la pantalla de Horas
+              navigation.navigate('Horas');
             },
           },
         ]);
@@ -84,18 +93,18 @@ const HomeEstudiante = ({ navigation }: any) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <NavegadorEstudiante />
       <Text style={styles.title}>Campañas</Text>
       <Text style={styles.subtitle}>El servicio social es una oportunidad para marcar la diferencia.</Text>
 
       {campanas.map((campana, index) => {
         const docente = docentes.find((doc: any) => doc.id_usuario === campana.id_docente);
         return (
-          <View key={campana.id_campañas} style={styles.card}> {/* Aquí se añade la key */}
+          <View key={campana.id_campañas} style={styles.card}>
             <Image
               source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
               style={styles.image}
             />
-
             <Text style={styles.campaignTitle}>{campana.nom_campaña}</Text>
             <Text>{campana.descripcion}</Text>
             <Text style={styles.detail}>
@@ -266,4 +275,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeEstudiante;
+export default HomeEstudiante;

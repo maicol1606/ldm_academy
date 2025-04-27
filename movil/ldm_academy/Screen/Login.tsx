@@ -15,7 +15,7 @@ type RootStackParamList = {
   Home: undefined;
   AdminHome: undefined; 
   HomeEstudiante: undefined;
-  HomeDocentes: undefined;
+  HomeDocente: undefined;
   Register: undefined;
   OlvidarContrasena: undefined;
 };
@@ -62,7 +62,7 @@ const Login: React.FC = () => {
                   navigation.navigate('HomeEstudiante');
                   break;
                 case 3:
-                  navigation.navigate('HomeDocentes');
+                  navigation.navigate('HomeDocente');
                   break;
                 default:
                   navigation.navigate('Home');
