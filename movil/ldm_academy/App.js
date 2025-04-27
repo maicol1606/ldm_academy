@@ -20,7 +20,15 @@ import CampaignList from './Screen/Admin/CampaignList';
 //estudiante
 import HomeEstudiante from './Screen/Estudiante/HomeEstudiante';
 import NavegadorEstudiante from './Screen/Estudiante/NavegadorEstudiante';
-
+import Horas from './Screen/Estudiante/Horas';
+import Certificados from './Screen/Estudiante/Certificados';
+//Docente
+import HomeDocente from './Screen/Docente/HomeDocente';
+import CrearCampaña from './Screen/Docente/CrearCampaña';
+import AsignarHoras from './Screen/Docente/AsignarHoras';
+import GestionarCampañas from './Screen/Docente/GestionarCampañas';
+import NavegadorDocente from './Screen/Docente/NavegadorDocente';
+import PostulacionesDocente from './Screen/Docente/PostulacionesDocente';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +57,17 @@ export default function App() {
     {/**Estudiante */}
     <Stack.Screen name="HomeEstudiante" component={HomeEstudiante} />
     <Stack.Screen name="NavegadorEstudiante" component={NavegadorEstudiante} />
+    <Stack.Screen name="Horas" component={Horas} />
+    <Stack.Screen name="Certificados" component={Certificados} />
+    {/**Docente */}
+    <Stack.Screen name="HomeDocente" component={HomeDocente} />
+    <Stack.Screen name="CrearCampaña" component={CrearCampaña} />
+    <Stack.Screen name="AsignarHoras" component={AsignarHoras} />
+    <Stack.Screen name="GestionarCampañas" component={GestionarCampañas} />
+    <Stack.Screen name="NavegadorDocente" component={NavegadorDocente} />
+    <Stack.Screen name="PostulacionesDocente" component={PostulacionesDocente} />
+
+
     
   </Stack.Navigator>
 </NavigationContainer>
