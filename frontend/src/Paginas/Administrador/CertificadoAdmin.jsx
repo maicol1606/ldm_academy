@@ -1,129 +1,159 @@
-import React, { useState } from "react";
-import axios from "axios";
-import NavegacionAdmin from "../../Componentes/NavegacionAdmin";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+import React, { useState } from 'react';
+import NavegacionEstudiante from '../../Componentes/NavegacionAdmin';
+import { FaIdCard, FaClock, FaEnvelope, FaFileSignature, FaUser, FaChalkboardTeacher, FaSignature, FaFilePdf } from 'react-icons/fa';
+import { jsPDF } from 'jspdf';
+import NavegacionAdmin from '../../Componentes/NavegacionAdmin';
 
-const CertificadoAdmin = () => {
-  
-  const [datos, setDatosEstudiante] = useState(null);
-  const [descripcion, setDescripcion] = useState("");
-  const [mostrar, setMostrarEstudiante] = useState(false);
+const GenCertificados = () => {
+  const [identificacion, setIdentificacion] = useState('');
 
-  const [idUsuario, setIdUsuario] = useState("");
+  const [generado, setGenerado] = useState(false); // Estado para mostrar el certificado generado
 
-  const handleBuscarEstudiante = async (e) => {
-    const valor = e.target.value;
-    setIdUsuario(valor);
-  
-    if (valor.length === 4) {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/asistencia/obtenerAsistencias/${valor}`);
-        setDatosEstudiante(response.data);
-        setMostrarEstudiante(true);
-      } catch (error) {
-        console.error("Error al obtener datos del estudiante:", error);
-        setMostrarEstudiante(false);
-      }
+  const generarCertificado = () => {
+    // Aquí simulas la generación del certificado
+    if (identificacion) {
+      setGenerado(true);
     } else {
-      setMostrarEstudiante(false);
+      alert('Por favor, complete todos los campos antes de generar el certificado.');
     }
   };
 
-  const generarPDF = () => {
-    if (!datos) return;
-
+  const descargarCertificado = () => {
     const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text("Certificación de Servicio Social", 50, 20);
+    const marginLeft = 20;
+    let currentHeight = 20;
+
+    // Título principal
+    doc.setFontSize(20);
+    doc.setTextColor(0, 40, 85); // color #002855
+    doc.setFont('helvetica', 'bold');
+    doc.text('¡Certificado Generado Exitosamente!', marginLeft, currentHeight);
+
+    currentHeight += 20;
+
+    // Subtítulo
+    doc.setFontSize(16);
+    doc.setTextColor(0, 51, 102); // color #003366
+    doc.text('Certificado de Servicio Social', marginLeft, currentHeight);
+
+    currentHeight += 20;
+
+    // Cuerpo del certificado
     doc.setFontSize(12);
-    doc.text(`Nombre del Estudiante: ${datos.nombre}`, 20, 40);
-    doc.text(`Horas Cumplidas: ${datos.horasCumplidas}`, 20, 50);
-    doc.text(`Promedio de Horas: ${datos.promedioHoras}`, 20, 60);
-    doc.text(`Inicio del Servicio: ${datos.inicioServicio}`, 20, 70);
-    doc.text(`Fin del Servicio: ${datos.finServicio}`, 20, 80);
-    doc.text(`Campaña: ${datos.campaña}`, 20, 90);
-    doc.text(`Docente: ${datos.docente}`, 20, 100);
-    doc.text(`Descripción: ${descripcion}`, 20, 110);
-    doc.save(`Certificado_${datos.nombre}.pdf`);
+    doc.setTextColor(51, 51, 51); // color #333
+    doc.setFont('helvetica', 'normal');
 
-    registrarCertificado();
+    const texto1 = `Este certificado acredita que el estudiante identificado con documento N° ${identificacion} ha completado satisfactoriamente SU SERVICIO SOCIAL en la institución educativa Fernando Gonzalez Ochoa.`;
+    const texto2 = `Se ha validado su presencia y participación de manera correcta, es por eso que este certificado es entregado a usted:`;
+    const texto3 = `• Cumplimiento en su servicio social`;
+    const texto4 = `¡Felicidades por completar tu servicio social y continuar con tu formación!`;
+
+    const splitText1 = doc.splitTextToSize(texto1, 170);
+    const splitText2 = doc.splitTextToSize(texto2, 170);
+    const splitText3 = doc.splitTextToSize(texto3, 170);
+    const splitText4 = doc.splitTextToSize(texto4, 170);
+
+    doc.text(splitText1, marginLeft, currentHeight);
+    currentHeight += splitText1.length * 10;
+
+    doc.text(splitText2, marginLeft, currentHeight);
+    currentHeight += splitText2.length * 10;
+
+    doc.text(splitText3, marginLeft + 10, currentHeight); // sangría para la lista
+    currentHeight += splitText3.length * 10;
+
+    doc.text(splitText4, marginLeft, currentHeight);
+
+    // Guardar el PDF
+    doc.save('certificado_servicio_social.pdf');
   };
 
-  const registrarCertificado = async () => {
-    try {
-      const payload = {
-        id_usuario: idUsuario, // ✅ aquí va idUsuario
-        id_campaña: datos.id_campaña, // asegúrate que `id_campaña` venga en los datos
-        descripcion,
-      };
-      await axios.post("http://localhost:3000/api/certificados/agregarCertificado", payload);
-      alert("Certificado registrado correctamente.");
-    } catch (error) {
-      console.error("Error al registrar certificado:", error);
-      alert("Error al registrar certificado.");
-    }
-  };
-  
 
   return (
-    <div className="container-fluid bg-light min-vh-100">
+    <div className="d-flex flex-column">
       <NavegacionAdmin />
-      <div className="d-flex justify-content-center align-items-center">
-        <div className="card shadow-lg p-4 mt-4 w-75">
-          <h2 className="text-center text-primary mb-4">
-            <i className="fas fa-certificate"></i> Generar Certificación
-          </h2>
-          <form autoComplete="off">
-            <fieldset>
-              <legend className="text-secondary">
-                <i className="far fa-file-alt"></i> Datos del Estudiante
-              </legend>
-              <div className="mb-3">
-  <input
-    type="text"
-    className="form-control"
-    placeholder="ID del usuario (estudiante)"
-    maxLength="6"
-    value={idUsuario}
-    onChange={handleBuscarEstudiante}
-  />
-</div>
 
-              {mostrar && datos && (
-                <div className="border p-3 rounded bg-white">
-                  <p><strong>Nombre:</strong> {datos.nombre}</p>
-                  <p><strong>Horas cumplidas:</strong> {datos.horasCumplidas}</p>
-                  <p><strong>Promedio diario:</strong> {datos.promedioHoras}</p>
-                  <p><strong>Inicio:</strong> {datos.inicioServicio}</p>
-                  <p><strong>Fin:</strong> {datos.finServicio}</p>
-                  <p><strong>Campaña:</strong> {datos.campaña}</p>
-                  <p><strong>Docente:</strong> {datos.docente}</p>
-                  <textarea
-                    className="form-control"
-                    placeholder="Descripción ante novedad"
-                    rows="3"
-                    value={descripcion}
-                    onChange={(e) => setDescripcion(e.target.value)}
-                  ></textarea>
-                </div>
-              )}
-            </fieldset>
-            <div className="text-center mt-4">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={generarPDF}
-                disabled={!mostrar}
-              >
-                <i className="fas fa-file-download"></i> GENERAR CERTIFICADO
-              </button>
-            </div>
-          </form>
+      {/* Primera sección */}
+      <div className="container-fluid d-flex align-items-center justify-content-center" style={{
+        backgroundColor: '#002855',
+        height: '70vh',
+        width: '100%',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div>
+          <h1 style={{ fontSize: '3rem', fontWeight: 'bold' }}>Listo para generar tu certificado en línea</h1>
+          <p style={{ fontSize: '1.2rem', marginTop: '10px' }}>
+            Ya puedes generar tu certificado de manera online, sin tener que esperar en largas filas.
+          </p>
+          <button style={{
+            backgroundColor: '#004a99',
+            border: '2px solid #003366',
+            color: 'white',
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            borderRadius: '8px',
+            marginTop: '20px',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#005bbb'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#004a99'}
+            onClick={generarCertificado}>
+            Genera tu certificado
+          </button>
         </div>
       </div>
+
+      {/* Generación del Certificado */}
+      {generado ? (
+        <div className="container py-5" style={{ backgroundColor: 'white', textAlign: 'center', border: '2px solid #004a99', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+          <h2 className="mb-4" style={{ color: '#002855', fontWeight: 'bold' }}>¡Certificado Generado Exitosamente!</h2>
+          <div className="row justify-content-center">
+            <div className="col-md-8">
+              <div className="card" style={{ padding: '30px', backgroundColor: '#f8f8f8', border: '1px solid #d4af37', borderRadius: '8px' }}>
+                <h3 className="text-center" style={{ color: '#003366', fontWeight: 'bold' }}>Certificado de Servicio Social</h3>
+                <p className="mt-3" style={{ fontSize: '1.2rem', color: '#333' }}>
+                  Este certificado acredita que el estudiante identificado con documento N° <strong>{identificacion}</strong> ha completado satisfactoriamente <strong>SU SERVICIO SOCIAL</strong> en la institución educativa Fernando Gonzalez Ochoa.
+                </p>
+                <p style={{ fontSize: '1.1rem', color: '#333' }}>
+                  Se ha validado su presencia y participación de manera correcta es por eson este certificado es entregado a usted:
+                </p>
+                <ul style={{ textAlign: 'left', listStyleType: 'disc', paddingLeft: '30px', fontSize: '1.1rem', color: '#333' }}>
+                  <li>Cumplimiento en su servicio social</li>
+                </ul>
+                <p className="mt-3" style={{ fontSize: '1.2rem', color: '#333' }}>
+                  ¡Felicidades por completar tu servicio social y continuar con tu formación!
+                </p>
+                <div className="text-center mt-4">
+                  <button className="btn btn-success" style={{ fontSize: '1.2rem', padding: '10px 20px' }} onClick={descargarCertificado}>
+                    <FaFilePdf /> Descargar Certificado
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="container py-5" style={{ backgroundColor: 'white', textAlign: 'center', padding: '30px' }}>
+          <h2 className="mb-4">Genera tu certificado ahora</h2>
+            <p>Si en caso de que un estudiante no pueda generar su certficado se le podra generar desde aa con el numero de identificación.</p>
+
+          <div className="row justify-content-center">
+            <div className="col-md-6 text-start">
+              <label className="form-label"><FaUser /> Número de identificación del estudiante</label>
+              <input type="text" className="form-control" value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} />
+            </div>
+
+          </div>
+          <button className="btn btn-primary mt-4" style={{ fontSize: '1.2rem', padding: '10px 20px' }} onClick={generarCertificado}>
+            <FaFilePdf /> Generar certificado
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default CertificadoAdmin;
+export default GenCertificados;

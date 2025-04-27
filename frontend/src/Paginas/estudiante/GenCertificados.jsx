@@ -5,14 +5,12 @@ import { jsPDF } from 'jspdf';
 
 const GenCertificados = () => {
   const [identificacion, setIdentificacion] = useState('');
-  const [idAsistencia, setIdAsistencia] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [firma, setFirma] = useState(null);
+
   const [generado, setGenerado] = useState(false); // Estado para mostrar el certificado generado
 
   const generarCertificado = () => {
     // Aquí simulas la generación del certificado
-    if (identificacion && idAsistencia && correo && firma) {
+    if (identificacion) {
       setGenerado(true);
     } else {
       alert('Por favor, complete todos los campos antes de generar el certificado.');
@@ -21,23 +19,54 @@ const GenCertificados = () => {
 
   const descargarCertificado = () => {
     const doc = new jsPDF();
+    const marginLeft = 20;
+    let currentHeight = 20;
 
-    // Contenido del certificado
+    // Título principal
+    doc.setFontSize(20);
+    doc.setTextColor(0, 40, 85); // color #002855
+    doc.setFont('helvetica', 'bold');
+    doc.text('¡Certificado Generado Exitosamente!', marginLeft, currentHeight);
+
+    currentHeight += 20;
+
+    // Subtítulo
     doc.setFontSize(16);
-    doc.text('Certificado de Servicio Social', 20, 20);
-    doc.setFontSize(12);
-    doc.text(`Este certificado acredita que el estudiante ${identificacion} ha completado satisfactoriamente 120 horas de servicio social en la institución educativa.`, 20, 30);
-    doc.text('Se ha validado su presencia y participación en las siguientes actividades:', 20, 40);
-    doc.text('• Comedor', 20, 50);
-    doc.text('• Biblioteca', 20, 60);
-    doc.text('• Enfermería', 20, 70);
-    doc.text('• Coordinación', 20, 80);
-    doc.text('• Orientación', 20, 90);
-    doc.text('¡Felicidades por completar tu servicio social y continuar con tu formación!', 20, 100);
+    doc.setTextColor(0, 51, 102); // color #003366
+    doc.text('Certificado de Servicio Social', marginLeft, currentHeight);
 
-    // Guardar como PDF
+    currentHeight += 20;
+
+    // Cuerpo del certificado
+    doc.setFontSize(12);
+    doc.setTextColor(51, 51, 51); // color #333
+    doc.setFont('helvetica', 'normal');
+
+    const texto1 = `Este certificado acredita que el estudiante identificado con documento N° ${identificacion} ha completado satisfactoriamente SU SERVICIO SOCIAL en la institución educativa Fernando Gonzalez Ochoa.`;
+    const texto2 = `Se ha validado su presencia y participación de manera correcta, es por eso que este certificado es entregado a usted:`;
+    const texto3 = `• Cumplimiento en su servicio social`;
+    const texto4 = `¡Felicidades por completar tu servicio social y continuar con tu formación!`;
+
+    const splitText1 = doc.splitTextToSize(texto1, 170);
+    const splitText2 = doc.splitTextToSize(texto2, 170);
+    const splitText3 = doc.splitTextToSize(texto3, 170);
+    const splitText4 = doc.splitTextToSize(texto4, 170);
+
+    doc.text(splitText1, marginLeft, currentHeight);
+    currentHeight += splitText1.length * 10;
+
+    doc.text(splitText2, marginLeft, currentHeight);
+    currentHeight += splitText2.length * 10;
+
+    doc.text(splitText3, marginLeft + 10, currentHeight); // sangría para la lista
+    currentHeight += splitText3.length * 10;
+
+    doc.text(splitText4, marginLeft, currentHeight);
+
+    // Guardar el PDF
     doc.save('certificado_servicio_social.pdf');
   };
+
 
   return (
     <div className="d-flex flex-column">
@@ -85,17 +114,13 @@ const GenCertificados = () => {
               <div className="card" style={{ padding: '30px', backgroundColor: '#f8f8f8', border: '1px solid #d4af37', borderRadius: '8px' }}>
                 <h3 className="text-center" style={{ color: '#003366', fontWeight: 'bold' }}>Certificado de Servicio Social</h3>
                 <p className="mt-3" style={{ fontSize: '1.2rem', color: '#333' }}>
-                  Este certificado acredita que el estudiante <strong>{identificacion}</strong> ha completado satisfactoriamente <strong>120 horas</strong> de servicio social en la institución educativa.
+                  Este certificado acredita que el estudiante identificado con documento N° <strong>{identificacion}</strong> ha completado satisfactoriamente <strong>SU SERVICIO SOCIAL</strong> en la institución educativa Fernando Gonzalez Ochoa.
                 </p>
                 <p style={{ fontSize: '1.1rem', color: '#333' }}>
-                  Se ha validado su presencia y participación en las siguientes actividades:
+                  Se ha validado su presencia y participación de manera correcta es por eson este certificado es entregado a usted:
                 </p>
                 <ul style={{ textAlign: 'left', listStyleType: 'disc', paddingLeft: '30px', fontSize: '1.1rem', color: '#333' }}>
-                  <li>Comedor</li>
-                  <li>Biblioteca</li>
-                  <li>Enfermería</li>
-                  <li>Coordinación</li>
-                  <li>Orientación</li>
+                  <li>Cumplimiento en su servicio social</li>
                 </ul>
                 <p className="mt-3" style={{ fontSize: '1.2rem', color: '#333' }}>
                   ¡Felicidades por completar tu servicio social y continuar con tu formación!
@@ -112,30 +137,15 @@ const GenCertificados = () => {
       ) : (
         <div className="container py-5" style={{ backgroundColor: 'white', textAlign: 'center', padding: '30px' }}>
           <h2 className="mb-4">Genera tu certificado ahora</h2>
-          <p>Si ya completaste tus 120 horas, podrás generar tu certificado en PDF y recibirlo en tu correo.</p>
+          <p>Si ya completaste tus  horas, podrás generar tu certificado en PDF y recibirlo en tu correo.</p>
 
           <div className="row justify-content-center">
             <div className="col-md-6 text-start">
               <label className="form-label"><FaUser /> Número de identificación</label>
               <input type="text" className="form-control" value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} />
             </div>
-            <div className="col-md-6 text-start">
-              <label className="form-label"><FaUser /> ID de asistencia</label>
-              <input type="text" className="form-control" value={idAsistencia} onChange={(e) => setIdAsistencia(e.target.value)} />
-            </div>
-          </div>
 
-          <div className="row justify-content-center mt-3">
-            <div className="col-md-6 text-start">
-              <label className="form-label"><FaEnvelope /> Correo electrónico</label>
-              <input type="email" className="form-control" value={correo} onChange={(e) => setCorreo(e.target.value)} />
-            </div>
-            <div className="col-md-6 text-start">
-              <label className="form-label"><FaSignature /> Subir firma</label>
-              <input type="file" className="form-control" onChange={(e) => setFirma(e.target.files[0])} />
-            </div>
           </div>
-
           <button className="btn btn-primary mt-4" style={{ fontSize: '1.2rem', padding: '10px 20px' }} onClick={generarCertificado}>
             <FaFilePdf /> Generar certificado
           </button>

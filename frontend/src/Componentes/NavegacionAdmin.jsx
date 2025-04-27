@@ -147,7 +147,6 @@ export default function NavegacionAdmin() {
 
                     <ul className="list-unstyled mt-4">
                         <li><Link to="/" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-house-door me-2"></i> Página de Inicio</Link></li>
-                        <li><Link to="/NotificacionesAdmin" className="text-white text-decoration-none d-flex align-items-center p-2 rounded"><i className="bi bi-bell me-2"></i> Notificaciones</Link></li>
                         {[{
                             title: 'Estudiantes',
                             icon: 'bi-person',
