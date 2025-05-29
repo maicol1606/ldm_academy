@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, Modal, TextInput, Image, Alert, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View, Text, Button, FlatList, Modal, TextInput,
+  Image, Alert, TouchableOpacity, StyleSheet
+} from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
-import NavegacionAdmin from './NavegacionAdmin';  // Asegúrate de que la ruta sea correcta
+import NavegacionAdmin from './NavegacionAdmin';
 
 export default function CampaignList() {
   const [campañas, setCampañas] = useState([]);
@@ -24,8 +27,8 @@ export default function CampaignList() {
     const fetchData = async () => {
       try {
         const [campanasRes, docentesRes] = await Promise.all([
-          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes'),
+          axios.get('http://192.168.1.14:3000/api/campanas/mostrarCampanas'),
+          axios.get('http://192.168.1.14:3000/api/docentes/obtenerDocentes'),
         ]);
         setCampañas(campanasRes.data);
         setDocentes(docentesRes.data);
@@ -52,13 +55,13 @@ export default function CampaignList() {
         formData.append('foto', CampañaEdit.foto);
       }
 
-      const res = await axios.put(`http://192.168.1.11:3000/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`, formData, {
+      const res = await axios.put(`http://192.168.1.14:3000/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (res.status === 200) {
-        Alert.alert('Success', 'Campaña actualizada');
+        Alert.alert('Éxito', 'Campaña actualizada');
         setModalVisible(false);
-        setCampañaEdit({ ...CampañaEdit, foto: null }); // reset photo
+        setCampañaEdit({ ...CampañaEdit, foto: null });
       }
     } catch (error) {
       console.log(error);
@@ -79,9 +82,9 @@ export default function CampaignList() {
         )
       );
       if (confirm) {
-        const res = await axios.delete(`http://192.168.1.11:3000/api/campanas/eliminarCampana/${id}`);
+        const res = await axios.delete(`http://192.168.1.14:3000/api/campanas/eliminarCampana/${id}`);
         if (res.status === 200) {
-          Alert.alert('Success', 'Campaña borrada');
+          Alert.alert('Éxito', 'Campaña borrada');
         }
       }
     } catch (error) {
@@ -92,18 +95,16 @@ export default function CampaignList() {
 
   return (
     <View style={styles.container}>
-      {/* Navegación */}
       <NavegacionAdmin />
-
       <Text style={styles.title}>Lista de Campañas</Text>
-      
+
       <FlatList
         data={campañas}
         keyExtractor={(item) => item.id_campaña.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Image
-              source={{ uri: `/img/campañas/${item.imagen}` }}
+              source={{ uri: `http://192.168.1.14:8081/img/campanas/${item.imagen}` }}
               style={styles.image}
             />
             <Text style={styles.cardTitle}>{item.nom_campaña}</Text>
@@ -129,7 +130,6 @@ export default function CampaignList() {
         )}
       />
 
-      {/* Modal para Editar Campaña */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -238,4 +238,3 @@ const styles = StyleSheet.create({
     color: '#495057',
   },
 });
-

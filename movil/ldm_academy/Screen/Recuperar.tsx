@@ -44,7 +44,7 @@ export default function Recuperar() {
     }
 
     try {
-      const res = await axios.put('http://192.168.1.11:3000/api/auth/recuperar', user, {
+      const res = await axios.put('http://192.168.1.14:3000/api/auth/recuperar', user, {
         headers: { 'Content-Type': 'application/json' },
       });
 

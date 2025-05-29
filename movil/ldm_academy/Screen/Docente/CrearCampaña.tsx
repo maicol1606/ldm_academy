@@ -70,7 +70,7 @@ export default function CampaignNew() {
     }
 
     try {
-      const res = await axios.post('http://192.168.1.11:3000/api/campanas/agregarCampana', formData, {
+      const res = await axios.post('http://192.168.1.14:3000/api/campanas/agregarCampana', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
