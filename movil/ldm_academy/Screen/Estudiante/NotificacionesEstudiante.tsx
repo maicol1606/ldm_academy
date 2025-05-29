@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import axios from 'axios';
-import NavegacionAdmin from './NavegacionAdmin'; 
+import NavegacionEstudiante from './NavegadorEstudiante'; // Componente de navegación del estudiante
 
 interface Notificacion {
   id: number;
@@ -22,7 +22,7 @@ interface Notificacion {
   estado: string;
 }
 
-const NotificacionesAdmin = () => {
+const NotificacionesEstudiante = () => {
   const [notifications, setNotifications] = useState<Notificacion[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [campaignFilter, setCampaignFilter] = useState('');
@@ -33,7 +33,7 @@ const NotificacionesAdmin = () => {
 
   useEffect(() => {
     axios
-      .get('http://192.168.1.11:3000/api/notificaciones')
+      .get('http://192.168.1.11:3000/api/notificaciones') // Cambia por el endpoint adecuado
       .then((res) => {
         if (Array.isArray(res.data)) {
           setNotifications(res.data);
@@ -110,7 +110,7 @@ const NotificacionesAdmin = () => {
 
   return (
     <>
-      <NavegacionAdmin />
+      <NavegacionEstudiante /> {/* Aquí insertamos la navegación para el estudiante */}
       <ScrollView style={styles.container}>
         <Text style={styles.header}>📬 Notificaciones de Postulación</Text>
         <Text style={styles.subHeader}>Tienes {notifications.length} notificaciones en total</Text>
@@ -291,4 +291,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NotificacionesAdmin;
+export default NotificacionesEstudiante;

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-import NavegadorAdmin from './NavegacionAdmin';
+import NavegadorAdmin from './NavegadorDocente';
 
 export default function CampaignNew() {
   const [Campaña, setCampaña] = useState({
@@ -19,7 +19,7 @@ export default function CampaignNew() {
     descripcion: '',
     fecha: '',
     cupos: '',
-    id_docente: '', // AQUI el id deberías traerlo de AsyncStorage o similar
+    id_docente: '', 
     foto: null as any
   });
 
@@ -151,11 +151,13 @@ export default function CampaignNew() {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    flex: 1, 
   },
   container: {
     padding: 20,
     alignItems: 'center',
+    flexGrow: 1, 
+    marginTop: 60,  
   },
   title: {
     fontSize: 24,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,19 +12,20 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import cerrarSesion from '../hooks/CerrarSesion';
 
-const NavegadorEstudiante = () => {
+const NavegadorDocente = () => {
   const navigation = useNavigation<any>();
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>('/img/navegacion/Avatar2.png');
-  const [studentData, setStudentData] = useState({
-    nombre: 'Estudiante',
-    campaña: 'Campaña Actual',
-    horas: '50',
+  const [docenteData, setDocenteData] = useState({
+    nombre: 'Docente',
     telefono: '1234567890',
-    correo: 'estudiante@example.com',
+    correo: 'docente@example.com',
   });
+
+  const CerrarSesion = cerrarSesion();
 
   const handleProfileClick = () => {
     setShowProfileModal(true);
@@ -41,12 +42,10 @@ const NavegadorEstudiante = () => {
   };
 
   const optionItems = [
-    { key: 'verHoras', title: 'Ver horas', icon: 'clock-outline', route: 'Horas' },
-    { key: 'infoCampaña', title: 'Información de la campaña', icon: 'information-circle-outline', route: 'InfoCampaña' },
-    { key: 'listaCampañas', title: 'Lista de campañas', icon: 'list-outline', route: 'ListaCampañas' },
-    { key: 'notificaciones', title: 'Notificaciones', icon: 'notifications-outline', route: 'Notificaciones' },
-    { key: 'certificados', title: 'Certificados', icon: 'clipboard-outline', route: 'Certificados' },
-    { key: 'cerrarSesion', title: 'Cerrar sesión', icon: 'exit-outline', route: 'Login' },
+    { key: 'asignarHoras', title: 'Asignar Horas', icon: 'time', route: 'AsignarHoras' },
+    { key: 'gestionarCampanas', title: 'Gestionar Campañas', icon: 'list', route: 'GestionarCampañas' },
+    { key: 'notificaciones', title: 'Notificaciones', icon: 'notifications', route: 'Notificaciones' },
+    { key: 'cerrarSesion', title: 'Cerrar sesión', icon: 'exit', route: 'Login' },
   ];
 
   return (
@@ -56,10 +55,9 @@ const NavegadorEstudiante = () => {
         <TouchableOpacity onPress={handleProfileClick}>
           <Image source={{ uri: profileImage || '/img/navegacion/Avatar2.png' }} style={styles.profileImage} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Hola, {studentData.nombre}</Text>
+        <Text style={styles.headerTitle}>Hola, {docenteData.nombre}</Text>
       </View>
 
-      {/* Scroll horizontal de opciones */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
         {optionItems.map((item) => (
           <TouchableOpacity
@@ -67,7 +65,6 @@ const NavegadorEstudiante = () => {
             style={styles.card}
             onPress={() => {
               console.log(`Navigating to ${item.route}`);
-              // Verifica que la ruta está definida correctamente antes de navegar
               if (item.route) {
                 navigation.navigate(item.route);
               }
@@ -83,16 +80,14 @@ const NavegadorEstudiante = () => {
       <Modal visible={showProfileModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Perfil del Estudiante</Text>
+            <Text style={styles.modalTitle}>Perfil del Docente</Text>
             <TouchableOpacity onPress={closeModal}>
               <Text style={styles.closeModal}>Cerrar</Text>
             </TouchableOpacity>
             <Image source={{ uri: profileImage || '/img/navegacion/Avatar2.png' }} style={styles.profileImageLarge} />
-            <Text><strong>Nombre:</strong> {studentData.nombre}</Text>
-            <Text><strong>Campaña:</strong> {studentData.campaña}</Text>
-            <Text><strong>Horas:</strong> {studentData.horas}</Text>
-            <Text><strong>Teléfono:</strong> {studentData.telefono}</Text>
-            <Text><strong>Correo:</strong> {studentData.correo}</Text>
+            <Text><strong>Nombre:</strong> {docenteData.nombre}</Text>
+            <Text><strong>Teléfono:</strong> {docenteData.telefono}</Text>
+            <Text><strong>Correo:</strong> {docenteData.correo}</Text>
             <TouchableOpacity onPress={handleEditClick}>
               <Text style={styles.modalButton}>Editar perfil</Text>
             </TouchableOpacity>
@@ -110,12 +105,12 @@ const NavegadorEstudiante = () => {
             </TouchableOpacity>
             <TextInput
               style={styles.input}
-              value={studentData.nombre}
-              onChangeText={(text) => setStudentData((prev) => ({ ...prev, nombre: text }))} />
+              value={docenteData.nombre}
+              onChangeText={(text) => setDocenteData((prev) => ({ ...prev, nombre: text }))} />
             <TextInput
               style={styles.input}
-              value={studentData.correo}
-              onChangeText={(text) => setStudentData((prev) => ({ ...prev, correo: text }))} />
+              value={docenteData.correo}
+              onChangeText={(text) => setDocenteData((prev) => ({ ...prev, correo: text }))} />
             <TouchableOpacity onPress={closeModal} style={styles.modalButton}>
               <Text style={styles.modalButtonText}>Guardar cambios</Text>
             </TouchableOpacity>
@@ -219,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NavegadorEstudiante;
+export default NavegadorDocente;

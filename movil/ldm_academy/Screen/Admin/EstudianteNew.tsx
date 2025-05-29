@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import NavegadorAdmin from './NavegacionAdmin';
 
 interface User {
   nombre: string;
@@ -41,7 +42,6 @@ const EstudianteNew: React.FC = () => {
         Alert.alert('Éxito', response.data.message, [
           { text: 'OK', onPress: () => console.log('Usuario registrado') },
         ]);
-        // Opcionalmente puedes limpiar el formulario
         setUser({
           nombre: '',
           apellido: '',
@@ -62,6 +62,8 @@ const EstudianteNew: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <NavegadorAdmin /> {/* Aquí agregamos el componente NavegadorAdmin */}
+      
       <Text style={styles.title}>Registro de Estudiante</Text>
 
       <TextInput

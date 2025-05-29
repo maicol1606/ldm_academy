@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
+import NavegadorAdmin from './NavegacionAdmin'; 
 
-interface Estudiante {
+interface EstudianteList {
   id_usuario: number;
   nombre: string;
   apellido: string;
@@ -13,7 +14,7 @@ interface Estudiante {
 }
 
 const EstudianteList: React.FC = () => {
-  const [estudiantes, setEstudiantes] = useState<Estudiante[]>([]);
+  const [estudiantes, setEstudiantes] = useState<EstudianteList[]>([]);
 
   useEffect(() => {
     const fetchEstudiantes = async () => {
@@ -57,7 +58,7 @@ const EstudianteList: React.FC = () => {
     console.log(`Editar usuario con ID: ${id}`);
   };
 
-  const renderItem = ({ item }: { item: Estudiante }) => (
+  const renderItem = ({ item }: { item: EstudianteList }) => (
     <View style={styles.row}>
       <View style={styles.details}>
         <Text style={styles.textBold}>{item.nombre} {item.apellido}</Text>
@@ -78,6 +79,8 @@ const EstudianteList: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <NavegadorAdmin /> 
+      
       <Text style={styles.header}>Listado de estudiantes en plataforma</Text>
       <FlatList
         data={estudiantes}
