@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
 import axios from 'axios';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';  // Importación correcta
 import NavegacionEstudiante from './NavegadorEstudiante';
 
 const Horas: React.FC = () => {
   const [asistencias, setAsistencias] = useState<any[]>([]);
-  const [horasTotales] = useState(120);
-  const idEstudiante = '123';
+  const [horasTotales] = useState(120); 
+  const idEstudiante = '123'; 
 
   const fetchDatos = async () => {
     try {
-      const res = await axios.get(`http://192.168.1.14:3000/api/asistencia/mostrarAsistencias/${idEstudiante}`);
+      const res = await axios.get(`http://192.168.1.11:3000/api/asistencia/mostrarAsistencias/${idEstudiante}`);
       setAsistencias(res.data);
     } catch (err) {
       console.error('Error al cargar los datos del estudiante', err);
@@ -24,28 +24,34 @@ const Horas: React.FC = () => {
 
   const novedadesInvalidas = ['no porta el carnet', 'no asistió', 'no hace uso del uniforme'];
 
+  
   const horasValidas = asistencias
     .filter((a: any) => !novedadesInvalidas.includes(a.novedades?.toLowerCase()))
     .reduce((total, a) => total + a.horas, 0) || 0;
 
+  // Filtra las horas con novedad
   const horasConNovedad = asistencias
     .filter((a: any) => novedadesInvalidas.includes(a.novedades?.toLowerCase()))
     .reduce((total, a) => total + a.horas, 0) || 0;
 
+  // Calcula las horas extra
   const horasExtra = horasValidas > horasTotales ? horasValidas - horasTotales : 0;
 
+  // Total de horas no válidas (con novedad + extra)
   const horasNoValidas = horasExtra + horasConNovedad;
 
-  // Componente que renderiza el encabezado y resumen
-  const ListHeader = () => (
-    <>
+  return (
+    <View style={styles.container}>
+      {/* Barra de Navegación */}
       <View style={styles.navBar}>
         <NavegacionEstudiante />
       </View>
 
-      <View style={styles.content}>
+      {/* Contenido de las horas */}
+      <ScrollView style={styles.content}>
         <Text style={styles.title}>Gestión de Horas de Servicio Social</Text>
-
+        
+        {/* Resumen de horas */}
         <View style={styles.summary}>
           <View style={styles.card}>
             <Ionicons name="timer-outline" size={40} color="#4CAF50" />
@@ -66,27 +72,22 @@ const Horas: React.FC = () => {
           </View>
         </View>
 
+        {/* Tabla de registro de horas */}
         <Text style={styles.tableTitle}>Registro de Horas</Text>
-      </View>
-    </>
-  );
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={asistencias}
-        keyExtractor={(item, index) => index.toString()}
-        ListHeaderComponent={ListHeader}
-        renderItem={({ item }) => (
-          <View style={styles.row}>
-            <Text style={styles.cell}>{new Date(item.fecha).toLocaleDateString()}</Text>
-            <Text style={styles.cell}>{new Date(`1970-01-01T${item.hora_Inicio}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-            <Text style={styles.cell}>{new Date(`1970-01-01T${item.hora_fin}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-            <Text style={styles.cell}>{item.horas}</Text>
-            <Text style={styles.cell}>{item.novedades || '—'}</Text>
-          </View>
-        )}
-      />
+        <FlatList
+          data={asistencias}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.row}>
+              <Text style={styles.cell}>{new Date(item.fecha).toLocaleDateString()}</Text>
+              <Text style={styles.cell}>{new Date(`1970-01-01T${item.hora_Inicio}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+              <Text style={styles.cell}>{new Date(`1970-01-01T${item.hora_fin}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+              <Text style={styles.cell}>{item.horas}</Text>
+              <Text style={styles.cell}>{item.novedades || '—'}</Text>
+            </View>
+          )}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -99,9 +100,10 @@ const styles = StyleSheet.create({
   },
   navBar: {
     height: 190,
-    backgroundColor: '#2196F3',
+    backgroundColor: '#2196F3', 
   },
   content: {
+    flex: 1, 
     padding: 20,
   },
   title: {

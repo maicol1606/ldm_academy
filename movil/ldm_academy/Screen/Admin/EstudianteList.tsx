@@ -19,7 +19,7 @@ const EstudianteList: React.FC = () => {
   useEffect(() => {
     const fetchEstudiantes = async () => {
       try {
-        const res = await axios.get('http://192.168.1.14:3000/api/estudiantes/llamarEstudiantes');
+        const res = await axios.get('http://192.168.1.11:3000/api/estudiantes/llamarEstudiantes');
         setEstudiantes(res.data);
       } catch (error) {
         console.error('Error al obtener estudiantes:', error);
@@ -43,7 +43,7 @@ const EstudianteList: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await axios.delete(`http://192.168.1.14:3000/api/estudiantes/eliminarEstudiante/${id}`);
+      const res = await axios.delete(`http://192.168.1.11:3000/api/estudiantes/eliminarEstudiante/${id}`);
       if (res.status === 200) {
         Alert.alert('Estudiante borrado', 'El estudiante ha sido borrado');
         setEstudiantes(prevEstudiantes => prevEstudiantes.filter(estudiante => estudiante.id_usuario !== id));
@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#fff',
     borderRadius: 10,
-    elevation: 3, 
-    shadowColor: '#000',   
+    elevation: 3,  // Shadow for Android
+    shadowColor: '#000',  // Shadow for iOS
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

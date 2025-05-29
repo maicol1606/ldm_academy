@@ -9,12 +9,9 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-
-const screenWidth = Dimensions.get('window').width;
 
 const NavegadorEstudiante = () => {
   const navigation = useNavigation<any>();
@@ -43,10 +40,11 @@ const NavegadorEstudiante = () => {
     setShowEditModal(false);
   };
 
-  // Quitamos listaCampañas y notificaciones del menú
   const optionItems = [
     { key: 'verHoras', title: 'Ver horas', icon: 'clock-outline', route: 'Horas' },
-    { key: 'infoCampaña', title: 'Información de la campaña', icon: 'information-circle-outline', route: 'HomeEstudiante' },
+    { key: 'infoCampaña', title: 'Información de la campaña', icon: 'information-circle-outline', route: 'InfoCampaña' },
+    { key: 'listaCampañas', title: 'Lista de campañas', icon: 'list-outline', route: 'ListaCampañas' },
+    { key: 'notificaciones', title: 'Notificaciones', icon: 'notifications-outline', route: 'Notificaciones' },
     { key: 'certificados', title: 'Certificados', icon: 'clipboard-outline', route: 'Certificados' },
     { key: 'cerrarSesion', title: 'Cerrar sesión', icon: 'exit-outline', route: 'Login' },
   ];
@@ -61,19 +59,15 @@ const NavegadorEstudiante = () => {
         <Text style={styles.headerTitle}>Hola, {studentData.nombre}</Text>
       </View>
 
-      {/* Scroll horizontal de opciones, con mejor ajuste */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[styles.scrollContainer, { minWidth: screenWidth }]}
-        snapToInterval={110} // Para que el scroll "encaje" con cada card (ancho + margin)
-        decelerationRate="fast"
-      >
+      {/* Scroll horizontal de opciones */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
         {optionItems.map((item) => (
           <TouchableOpacity
             key={item.key}
             style={styles.card}
             onPress={() => {
+              console.log(`Navigating to ${item.route}`);
+              // Verifica que la ruta está definida correctamente antes de navegar
               if (item.route) {
                 navigation.navigate(item.route);
               }
@@ -94,11 +88,11 @@ const NavegadorEstudiante = () => {
               <Text style={styles.closeModal}>Cerrar</Text>
             </TouchableOpacity>
             <Image source={{ uri: profileImage || '/img/navegacion/Avatar2.png' }} style={styles.profileImageLarge} />
-            <Text><Text style={{fontWeight: 'bold'}}>Nombre:</Text> {studentData.nombre}</Text>
-            <Text><Text style={{fontWeight: 'bold'}}>Campaña:</Text> {studentData.campaña}</Text>
-            <Text><Text style={{fontWeight: 'bold'}}>Horas:</Text> {studentData.horas}</Text>
-            <Text><Text style={{fontWeight: 'bold'}}>Teléfono:</Text> {studentData.telefono}</Text>
-            <Text><Text style={{fontWeight: 'bold'}}>Correo:</Text> {studentData.correo}</Text>
+            <Text><strong>Nombre:</strong> {studentData.nombre}</Text>
+            <Text><strong>Campaña:</strong> {studentData.campaña}</Text>
+            <Text><strong>Horas:</strong> {studentData.horas}</Text>
+            <Text><strong>Teléfono:</strong> {studentData.telefono}</Text>
+            <Text><strong>Correo:</strong> {studentData.correo}</Text>
             <TouchableOpacity onPress={handleEditClick}>
               <Text style={styles.modalButton}>Editar perfil</Text>
             </TouchableOpacity>
@@ -176,7 +170,6 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontSize: 12,
     fontWeight: '600',
-    textAlign: 'center',
   },
   modalOverlay: {
     flex: 1,

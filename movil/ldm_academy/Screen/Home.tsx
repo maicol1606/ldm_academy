@@ -44,9 +44,8 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const campanasResponse = await axios.get('http://192.168.1.14:3000/api/campanas/mostrarCampanas');
+        const campanasResponse = await axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas');
         setCampanas(campanasResponse.data);
-        console.log('Campañas cargadas:', campanasResponse.data);
       } catch (error) {
         console.log('Error al cargar campañas:', error);
       }
@@ -109,34 +108,23 @@ const Home = () => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.campaignScroll}>
             {campanas.map((campana, index) => {
               const postulados = postulaciones.filter(p => p.campana_id === campana.id).length;
-              const imageUrl = `http://192.168.1.14:8081/img/campanas/${campana.imagen}`;
 
               return (
                 <View key={index} style={styles.campaignItem}>
-                  {campana.imagen ? (
+                  {campana.imagen && (
                     <Image
-                      source={{ uri: imageUrl }}
+                      source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
                       style={styles.campaignImage}
-                      onError={(error) => {
-                        console.log('Error al cargar imagen:', error.nativeEvent.error);
-                        console.log('URL:', imageUrl);
-                      }}
-                      onLoad={() => {
-                        console.log('Imagen cargada:', campana.imagen);
-                      }}
-                      resizeMode="contain" // Cambiado de cover a contain para no cortar imagen
+                      onError={() => console.log('Error al cargar la imagen')}
+                      onLoad={() => console.log('Imagen cargada correctamente')}
+                      resizeMode="cover"
                     />
-                  ) : (
-                    <View style={[styles.campaignImage, styles.placeholderImage]}>
-                      <Icon name="image" size={40} color="#ccc" />
-                      <Text style={styles.placeholderText}>Sin imagen</Text>
-                    </View>
                   )}
                   <Text style={styles.campaignName}>{campana.nom_campaña}</Text>
-                  <Text style={styles.campaignDescription}>{campana.descripcion}</Text>
-                  <Text style={styles.campaignInfo}>Cupos: {campana.cupos}</Text>
-                  <Text style={styles.campaignInfo}>Postulados: {postulados}</Text>
-                  <Text style={styles.campaignInfo}>Inicio: {formatearFecha(campana.fecha)}</Text>
+                  <Text>{campana.descripcion}</Text>
+                  <Text>Cupos: {campana.cupos}</Text>
+                  <Text>Postulados: {postulados}</Text>
+                  <Text>Inicio: {formatearFecha(campana.fecha)}</Text>
                   <TouchableOpacity
                     style={styles.postulateButton}
                     onPress={() => navigation.navigate('Login')}
@@ -149,7 +137,7 @@ const Home = () => {
           </ScrollView>
         </View>
 
-        {/* Maps */}
+        {/* Maps*/}
         <View style={styles.mapContainer}>
           <Text style={styles.sectionTitle}>Ubicación de referencia</Text>
           <MapView
@@ -288,71 +276,45 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 120,
     borderRadius: 10,
-    backgroundColor: '#eee',
-  },
-  placeholderImage: {
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  placeholderText: {
-    marginTop: 5,
-    fontSize: 12,
-    color: '#999',
   },
   campaignName: {
     fontWeight: 'bold',
     marginTop: 10,
     fontSize: 16,
-    color: '#104F92FF',
-  },
-  campaignDescription: {
-    fontSize: 14,
-    marginTop: 5,
-    color: '#555',
-  },
-  campaignInfo: {
-    fontSize: 13,
-    marginTop: 5,
-    color: '#777',
   },
   postulateButton: {
-    marginTop: 10,
-    backgroundColor: '#0077cc',
-    paddingVertical: 8,
-    borderRadius: 6,
+    backgroundColor: '#104F92FF',
+    marginTop: 15,
+    paddingVertical: 5,
+    borderRadius: 5,
     alignItems: 'center',
   },
   postulateText: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   mapContainer: {
     padding: 20,
-    marginBottom: 40,
+    backgroundColor: '#fff',
   },
   map: {
-    width: '100%',
-    height: 200,
-    borderRadius: 15,
+    height: 250,
+    borderRadius: 10,
   },
   bottomMenu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#f1f1f1',
-    paddingVertical: 12,
+    backgroundColor: '#fff',
+    paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: '#ccc',
+    borderTopColor: '#e0e0e0',
   },
   menuItem: {
     alignItems: 'center',
   },
   menuText: {
     fontSize: 12,
-    color: '#104F92FF',
-    marginTop: 4,
+    color: '#333',
   },
 });
 

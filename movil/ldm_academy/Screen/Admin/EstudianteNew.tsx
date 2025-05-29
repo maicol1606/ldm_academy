@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Alert,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import NavegadorAdmin from './NavegacionAdmin';
 
@@ -44,7 +36,7 @@ const EstudianteNew: React.FC = () => {
 
     try {
       const { confirmarContrasena, ...datosAEnviar } = user;
-      const response = await axios.post('http://192.168.1.14:3000/api/auth/registrar', datosAEnviar);
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/registrar', datosAEnviar);
 
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [
@@ -70,65 +62,62 @@ const EstudianteNew: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <NavegadorAdmin />
+      <NavegadorAdmin /> {/* Aquí agregamos el componente NavegadorAdmin */}
+      
       <Text style={styles.title}>Registro de Estudiante</Text>
 
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-          value={user.nombre}
-          onChangeText={(text) => handleChange('nombre', text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Apellido"
-          value={user.apellido}
-          onChangeText={(text) => handleChange('apellido', text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Curso (Ej: 901, 1001)"
-          value={user.curso}
-          onChangeText={(text) => handleChange('curso', text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Correo Electrónico"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={user.correo}
-          onChangeText={(text) => handleChange('correo', text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Teléfono"
-          keyboardType="phone-pad"
-          maxLength={10}
-          value={user.telefono}
-          onChangeText={(text) => handleChange('telefono', text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry
-          value={user.contrasena}
-          onChangeText={(text) => handleChange('contrasena', text)}
-        />
-        <TextInput
-          style={[
-            styles.input,
-            user.confirmarContrasena.length > 0 &&
-              (user.contrasena !== user.confirmarContrasena
-                ? styles.inputInvalid
-                : styles.inputValid),
-          ]}
-          placeholder="Confirmar Contraseña"
-          secureTextEntry
-          value={user.confirmarContrasena}
-          onChangeText={(text) => handleChange('confirmarContrasena', text)}
-        />
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Nombre"
+        value={user.nombre}
+        onChangeText={(text) => handleChange('nombre', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Apellido"
+        value={user.apellido}
+        onChangeText={(text) => handleChange('apellido', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Curso (Ej: 901, 1001)"
+        value={user.curso}
+        onChangeText={(text) => handleChange('curso', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Correo Electrónico"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={user.correo}
+        onChangeText={(text) => handleChange('correo', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Teléfono"
+        keyboardType="phone-pad"
+        maxLength={10}
+        value={user.telefono}
+        onChangeText={(text) => handleChange('telefono', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Contraseña"
+        secureTextEntry
+        value={user.contrasena}
+        onChangeText={(text) => handleChange('contrasena', text)}
+      />
+      <TextInput
+        style={[
+          styles.input,
+          user.confirmarContrasena.length > 0 &&
+          (user.contrasena !== user.confirmarContrasena ? styles.inputInvalid : styles.inputValid),
+        ]}
+        placeholder="Confirmar Contraseña"
+        secureTextEntry
+        value={user.confirmarContrasena}
+        onChangeText={(text) => handleChange('confirmarContrasena', text)}
+      />
 
       {user.confirmarContrasena.length > 0 && user.contrasena !== user.confirmarContrasena && (
         <Text style={styles.errorText}>Las contraseñas no coinciden.</Text>
@@ -161,15 +150,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  form: {
-    width: '100%',
-  },
   input: {
     backgroundColor: '#ffffff',
     paddingHorizontal: 15,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderRadius: 10,
-    marginBottom: 12,
+    marginBottom: 15,
     borderWidth: 1,
     borderColor: '#ccc',
   },
@@ -180,7 +166,7 @@ const styles = StyleSheet.create({
     borderColor: 'red',
   },
   buttonContainer: {
-    marginTop: 30,
+    marginTop: 20,
     alignItems: 'center',
   },
   button: {

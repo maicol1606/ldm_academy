@@ -28,7 +28,7 @@ const OlvidarContrasena: React.FC = () => {
     }
 
     try {
-      const res = await axios.post('http://192.168.1.14:3000/api/auth/enviarCodigo', { correo });
+      const res = await axios.post('http://192.168.1.11:3000/api/auth/enviarCodigo', { correo });
       console.log(res);
       Alert.alert('Correo Enviado', 'Revise su correo electrónico', [
         {

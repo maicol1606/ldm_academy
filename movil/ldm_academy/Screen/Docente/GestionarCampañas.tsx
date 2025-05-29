@@ -47,8 +47,8 @@ const GestionarCampañas = () => {
     const fetchData = async () => {
       try {
         const [campanasRes, docentesRes] = await Promise.all([
-          axios.get('http://192.168.1.14:3000/api/campanas/mostrarCampanas'),
-          axios.get('http://192.168.1.14:3000/api/docentes/obtenerDocentes'),
+          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
+          axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes'),
         ]);
         setCampañas(campanasRes.data);
         setDocentes(docentesRes.data);
@@ -69,7 +69,7 @@ const GestionarCampañas = () => {
   const handleSubmitEdit = async (e: any) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`http://192.168.1.14:3000/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`, CampañaEdit);
+      const res = await axios.put(`http://192.168.1.11:3000/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`, CampañaEdit);
       if (res.status === 200) {
         Alert.alert('Campaña actualizada', 'La campaña ha sido actualizada', [
           {
@@ -97,7 +97,7 @@ const GestionarCampañas = () => {
         text: 'Sí, borrar',
         onPress: async () => {
           try {
-            const res = await axios.delete(`http://192.168.1.14:3000/api/campanas/eliminarCampana/${id}`);
+            const res = await axios.delete(`http://192.168.1.11:3000/api/campanas/eliminarCampana/${id}`);
             if (res.status === 200) {
               Alert.alert('Campaña borrada', 'La campaña ha sido borrada', [
                 {
@@ -133,7 +133,7 @@ const GestionarCampañas = () => {
         {campañas.map((campaña) => (
           <View key={campaña.id_campaña} style={{ flexDirection: 'row', marginBottom: 20 }}>
             <Image
-              source={{ uri: `http://192.168.1.14:3000/img/campañas/${campaña.imagen}` }}
+              source={{ uri: `http://192.168.1.11:3000/img/campañas/${campaña.imagen}` }}
               style={{ width: 100, height: 100, borderRadius: 10, marginRight: 10 }}
             />
             <View style={{ flex: 1 }}>
