@@ -33,7 +33,7 @@ const AsignarHoras = () => {
                 const res = await axios.get(
                     `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/estudiantes/obtenerEstudiantes`
                 );
-                setEstudiantes(res.data.);
+                setEstudiantes(res.data);
             } catch (err) {
                 console.error(err);
             }
