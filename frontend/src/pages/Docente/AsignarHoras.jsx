@@ -33,7 +33,7 @@ const AsignarHoras = () => {
                 const res = await axios.get(
                     `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/estudiantes/obtenerEstudiantes`
                 );
-                setEstudiantes(res.data);
+                setEstudiantes(res.data[0]);
             } catch (err) {
                 console.error(err);
             }
@@ -275,7 +275,7 @@ const AsignarHoras = () => {
                                 <FaUserClock /> Seleccionar Estudiante
                             </h5>
                             <div className="row">
-                                {estudiantes.map((estudiante) => (
+                                {estudiantes?.map((estudiante) => (
                                     <div key={estudiante.id_usuario} className="col-md-4 mb-4">
                                         <div className="card shadow rounded-4 border-0 h-100">
                                             <div className="card-body text-center">
