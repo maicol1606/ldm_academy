@@ -26,7 +26,7 @@ const AsignarHoras = () => {
   useEffect(() => {
     const obtenerEstudiantes = async () => {
       try {
-        const res = await axios.get('http://192.168.1.11:3000/api/estudiantes/obtenerEstudiantes');
+        const res = await axios.get('http://192.168.56.1:3000/api/estudiantes/obtenerEstudiantes');
         console.log("Estudiantes obtenidos:", res.data); 
         setEstudiantes(res.data);
       } catch (err) {
@@ -60,7 +60,7 @@ const AsignarHoras = () => {
     }
 
     try {
-      await axios.post('http://192.168.1.11:3000/api/asistencia/agregarAsistencia', {
+      await axios.post('http://192.168.56.1:3000/api/asistencia/agregarAsistencia', {
         id_usuario: estudianteSeleccionado.id_usuario,
         id_campaña: estudianteSeleccionado.id_campaña,
         fecha,
@@ -80,7 +80,7 @@ const AsignarHoras = () => {
       setNuevasHoras('');
       setFecha('');
 
-      const res = await axios.get('http://192.168.1.11:3000/api/estudiantes/obtenerEstudiantes');
+      const res = await axios.get('http://192.168.56.1:3000/api/estudiantes/obtenerEstudiantes');
       setEstudiantes(res.data);
     } catch (error) {
       console.error(error);

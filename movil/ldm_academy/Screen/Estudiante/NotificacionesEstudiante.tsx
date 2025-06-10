@@ -33,7 +33,7 @@ const NotificacionesEstudiante = () => {
 
   useEffect(() => {
     axios
-      .get('http://192.168.1.11:3000/api/notificaciones') // Cambia por el endpoint adecuado
+      .get('http://192.168.56.1:3000/api/notificaciones') // Cambia por el endpoint adecuado
       .then((res) => {
         if (Array.isArray(res.data)) {
           setNotifications(res.data);
@@ -48,7 +48,7 @@ const NotificacionesEstudiante = () => {
 
   const handleAccept = (id: number) => {
     axios
-      .put(`http://192.168.1.11:3000/api/notificaciones/${id}`, { estado: 'Aceptado' })
+      .put(`http://192.168.56.1:3000/api/notificaciones/${id}`, { estado: 'Aceptado' })
       .then(() => {
         setAlertType('success');
         setAlert('✅ Notificación aceptada correctamente');
@@ -68,7 +68,7 @@ const NotificacionesEstudiante = () => {
 
   const handleReject = (id: number) => {
     axios
-      .put(`http://192.168.1.11:3000/api/notificaciones/${id}`, { estado: 'Rechazado' })
+      .put(`http://192.168.56.1:3000/api/notificaciones/${id}`, { estado: 'Rechazado' })
       .then(() => {
         setAlertType('danger');
         setAlert('🚫 Notificación rechazada');

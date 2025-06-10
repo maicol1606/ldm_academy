@@ -45,7 +45,7 @@ const Home = () => {
         const fetchData = async () => {
             try {
                 const campanasResponse = await axios.get(
-                    "http://192.168.1.11:3000/api/campanas/mostrarCampanas"
+                    "http://192.168.56.1:3000/api/campanas/mostrarCampanas"
                 );
                 setCampanas(campanasResponse.data);
             } catch (error) {
@@ -130,7 +130,7 @@ const Home = () => {
                                     {campana.imagen && (
                                         <Image
                                             source={{
-                                                uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}`,
+                                                uri: `http://192.168.56.1:3000/img/campañas/${campana.imagen}`,
                                             }}
                                             style={styles.campaignImage}
                                             onError={() => console.error("Error al cargar la imagen")}

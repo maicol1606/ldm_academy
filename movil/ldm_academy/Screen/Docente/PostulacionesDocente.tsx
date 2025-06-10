@@ -17,7 +17,7 @@ const PostulacionesDocente = () => {
     const obtenerPostulaciones = async () => {
       try {
         setIsDataUpdated(true);
-        const response = await axios.get(`http://192.168.1.11:3000/api/postulacion/mostrarPostulacionesPorDocente/${idDocente}`);
+        const response = await axios.get(`http://192.168.56.1:3000/api/postulacion/mostrarPostulacionesPorDocente/${idDocente}`);
         setPostulaciones(response.data);
       } catch (error) {
         console.error(error);
@@ -44,7 +44,7 @@ const PostulacionesDocente = () => {
           {
             text: 'Aceptar',
             onPress: async () => {
-              const response = await axios.put(`http://192.168.1.11:3000/api/postulacion/aceptarPostulacion/${idPostulacion}`, { correo });
+              const response = await axios.put(`http://192.168.56.1:3000/api/postulacion/aceptarPostulacion/${idPostulacion}`, { correo });
               if (response.status === 200) {
                 Alert.alert('Postulación aceptada', '', [{ text: 'OK' }]);
                 setIsDataUpdated(true);
@@ -72,7 +72,7 @@ const PostulacionesDocente = () => {
           {
             text: 'Rechazar',
             onPress: async () => {
-              const response = await axios.put(`http://192.168.1.11:3000/api/postulacion/rechazarPostulacion/${idPostulacion}`, { correo });
+              const response = await axios.put(`http://192.168.56.1:3000/api/postulacion/rechazarPostulacion/${idPostulacion}`, { correo });
               if (response.status === 200) {
                 Alert.alert('Postulación rechazada', '', [{ text: 'OK' }]);
                 setIsDataUpdated(true);
