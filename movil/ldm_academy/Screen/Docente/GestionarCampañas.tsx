@@ -53,7 +53,7 @@ const GestionarCampañas = () => {
         setCampañas(campanasRes.data);
         setDocentes(docentesRes.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -82,7 +82,7 @@ const GestionarCampañas = () => {
         ]);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert('Error', 'Error al actualizar la campaña');
     }
   };
@@ -109,7 +109,7 @@ const GestionarCampañas = () => {
               ]);
             }
           } catch (error) {
-            console.log(error);
+            console.error(error);
             Alert.alert('Error', 'Error al eliminar la campaña');
           }
         },

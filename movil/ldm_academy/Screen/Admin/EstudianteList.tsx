@@ -49,7 +49,7 @@ const EstudianteList: React.FC = () => {
         setEstudiantes(prevEstudiantes => prevEstudiantes.filter(estudiante => estudiante.id_usuario !== id));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert('Error', 'Error al eliminar al estudiante');
     }
   };

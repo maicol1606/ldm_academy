@@ -30,7 +30,7 @@ export default function CampaignList() {
         setCampañas(campanasRes.data);
         setDocentes(docentesRes.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -61,7 +61,7 @@ export default function CampaignList() {
         setCampañaEdit({ ...CampañaEdit, foto: null }); // reset photo
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert('Error', 'Error al actualizar la campaña');
     }
   };
@@ -85,7 +85,7 @@ export default function CampaignList() {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert('Error', 'Error al eliminar la campaña');
     }
   };

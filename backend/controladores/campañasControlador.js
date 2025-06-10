@@ -1,27 +1,27 @@
-const db = require('../config/db');
-const fs = require('fs');
-const path = require('path');
-const multer = require('multer');
-const nodemailer = require('nodemailer');
+const db = require("../config/db");
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
+const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
         user: "lulo06817@gmail.com",
-        pass: "bhkl iubb afws zrfo"
-    }
+        pass: "bhkl iubb afws zrfo",
+    },
 });
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.resolve(__dirname, '../../frontend/public/img/campañas/');
+        const uploadPath = path.resolve(__dirname, "../../frontend/public/img/campañas/");
         cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
         const ext = file.originalname.split(".").pop();
         cb(null, `campana_${Date.now()}.${ext}`);
-    }
+    },
 });
 
 const upload = multer({ storage: storage });
@@ -32,40 +32,44 @@ const eliminar = async (image) => {
         const filePath = path.resolve(__dirname, `../../frontend/public/img/campañas/${image}`);
         await fs.promises.unlink(filePath);
     } catch (err) {
-        console.error('Error eliminando imagen:', err);
+        console.error("Error eliminando imagen:", err);
     }
 };
-exports.uploadCampana= upload.single('foto');
+exports.uploadCampana = upload.single("foto");
 
 exports.agregarCampana = (req, res) => {
     const { nom_campana, descripcion, fecha, cupos, id_docente } = req.body;
     const foto = req.file;
 
     if (!foto) {
-        return res.status(400).send({ title: 'Debe subir una foto para la campaña' });
+        return res.status(400).send({ title: "Debe subir una foto para la campaña" });
     }
 
-    const query = 'INSERT INTO campañas (nom_campaña, descripcion, fecha, cupos, id_docente, imagen) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(query, [nom_campana, descripcion, fecha, cupos, id_docente, foto.filename], (error, results) => {
-        if (error) {
-            console.error('Error al agregar la campaña:', error);
-            res.status(500).send({ title: 'Error al agregar la campaña' });
-        } else {
-            res.status(200).send({ title: 'Campaña agregada correctamente' });
+    const query =
+        "INSERT INTO campañas (nom_campaña, descripcion, fecha, cupos, id_docente, imagen) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(
+        query,
+        [nom_campana, descripcion, fecha, cupos, id_docente, foto.filename],
+        (error, results) => {
+            if (error) {
+                console.error("Error al agregar la campaña:", error);
+                res.status(500).send({ title: "Error al agregar la campaña" });
+            } else {
+                res.status(200).send({ title: "Campaña agregada correctamente" });
+            }
         }
-    });
+    );
 };
-
 
 exports.eliminarCampana = (req, res) => {
     const id = req.params.id;
-    const query = 'DELETE FROM campañas WHERE id_campaña = ?';
+    const query = "DELETE FROM campañas WHERE id_campaña = ?";
     db.query(query, [id], (error, results) => {
         if (error) {
-            console.error('Error al eliminar la campaña:', error);
-            res.status(500).json({ error: 'Error al eliminar la campaña' });
+            console.error("Error al eliminar la campaña:", error);
+            res.status(500).json({ error: "Error al eliminar la campaña" });
         } else {
-            res.status(200).json({ message: 'Campaña eliminada correctamente' });
+            res.status(200).json({ message: "Campaña eliminada correctamente" });
         }
     });
 };
@@ -78,35 +82,40 @@ exports.actualizarCampana = (req, res) => {
     const cupos = req.body.cupos;
     const id_docente = req.body.id_docente;
 
-    const query = 'UPDATE campañas SET nom_campaña = ?, descripcion = ?, fecha = ?, cupos = ?, id_docente = ? WHERE id_campaña = ?';
+    const query =
+        "UPDATE campañas SET nom_campaña = ?, descripcion = ?, fecha = ?, cupos = ?, id_docente = ? WHERE id_campaña = ?";
     db.query(query, [nom_campana, descripcion, fecha, cupos, id_docente, id], (error, results) => {
         if (error) {
-            console.error('Error al actualizar la campaña:', error);
-            res.status(500).json({ error: 'Error al actualizar la campaña' });
+            console.error("Error al actualizar la campaña:", error);
+            res.status(500).json({ error: "Error al actualizar la campaña" });
         } else {
-            res.status(200).json({ message: 'Campaña actualizada correctamente' });
+            res.status(200).json({ message: "Campaña actualizada correctamente" });
         }
     });
 };
 
 exports.mostrarCampanas = (req, res) => {
-    db.query('SELECT * FROM campañas', (error, results) => {
+    db.query("SELECT * FROM campañas", (error, results) => {
         if (error) {
-            console.error('Error al obtener las campañas:', error);
-            res.status(500).json({ error: 'Error al obtener las campañas' });
+            console.error("Error al obtener las campañas:", error);
+            res.status(500).json({ error: "Error al obtener las campañas" });
         } else {
-            res.status(200).send(results);
+            res.status(200).send({
+                success: true,
+                message: "Campañas obtenidas correctamente",
+                data: results,
+            });
         }
     });
 };
 
 exports.mostrarCampanaNombre = (req, res) => {
-    const nom_campana = `%${req.params.nom_campana}%`
-    const query = 'SELECT * FROM campañas WHERE nom_campaña like ?';
+    const nom_campana = `%${req.params.nom_campana}%`;
+    const query = "SELECT * FROM campañas WHERE nom_campaña like ?";
     db.query(query, [nom_campana], (error, results) => {
         if (error) {
-            console.error('Error al obtener la campaña:', error);
-            res.status(500).json({ error: 'Error al obtener la campaña' });
+            console.error("Error al obtener la campaña:", error);
+            res.status(500).json({ error: "Error al obtener la campaña" });
         } else {
             res.status(200).send(results);
         }
@@ -115,12 +124,11 @@ exports.mostrarCampanaNombre = (req, res) => {
 
 exports.mostrarCampanaId = (req, res) => {
     const id = req.params.id;
-    console.log(id)
-    const query = 'SELECT * FROM campañas WHERE id_campaña = ?';
+    const query = "SELECT * FROM campañas WHERE id_campaña = ?";
     db.query(query, [id], (error, results) => {
         if (error) {
-            console.error('Error al obtener la campaña:', error);
-            res.status(500).json({ error: 'Error al obtener la campaña' });
+            console.error("Error al obtener la campaña:", error);
+            res.status(500).json({ error: "Error al obtener la campaña" });
         } else {
             res.status(200).send(results);
         }
@@ -129,13 +137,13 @@ exports.mostrarCampanaId = (req, res) => {
 
 exports.eliminarPorCupos = (req, res) => {
     const id = req.params.id;
-    const query = 'UPDATE campañas SET estado = 0  WHERE cupos = 0 ';
+    const query = "UPDATE campañas SET estado = 0  WHERE cupos = 0 ";
     db.query(query, [id], (error, results) => {
         if (error) {
-            console.error('Error al eliminar la campaña:', error);
-            res.status(500).json({ error: 'Error al eliminar la campaña' });
+            console.error("Error al eliminar la campaña:", error);
+            res.status(500).json({ error: "Error al eliminar la campaña" });
         } else {
-            res.status(200).json({ message: 'Campaña eliminada correctamente' });
+            res.status(200).json({ message: "Campaña eliminada correctamente" });
         }
     });
 };

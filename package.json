@@ -1,6 +1,19 @@
 {
-  "dependencies": {
-    "bootstrap-icons": "^1.11.3",
-    "multer": "^1.4.5-lts.2"
-  }
+    "name": "ldm_academy",
+    "version": "1.0.0",
+    "description": "ldm_academy sera un proyecto enfocado al area de orientacion para el colegio fernando gonzalez ochoa el cual busca facilitar tareas relacionadas con servicio social desarrollado con las tecgonologias de react, node.js, express, mysql",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "npm run dev --prefix frontend",
+        "server": "npm start --prefix backend",
+        "download": "npm install --prefix frontend && npm install --prefix backend"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs"
 }

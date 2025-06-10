@@ -29,7 +29,7 @@ const GestionarCampañas = () => {
     const file = e.target.files[0];
     setCampañaEdit((prevCampaña) => ({
       ...prevCampaña,
-      foto: file,
+      foto: file
     }));
   };
 
@@ -219,9 +219,9 @@ const GestionarCampañas = () => {
                     className="form-control-file"
                     id="fotoCampaña"
                     name='foto'
-
                     accept='image/*'
                     onChange={handleFileChangeEdit}
+
                   />
                 </div>
               </div>

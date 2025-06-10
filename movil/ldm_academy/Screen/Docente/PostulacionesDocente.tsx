@@ -20,7 +20,7 @@ const PostulacionesDocente = () => {
         const response = await axios.get(`http://192.168.1.11:3000/api/postulacion/mostrarPostulacionesPorDocente/${idDocente}`);
         setPostulaciones(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     obtenerPostulaciones();
@@ -55,7 +55,7 @@ const PostulacionesDocente = () => {
         { cancelable: false }
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -83,7 +83,7 @@ const PostulacionesDocente = () => {
         { cancelable: false }
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

@@ -58,7 +58,7 @@ const HomeEstudiante: React.FC<HomeEstudianteProps> = ({ navigation }) => {
           );
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

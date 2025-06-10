@@ -1,114 +1,136 @@
-const db = require('../config/db');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const secret = 'mysecretkey';
-const nodemailer = require('nodemailer');
+const db = require("../config/db");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
+const secret = process.env.JWT_SECRET;
+
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
-        user: "lulo06817@gmail.com",
-        pass: "bhkl iubb afws zrfo"
-    }
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
 });
 
-exports.registrar = (req, res) => {
-    console.log(req.body)
-    if (!req.body.nombre || !req.body.apellido || !req.body.correo){
-        return res.status(400).send({title: 'Todos los campos son obligatorios'})
+module.exports = class AuthControlador {
+    static async validarSesion(req, res) {
+        try {
+            const token = req.headers.authorization?.split(" ")[1];
+
+            // jwt decode and obtain user id
+            const decoded = jwt.verify(token, secret);
+            const userId = decoded.id_usuario;
+
+            // get user from database
+            const query = "SELECT * FROM usuarios WHERE id_usuario = ?";
+            const [rows] = await db.promise().query(query, [userId]);
+
+            return res.status(200).json({
+                success: true,
+                message: "Sesión validada correctamente",
+                data: rows[0],
+            });
+        } catch (error) {
+            console.error("Error al validar la sesión:", error);
+            return res.status(500).send({ error: "Error al validar la sesión" });
+        }
     }
 
-    const nombre = req.body.nombre;
-    const apellido = req.body.apellido;
-    const correo = req.body.correo;
-    const contrasena = req.body.contrasena;
-    const contrasenaEncriptada = bcrypt.hashSync(contrasena, 10);
-    const telefono = req.body.telefono;
-    const curso = req.body.curso;
-    const query1 = 'SELECT * FROM usuarios WHERE correo = ?';
+    static async iniciarSesion(req, res) {
+        try {
+            const { correo, contrasena } = req.body;
+            const query = "SELECT * FROM usuarios WHERE correo = ?";
+            const [rows] = await db.promise().query(query, [correo]);
 
-    db.query(query1, [correo], (error, results) => {
-        if (error) {
-            console.error('Error al obtener el usuario:', error);
-            res.status(500).send({ error: 'Error al obtener el usuario' });
-        } else if (results.length > 0) {
-            res.status(400).send({ title: 'El correo ya está registrado' });
-        }       
-        else {
-            const query = 'INSERT INTO usuarios (nombre, apellido, correo, contrasena, telefono, curso , id_rol) VALUES ( ?, ?, ?, ?, ?, ?,2)';
-            db.query(query, [nombre, apellido, correo, contrasenaEncriptada, telefono, curso], (error, results) => {
-                if (error) {
-                    console.error('Error al registrar el usuario:', error);
-                    res.status(500).send({ error: 'Error al registrar el usuario' });
-                } else {
-                    res.status(200).send({ title: 'Registro exitoso', message: 'Usuario registrado correctamente' });
+            if (rows.length === 0) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Usuario no encontrado",
+                });
+            }
+
+            const usuario = rows[0];
+
+            if (usuario.id_rol === 2) {
+                const query =
+                    "SELECT * FROM postulacion WHERE id_usuario = ? and estado = 'aceptada'";
+
+                const [rows] = await db.promise().query(query, [usuario.id_usuario]);
+                if (rows.length === 0) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Usuario no aceptado",
+                    });
                 }
-            });
-        }
-    });
 
-}
+                const postulacion = rows[0];
 
-exports.login = (req, res) => {
-    const correo = req.body.correo;
-    const contrasena = req.body.contrasena;
-    const query = 'SELECT * FROM usuarios WHERE correo = ? and estado = 1';
+                // validar si pasaron 6 meses desde la fecha de aceptacion
+                const fechaAceptacion = new Date(postulacion.fecha);
+                const fechaActual = new Date();
+                const diferencia = fechaActual.getTime() - fechaAceptacion.getTime();
+                const meses = Math.floor(diferencia / (1000 * 60 * 60 * 24 * 30));
+                if (meses > 6) {
+                    const query2 = "UPDATE usuarios SET estado = 0 WHERE id_usuario = ?";
+                    await db.promise().query(query2, [usuario.id_usuario]);
 
+                    return res.status(401).json({
+                        success: false,
+                        message:
+                            "Cuenta deshabilitada por no haber realizado el servicio social en el tiempo establecido",
+                    });
+                }
+            }
 
-    db.query(query, [correo], (error, results) => {
-        if (error) {
-            console.error('Error al obtener el usuario:', error);
-            res.status(500).send({ error: 'Error al obtener el usuario' });
-        } else if (results.length === 0) {
-            res.status(401).send({ title: 'Credenciales incorrectas' });
-        } else {
-            const usuario = results[0];
             const contrasenaValida = bcrypt.compareSync(contrasena, usuario.contrasena);
 
-            if (contrasenaValida) {
-                const token = jwt.sign({ id: usuario.id_usuario, rol: usuario.id_rol }, secret, { expiresIn: '3h' });
-                res.status(200).send({ token: token, title: 'Inicio de sesión exitoso', rol: usuario.id_rol,id_usuario: usuario.id_usuario, nombre: usuario.nombre,
-                    foto: usuario.foto, apellido: usuario.apellido });
-            } else {
-                res.status(401).send({ error: 'Credenciales incorrectas' });
+            if (!contrasenaValida) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Contraseña incorrecta",
+                });
             }
-        }
-    });
-}
-exports.validarToken = (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token) {
-        return res.status(403).send('Token no proporcionado');
+            const token = jwt.sign({ id_usuario: usuario.id_usuario }, secret, { expiresIn: "3h" });
+
+            return res.status(200).json({
+                success: true,
+                message: "Sesión iniciada correctamente",
+                data: { token, rol: usuario.rol_id },
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: "Error al iniciar sesión: " + error.message,
+                error: error.message,
+            });
+        }
     }
 
-    jwt.verify(token, secret, (err, decoded) => {
-        if (err) {
-            console.error("Error al verificar el token:", err);
-            return res.status(401).send('Error al verificar el token');
-        }
+    static async enviarCodigo(req, res) {
+        try {
+            const correo = req.body.correo;
+            const query = "SELECT * FROM usuarios WHERE correo = ? and estado = 1";
 
-        req.user = decoded;
-        res.send({ rol: decoded.rol });
-    });
-};
-exports.enviarCodigo = (req, res) => {
-    const correo = req.body.correo;
-    const query = 'SELECT * FROM usuarios WHERE correo = ? and estado = 1';
+            const [rows] = await db.promise().query(query, [correo]);
 
-    db.query(query, [correo], (error, results) => {
-        if (error) {
-            console.error('Error al obtener el usuario:', error);
-            res.status(500).send({ error: 'Error al obtener el usuario' });
-        } else {
-            const usuario = results[0];
+            if (rows.length === 0) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Usuario no encontrado",
+                });
+            }
+
+            const usuario = rows[0];
             const codigo = Math.floor(Math.random() * 9000) + 1000;
-            // Enviar el correo con el código de verificación
+
             const emailOptions = {
-                from: "lulo06817@gmail.com",
+                from: process.env.EMAIL_USER,
                 to: correo,
-                subject: "Recuperar contraseña",
+                subject: "Recuperar contraseña | LDM Academy",
                 html: `
                 <div class="container" style="background-color:rgb(41, 62, 247); color: white; padding: 80px;">
                     <div class="imagen" style="text-align: center;">
@@ -124,51 +146,81 @@ exports.enviarCodigo = (req, res) => {
 
                 </div>
                 `,
-            }
+            };
+
             transporter.sendMail(emailOptions, function (error, info) {
                 if (error) {
-                    console.log(error);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Error al enviar el correo",
+                        error: error.message,
+                    });
                 }
-                db.query('UPDATE usuarios SET codigo_verificacion = ? WHERE correo = ?', [codigo, usuario.correo], (error, results) => {
-                    if (error) {
-                        console.error('Error al actualizar el usuario:', error);
-                        res.status(500).send({ error: 'Error al actualizar el usuario' });
-                    } else {
-                        console.log(results)
-                        console.log(`Correo: ${correo}, Codigo: ${codigo}`);
-                        res.status(200).send({ title: 'Correo enviado con exito' });
+
+                db.query(
+                    "UPDATE usuarios SET codigo_verificacion = ? WHERE correo = ?",
+                    [codigo, usuario.correo],
+                    (error, results) => {
+                        if (error) {
+                            return res.status(500).json({
+                                success: false,
+                                message: "Error al actualizar el usuario",
+                                error: error.message,
+                            });
+                        }
+
+                        return res.status(200).json({
+                            success: true,
+                            message: "Correo enviado correctamente",
+                        });
                     }
-                });
-            })
-        }
-    })
-}
-
-exports.recuperar = (req, res) => {
-    const correo = req.body.correo;
-    const codigo = req.body.codigo;
-    const contrasena = req.body.contrasena;
-
-    const contrasenaEncriptada = bcrypt.hashSync(contrasena, 10);
-
-    db.query('SELECT * FROM usuarios WHERE correo = ? and codigo_verificacion = ?', [correo, codigo], (error, results) => {
-        if (error) {
-            console.error('Error al obtener el usuario:', error);
-            res.status(500).send({ error: 'Error al obtener el usuario' });
-        } else {
-            if (results.length === 0) {
-                res.status(400).send({ error: 'Correo o codigo incorrecto' });
-            } else {
-                db.query('UPDATE usuarios SET contrasena = ? WHERE correo = ?', [contrasenaEncriptada, correo], (error, results) => {
-                    if (error) {
-                        console.error('Error al actualizar el usuario:', error);
-                        res.status(500).send({ error: 'Error al actualizar el usuario' });
-                    } else {
-                        res.status(200).send({ title: 'Contraseña actualizada con exito' });
-                    }
-                });
-            }
+                );
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: "Error al enviar el correo",
+                error: error.message,
+            });
         }
     }
-    )
-}
+
+    static async recuperar(req, res) {
+        try {
+            const { correo, codigo, contrasena } = req.body;
+
+            const contrasenaEncriptada = bcrypt.hashSync(contrasena, 10);
+
+            const query = "SELECT * FROM usuarios WHERE correo = ? and codigo_verificacion = ?";
+            const [rows] = await db.promise().query(query, [correo, codigo]);
+
+            if (rows.length === 0) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Correo o codigo incorrecto",
+                });
+            }
+
+            const query2 = "UPDATE usuarios SET contrasena = ? WHERE correo = ?";
+            const [rows2] = await db.promise().query(query2, [contrasenaEncriptada, correo]);
+
+            if (rows2.length === 0) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Error al actualizar el usuario",
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Contraseña actualizada correctamente",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: "Error al recuperar la contraseña",
+                error: error.message,
+            });
+        }
+    }
+};

@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authControlador = require('../controladores/authControlador.js');
+const AuthControlador = require('../controladores/authControlador.js');
 
-router.post('/registrar', authControlador.registrar);
-router.post('/login', authControlador.login);
-router.get('/validarToken', authControlador.validarToken);
-router.post('/enviarCodigo', authControlador.enviarCodigo);
-router.put('/recuperar', authControlador.recuperar);
+router.get('/session', AuthControlador.validarSesion);
+router.post('/login', AuthControlador.iniciarSesion);
+router.post('/enviarCodigo', AuthControlador.enviarCodigo);
+router.put('/recuperar', AuthControlador.recuperar);
 
 module.exports = router;
