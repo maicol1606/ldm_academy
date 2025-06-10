@@ -33,7 +33,7 @@ const AsignarHoras = () => {
                 const res = await axios.get(
                     `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/estudiantes/obtenerEstudiantes`
                 );
-                setEstudiantes(res.data);
+                setEstudiantes(res.data.);
             } catch (err) {
                 console.error(err);
             }
@@ -109,7 +109,7 @@ const AsignarHoras = () => {
                 .get(`http://localhost:3001/api/estudiantes/asistenciaEstudiante/${id}`)
 
                 .then((res) => {
-                    setEstudianteSeleccionado(res.data); // Aquí se guardan los datos completos del estudiante, incluyendo el historial de asistencia
+                    setEstudianteSeleccionado(res.data.data); // Aquí se guardan los datos completos del estudiante, incluyendo el historial de asistencia
                     setMostrarModal(true); // abre el modal
                 })
                 .catch((err) => console.error(err));

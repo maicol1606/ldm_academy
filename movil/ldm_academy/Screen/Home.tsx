@@ -8,13 +8,18 @@ import {
     ScrollView,
     Image,
     ImageBackground,
+    Platform, // Importa Platform
 } from "react-native";
+
+
+// Conditionally import based on platform
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { RootStackParamList } from "../navigation/PublicNavigate";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import MapView, { Marker } from "react-native-maps";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Home">;
@@ -157,25 +162,33 @@ const Home = () => {
                     </ScrollView>
                 </View>
 
-                {/* Maps*/}
-                <View style={styles.mapContainer}>
-                    <Text style={styles.sectionTitle}>Ubicación de referencia</Text>
-                    <MapView
-                        style={styles.map}
-                        initialRegion={{
-                            latitude: 4.486698,
-                            longitude: -74.10854,
-                            latitudeDelta: 0.055,
-                            longitudeDelta: 0.055,
-                        }}
-                    >
-                        <Marker
-                            coordinate={{ latitude: 4.486698, longitude: -74.10854 }}
-                            title="Colegio Fernando González Ochoa"
-                            description="Carrera 4D Este #89-55 Sur, Chicó Sur, Usme"
-                        />
-                    </MapView>
-                </View>
+                {/* Maps - Condición para no cargar el mapa en la web */}
+                {Platform.OS === 'web' ? (
+    <View style={styles.mapContainer}>
+        <Text style={styles.sectionTitle}>Ubicación de referencia</Text>
+        <Text>Mapa no disponible en la web</Text>
+    </View>
+) : (
+    <View style={styles.mapContainer}>
+        <Text style={styles.sectionTitle}>Ubicación de referencia</Text>
+        <MapView
+            style={styles.map}
+            initialRegion={{
+                latitude: 4.486698,
+                longitude: -74.10854,
+                latitudeDelta: 0.055,
+                longitudeDelta: 0.055,
+            }}
+        >
+            <Marker
+                coordinate={{ latitude: 4.486698, longitude: -74.10854 }}
+                title="Colegio Fernando González Ochoa"
+                description="Carrera 4D Este #89-55 Sur, Chicó Sur, Usme"
+            />
+        </MapView>
+    </View>
+)}
+
             </ScrollView>
 
             {/* Menú inferior */}
