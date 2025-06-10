@@ -41,7 +41,7 @@ const GestionarCampañas = () => {
           axios.get(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/campanas/mostrarCampanas`),
           axios.get(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/docentes/obtenerDocentes`),
         ]);
-        setCampañas(campanasRes.data);
+        setCampañas(campanasRes.data.data);
         setDocentes(docentesRes.data);
       } catch (error) {
         console.error(error);
@@ -123,7 +123,7 @@ const GestionarCampañas = () => {
             </tr>
           </thead>
           <tbody>
-            {campañas.map((campaña) => (
+            {campañas?.map((campaña) => (
               <tr key={campaña.id_campaña}>
                 <td><img width={100} height={100} className="rounded-3" src={`/img/campañas/${campaña.imagen}`} alt="" /></td>
                 <td>{campaña.nom_campaña}</td>
