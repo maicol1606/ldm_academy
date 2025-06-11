@@ -188,30 +188,30 @@ const AsignarHoras = () => {
                                 </div>
                             </div>
                             <div className="modal-body">
-                                <p>Numero: {estudianteSeleccionado.id_usuario}</p>
-                                <p>Nombre: {estudianteSeleccionado.nombre}</p>
-                                <p>Campaña: {estudianteSeleccionado.nom_campaña}</p>
+                                <p>Numero: {estudianteSeleccionado?.id_usuario}</p>
+                                <p>Nombre: {estudianteSeleccionado?.nombre}</p>
+                                <p>Campaña: {estudianteSeleccionado?.nom_campaña}</p>
                                 <p>
-                                    Total de Horas: {estudianteSeleccionado.total_horas} de{" "}
+                                    Total de Horas: {estudianteSeleccionado?.total_horas} de{" "}
                                     {120 +
-                                        parseInt(estudianteSeleccionado.total_horas_observaciones)}
+                                        parseInt(estudianteSeleccionado?.total_horas_observaciones)}
                                 </p>
                                 <p>
                                     Total de Horas con observaciones:{" "}
-                                    {estudianteSeleccionado.total_horas_observaciones}
+                                    {estudianteSeleccionado?.total_horas_observaciones}
                                 </p>
-                                <p>Días asistidos: {estudianteSeleccionado.total_asistencias}</p>
+                                <p>Días asistidos: {estudianteSeleccionado?.total_asistencias}</p>
                                 <hr />
                                 <h6>Historial de asistencia:</h6>
-                                {estudianteSeleccionado.asistencias.map((asistencia) => (
-                                    <p key={asistencia.id_asistencia}>
-                                        {new Date(asistencia.fecha).toLocaleDateString("es-ES", {
+                                {estudianteSeleccionado?.asistencias?.map((asistencia) => (
+                                    <p key={asistencia?.id_asistencia}>
+                                        {new Date(asistencia?.fecha).toLocaleDateString("es-ES", {
                                             day: "numeric",
                                             month: "long",
                                             year: "numeric",
                                         })}
                                         {": "}
-                                        {asistencia.horas} horas
+                                        {asistencia?.horas} horas
                                     </p>
                                 ))}
                             </div>
