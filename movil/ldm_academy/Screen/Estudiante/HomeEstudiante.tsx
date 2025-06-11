@@ -33,9 +33,9 @@ const HomeEstudiante: React.FC<HomeEstudianteProps> = ({ navigation }) => {
         const idUsuario = tokenDecoded?.id ?? null;
 
         const [campanasRes, postulacionesRes, docentesRes] = await Promise.all([
-          axios.get('http://192.168.56.1:3000/api/campanas/mostrarCampanas'),
-          axios.get(`http://192.168.56.1:3000/api/postulacion/mostrarPostulacion/${idUsuario}`),
-          axios.get('http://192.168.56.1:3000/api/docentes/obtenerDocentes'),
+          axios.get('http://192.168.1.11:3000/api/campanas/mostrarCampanas'),
+          axios.get(`http://192.168.1.11:3000/api/postulacion/mostrarPostulacion/${idUsuario}`),
+          axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes'),
         ]);
 
         setCampanas(campanasRes.data);
@@ -66,7 +66,7 @@ const HomeEstudiante: React.FC<HomeEstudianteProps> = ({ navigation }) => {
 
   const handlePostular = async () => {
     try {
-      const response = await axios.post('http://192.168.56.1:3000/api/postulacion/agregarPostulacion', postulado);
+      const response = await axios.post('http://192.168.1.11:3000/api/postulacion/agregarPostulacion', postulado);
 
       if (response.status === 200) {
         Alert.alert('Éxito', 'Has postulado correctamente para la campaña.', [
@@ -102,7 +102,7 @@ const HomeEstudiante: React.FC<HomeEstudianteProps> = ({ navigation }) => {
         return (
           <View key={campana.id_campañas} style={styles.card}>
             <Image
-              source={{ uri: `http://192.168.56.1:3000/img/campañas/${campana.imagen}` }}
+              source={{ uri: `http://192.168.1.11:3000/img/campañas/${campana.imagen}` }}
               style={styles.image}
             />
             <Text style={styles.campaignTitle}>{campana.nom_campaña}</Text>

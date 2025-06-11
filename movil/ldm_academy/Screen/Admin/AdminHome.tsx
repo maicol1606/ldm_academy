@@ -24,11 +24,11 @@ const AdminHome: React.FC = () => {
   const [estudiantes, setEstudiantes] = useState<Estudiante[]>([]);
 
   useEffect(() => {
-    axios.get("http://192.168.56.1:3000/api/obtenerEstadisticas")
+    axios.get("http://192.168.1.11:3000/api/obtenerEstadisticas")
       .then(res => setDatos(res.data))
       .catch(err => console.error("Error al cargar estadísticas:", err));
 
-    axios.get("http://192.168.56.1:3000/api/estudiantes/llamarEstudiantes")
+    axios.get("http://192.168.1.11:3000/api/estudiantes/llamarEstudiantes")
       .then(res => setEstudiantes(res.data))
       .catch(err => {
         console.error("Error al obtener estudiantes:", err);

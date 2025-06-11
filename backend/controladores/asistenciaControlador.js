@@ -15,7 +15,7 @@ exports.mostrarAsistenciasPorEstudiante = async (req, res) => {
             success: true,
             data: result,
             message: "Asistencias obtenidas correctamente",
-        })
+        });
     } catch (error) {
         console.error("Error al obtener asistencias por estudiante:", error);
         res.status(500).json({
@@ -100,9 +100,15 @@ exports.agregarAsistencia = (req, res) => {
         (err, result) => {
             if (err) {
                 console.error(err);
-                res.status(500).json({ error: "Error al agregar asistencia" });
+                res.status(400).json({
+                    success: false,
+                    message: "Error al agregar asistencia",
+                });
             } else {
-                res.json({ message: "Asistencia agregada correctamente" });
+                res.status(200).json({
+                    success: true,
+                    message: "Asistencia agregada correctamente",
+                });
             }
         }
     );

@@ -123,7 +123,7 @@ const GestionarCampañas = () => {
             </tr>
           </thead>
           <tbody>
-            {campañas?.map((campaña) => (
+            {campañas.map((campaña) => (
               <tr key={campaña.id_campaña}>
                 <td><img width={100} height={100} className="rounded-3" src={`/img/campañas/${campaña.imagen}`} alt="" /></td>
                 <td>{campaña.nom_campaña}</td>

@@ -5,7 +5,6 @@ import { useAuth } from "../../contexts/authContext";
 
 export default function PostulacionesDocente() {
     const [postulaciones, setPostulaciones] = useState([]);
-    console.log(postulaciones)
     const [isDataUpdated, setIsDataUpdated] = useState(false);
 
     const { data: user, loading: loadingUser } = useAuth();
@@ -108,10 +107,9 @@ export default function PostulacionesDocente() {
     return (
         <div className="d-flex">
             <div className="container">
-                <h1 className="text-center display-1">Postulaciones</h1>
+                <h1 className="text-center">Postulaciones</h1>
                 <h1 className="text-center">Postulaciones pendientes</h1>
                 <div className="row">
-                    {postulacionesPendientes.length == 0 && <div className="text-center">No hay postulaciones pendientes</div>}
                     {postulacionesPendientes.map((postulacion) => (
                         <div className="col-md-4" key={postulacion.id_postulacion}>
                             <div className="card p-2 rounded d-flex align-items-center">
@@ -154,7 +152,6 @@ export default function PostulacionesDocente() {
                 <div className="row">
                     <h1 className="text-center">Postulaciones aceptadas</h1>
                     <div className="row">
-                    {postulacionesAceptadas.length == 0 && <div className="text-center">No hay postulaciones pendientes</div>}
                         {postulacionesAceptadas.map((postulacion) => (
                             <div className="col-md-4" key={postulacion.id_postulacion}>
                                 <div className="card p-2 rounded d-flex align-items-center">
@@ -177,7 +174,6 @@ export default function PostulacionesDocente() {
                 <div className="row">
                     <h1 className="text-center">Postulaciones rechazadas</h1>
                     <div className="row">
-                    {postulacionesRechazadas.length == 0 && <div className="text-center">No hay postulaciones pendientes</div>}
                         {postulacionesRechazadas.map((postulacion) => (
                             <div className="col-md-4" key={postulacion.id_postulacion}>
                                 <div className="card p-2 rounded d-flex align-items-center">

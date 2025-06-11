@@ -36,7 +36,7 @@ const EstudianteNew: React.FC = () => {
 
     try {
       const { confirmarContrasena, ...datosAEnviar } = user;
-      const response = await axios.post('http://192.168.56.1:3000/api/auth/registrar', datosAEnviar);
+      const response = await axios.post('http://192.168.1.11:3000/api/auth/registrar', datosAEnviar);
 
       if (response.status === 200) {
         Alert.alert('Éxito', response.data.message, [

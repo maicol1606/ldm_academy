@@ -11,7 +11,7 @@ const Horas: React.FC = () => {
 
   const fetchDatos = async () => {
     try {
-      const res = await axios.get(`http://192.168.56.1:3000/api/asistencia/mostrarAsistencias/${idEstudiante}`);
+      const res = await axios.get(`http://192.168.1.11:3000/api/asistencia/mostrarAsistencias/${idEstudiante}`);
       setAsistencias(res.data);
     } catch (err) {
       console.error('Error al cargar los datos del estudiante', err);

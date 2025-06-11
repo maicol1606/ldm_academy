@@ -32,7 +32,7 @@ const EstudianteList: React.FC = () => {
   useEffect(() => {
     const fetchDocente = async () => {
       try {
-        const res = await axios.get('http://192.168.56.1:3000/api/docentes/obtenerDocentes');
+        const res = await axios.get('http://192.168.1.11:3000/api/docentes/obtenerDocentes');
         setEstudiantes(res.data);
       } catch (error) {
         console.error('Error al obtener estudiantes:', error);
@@ -53,7 +53,7 @@ const EstudianteList: React.FC = () => {
           style: 'destructive', 
           onPress: async () => {
             try {
-              const res = await axios.delete(`http://192.168.56.1:3000/api/docentes/eliminarDocente/${id}`);
+              const res = await axios.delete(`http://192.168.1.11:3000/api/docentes/eliminarDocente/${id}`);
               if (res.status === 200) {
                 Alert.alert('Eliminado', 'El estudiante fue eliminado.');
                 setEstudiantes(prev => prev.filter(est => est.id_usuario !== id));

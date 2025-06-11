@@ -10,10 +10,11 @@ import {
 } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
+import { useGetData, usePostData } from "../../lib/fetchData.js";
 
 const AsignarHoras = () => {
-    const [estudiantes, setEstudiantes] = useState([]);
     const [estudianteSeleccionado, setEstudianteSeleccionado] = useState(null);
+    console.log(estudianteSeleccionado);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarDetalle, setMostrarDetalle] = useState(false); // Declaración de mostrarDetalle
 
@@ -27,19 +28,11 @@ const AsignarHoras = () => {
     const [modalMensaje, setModalMensaje] = useState("");
     const [tipoModal, setTipoModal] = useState("success");
 
-    useEffect(() => {
-        const obtenerEstudiantes = async () => {
-            try {
-                const res = await axios.get(
-                    `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/estudiantes/obtenerEstudiantes`
-                );
-                setEstudiantes(res.data[0]);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        obtenerEstudiantes();
-    }, []);
+    const {
+        data: estudiantes,
+        loading: loadingEstudiantes,
+        reload: reloadEstudiantes,
+    } = useGetData("/estudiantes/obtenerEstudiantes");
 
     const seleccionarEstudiante = (idUsuario) => {
         const estudiante = estudiantes.find((e) => e.id_usuario === idUsuario);
@@ -50,7 +43,7 @@ const AsignarHoras = () => {
     };
 
     const enviarAsistencia = async () => {
-        if (!horaInicio || !horaFin || isNaN(nuevasHoras) || nuevasHoras < 1 || nuevasHoras > 6) {
+        if (!horaInicio || !horaFin || isNaN(nuevasHoras) || nuevasHoras < 1 || nuevasHoras > 16) {
             setTipoModal("error");
             setModalMensaje("Completa todos los campos correctamente.");
             setMostrarModal(true);
@@ -58,15 +51,16 @@ const AsignarHoras = () => {
         }
 
         try {
-            await axios.post(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/asistencia/agregarAsistencia`, {
+            const response = await usePostData("/asistencia/agregarAsistencia", {
                 id_usuario: estudianteSeleccionado.id_usuario,
                 id_campaña: estudianteSeleccionado.id_campaña,
-                fecha, // Este campo debe existir en los datos del estudiante
+                fecha: new Date(fecha).toISOString().split("T")[0],
                 hora_Inicio: horaInicio,
                 hora_fin: horaFin,
                 horas: nuevasHoras,
                 novedades,
             });
+            if (!response.success) return;
 
             setTipoModal("success");
             setModalMensaje("Asistencia registrada correctamente.");
@@ -80,39 +74,16 @@ const AsignarHoras = () => {
             setNuevasHoras("");
             setFecha("");
 
-            const res = await axios.get(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/estudiantes/obtenerEstudiantes`);
-            setEstudiantes(res.data);
-            const actualizado = res.data.find(
-                (e) => e.id_usuario === estudianteSeleccionado.id_usuario
-            );
-            setEstudianteSeleccionado(actualizado);
+            setEstudianteSeleccionado(null);
+            setMostrarDetalle(false);
+            setMostrarFormulario(false);
+            setMostrarModal(false);
+            reloadEstudiantes();
         } catch (error) {
             console.error(error);
             setTipoModal("error");
             setModalMensaje("Error al registrar asistencia.");
             setMostrarModal(true);
-        }
-    };
-
-    const handleHorasChange = (e) => {
-        const valor = parseInt(e.target.value);
-        if (!isNaN(valor) && valor >= 1 && valor <= 6) {
-            setNuevasHoras(valor);
-        } else {
-            setNuevasHoras("");
-        }
-    };
-
-    const obtenerDatosEstudiante = (id) => {
-        if (!estudianteSeleccionado || estudianteSeleccionado.id_usuario !== id) {
-            axios
-                .get(`http://localhost:3001/api/estudiantes/asistenciaEstudiante/${id}`)
-
-                .then((res) => {
-                    setEstudianteSeleccionado(res.data.data); // Aquí se guardan los datos completos del estudiante, incluyendo el historial de asistencia
-                    setMostrarModal(true); // abre el modal
-                })
-                .catch((err) => console.error(err));
         }
     };
 
@@ -128,17 +99,17 @@ const AsignarHoras = () => {
         let diferenciaHoras = (minutosFin - minutosInicio) / 60;
 
         if (diferenciaHoras <= 0) {
-            setNuevasHoras(0); // o puedes mostrar error
-        } else if (diferenciaHoras > 6) {
-            setNuevasHoras(6); // máximo permitido
+            setNuevasHoras(0);
         } else {
             setNuevasHoras(Math.floor(diferenciaHoras));
         }
     };
+
     useEffect(() => {
         calcularHoras(horaInicio, horaFin);
     }, [horaInicio, horaFin]);
 
+    if (loadingEstudiantes) return <div>Cargando...</div>;
     return (
         <>
             {mostrarModal && (
@@ -218,35 +189,32 @@ const AsignarHoras = () => {
                                 </div>
                             </div>
                             <div className="modal-body">
-                                <h6>Nombre: {estudianteSeleccionado.nombre}</h6>
                                 <p>Numero: {estudianteSeleccionado.id_usuario}</p>
+                                <p>Nombre: {estudianteSeleccionado.nombre}</p>
+                                <p>Campaña: {estudianteSeleccionado.nom_campaña}</p>
                                 <p>
-                                    Total de Horas:{" "}
-                                    {estudianteSeleccionado.horas?.reduce(
-                                        (acc, a) => acc + a.horas,
-                                        0
-                                    )}
+                                    Total de Horas: {estudianteSeleccionado.total_horas} de{" "}
+                                    {120 +
+                                        parseInt(estudianteSeleccionado.total_horas_observaciones)}
                                 </p>
-                                <p>Días asistidos: {estudianteSeleccionado.fecha?.length}</p>
+                                <p>
+                                    Total de Horas con observaciones:{" "}
+                                    {estudianteSeleccionado.total_horas_observaciones}
+                                </p>
+                                <p>Días asistidos: {estudianteSeleccionado.total_asistencias}</p>
                                 <hr />
                                 <h6>Historial de asistencia:</h6>
-                                {estudianteSeleccionado.historial?.length > 0 ? (
-                                    <ul className="list-group">
-                                        {estudianteSeleccionado.historial.map((a, index) => (
-                                            <li key={index} className="list-group-item">
-                                                Fecha: {a.fecha} | Inicio: {a.hora_inicio} | Fin:{" "}
-                                                {a.hora_fin} | Horas: {a.horas}
-                                                {a.novedades && (
-                                                    <div className="text-muted">
-                                                        Novedades: {a.novedades}
-                                                    </div>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>No hay historial de asistencia disponible.</p>
-                                )}
+                                {estudianteSeleccionado.asistencias.map((asistencia) => (
+                                    <p key={asistencia.id_asistencia}>
+                                        {new Date(asistencia.fecha).toLocaleDateString("es-ES", {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric",
+                                        })}
+                                        {": "}
+                                        {asistencia.horas} horas
+                                    </p>
+                                ))}
                             </div>
                             <div className="modal-footer">
                                 <button
@@ -275,7 +243,7 @@ const AsignarHoras = () => {
                                 <FaUserClock /> Seleccionar Estudiante
                             </h5>
                             <div className="row">
-                                {estudiantes?.map((estudiante) => (
+                                {estudiantes.map((estudiante) => (
                                     <div key={estudiante.id_usuario} className="col-md-4 mb-4">
                                         <div className="card shadow rounded-4 border-0 h-100">
                                             <div className="card-body text-center">
@@ -284,7 +252,9 @@ const AsignarHoras = () => {
                                                     className="text-primary mb-2"
                                                 />
                                                 <h5 className="card-title fw-semibold">
-                                                    {estudiante.nombre}
+                                                    {estudiante.nombre} {estudiante.apellido}
+                                                    {" - "}
+                                                    {estudiante.nom_campaña}
                                                 </h5>
                                                 <p className="text-muted mb-2">
                                                     ID: {estudiante.id_usuario}

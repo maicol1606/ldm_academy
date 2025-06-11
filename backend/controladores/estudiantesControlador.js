@@ -4,15 +4,98 @@ const fs = require("fs");
 
 exports.obtenerEstudiantes = async (req, res) => {
     const query = `
-        SELECT usuarios.*, postulacion.id_campaña 
-        FROM usuarios 
-        INNER JOIN postulacion ON usuarios.id_usuario = postulacion.id_usuario 
-        WHERE usuarios.id_rol = 2 AND usuarios.estado = 1
+        SELECT 
+            u.id_usuario,
+            u.nombre,
+            u.apellido,
+            u.correo,
+            u.telefono,
+            u.curso,
+            u.estado,
+            u.foto,
+            c.nom_campaña,
+            a.fecha,
+            a.hora_inicio,
+            a.hora_fin,
+            a.horas,
+            a.novedades,
+            p.estado,
+            c.id_campaña,
+            (
+                SELECT COALESCE(SUM(horas), 0) 
+                FROM asistencia 
+                WHERE id_usuario = u.id_usuario
+            ) AS total_horas,
+            (
+                SELECT COALESCE(SUM(horas), 0) 
+                FROM asistencia 
+                WHERE id_usuario = u.id_usuario 
+                AND novedades IS NOT NULL
+            ) AS total_horas_observaciones,
+            (
+                SELECT COUNT(*) 
+                FROM asistencia 
+                WHERE id_usuario = u.id_usuario
+            ) AS total_asistencias
+        FROM usuarios u
+        INNER JOIN postulacion p ON u.id_usuario = p.id_usuario AND p.estado = 'aceptada'
+        INNER JOIN campañas c ON p.id_campaña = c.id_campaña
+        INNER JOIN asistencia a ON u.id_usuario = a.id_usuario
+        WHERE u.id_rol = 2 AND u.estado = 1
+        ORDER BY u.id_usuario, a.fecha DESC
     `;
 
-    const results = await db.promise().query(query);
+    const [results] = await db.promise().query(query);
 
-    res.status(200).json(results);
+    // Group results by user
+    let estudiantes = Object.groupBy(results, ({ id_usuario }) => id_usuario);
+
+    // Transform the data into a more organized structure
+    estudiantes = Object.values(estudiantes).map((estudiante) => {
+        const estudianteData = estudiante[0];
+        const asistencias = estudiante
+            .filter(record => record.fecha !== null) // Filter out null attendance records
+            .map(({ 
+                nom_campaña, 
+                fecha, 
+                hora_inicio, 
+                hora_fin, 
+                horas, 
+                novedades,
+                estado 
+            }) => ({
+                campaña: nom_campaña,
+                fecha,
+                hora_inicio,
+                hora_fin,
+                horas,
+                novedades,
+                estado
+            }));
+
+        return {
+            id_usuario: estudianteData.id_usuario,
+            nombre: estudianteData.nombre,
+            apellido: estudianteData.apellido,
+            correo: estudianteData.correo,
+            telefono: estudianteData.telefono,
+            curso: estudianteData.curso,
+            estado: estudianteData.estado,
+            foto: estudianteData.foto,
+            total_horas: estudianteData.total_horas,
+            total_horas_observaciones: estudianteData.total_horas_observaciones,
+            total_asistencias: estudianteData.total_asistencias,
+            nom_campaña: estudianteData.nom_campaña,
+            id_campaña: estudianteData.id_campaña,
+            asistencias
+        };
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Estudiantes obtenidos correctamente",
+        data: estudiantes,
+    });
 };
 
 exports.obtenerEstudiante = async (req, res) => {

@@ -40,7 +40,7 @@ export default function Navegacion() {
                 style={{
                     width: "80px",
                     height: "100vh",
-                    zIndex: 9999,
+                    zIndex: 99,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
