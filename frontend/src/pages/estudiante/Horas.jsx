@@ -15,7 +15,7 @@ export default function Horas() {
         return <div>Cargando...</div>;
     }
 
-    const horasHechas = asistencias.reduce((total, a) => total + a.horas, 0);
+    const horasHechas = asistencias.reduce((total, a) => total + (a.novedades ? 0 : a.horas), 0);
     const horasInvalidas = asistencias.reduce(
         (total, a) => (a.novedades ? total + a.horas : total),
         0
@@ -32,7 +32,7 @@ export default function Horas() {
                         <div className="col-md-4">
                             <div className="card p-3">
                                 <FaRegClock size={30} className="mb-2" />
-                                <h5>Total de Horas al realizar</h5>
+                                <h5>Total de Horas a realizar</h5>
                                 <p>{horasTotales} horas</p>
                             </div>
                         </div>

@@ -14,7 +14,6 @@ import { useGetData, usePostData } from "../../lib/fetchData.js";
 
 const AsignarHoras = () => {
     const [estudianteSeleccionado, setEstudianteSeleccionado] = useState(null);
-    console.log(estudianteSeleccionado);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarDetalle, setMostrarDetalle] = useState(false); // Declaración de mostrarDetalle
 
