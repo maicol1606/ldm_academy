@@ -20,6 +20,7 @@ const OlvidarContrasena: React.FC = () => {
             return;
         }
 
+<<<<<<< HEAD
         try {
             const res = await axios.post("http://192.168.1.11:3000/api/auth/enviarCodigo", {
                 correo,
@@ -40,6 +41,26 @@ const OlvidarContrasena: React.FC = () => {
             Alert.alert("Error", "Algo salió mal. Intente nuevamente");
         }
     };
+=======
+    try {
+      const res = await axios.post('http://192.168.1.14:3000/api/auth/enviarCodigo', { correo });
+      console.log(res);
+      Alert.alert('Correo Enviado', 'Revise su correo electrónico', [
+        {
+          text: 'Continuar',
+          onPress: () => {
+            // Puedes usar AsyncStorage en lugar de localStorage en React Native
+            // AsyncStorage.setItem('correo', correo);
+            navigation.navigate('Recuperar');
+          },
+        },
+      ]);
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Algo salió mal. Intente nuevamente');
+    }
+  };
+>>>>>>> parent of 5431c7d (Revert "movil")
 
     return (
         <View style={styles.container}>

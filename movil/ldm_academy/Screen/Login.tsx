@@ -36,6 +36,7 @@ const Login: React.FC = () => {
         }));
     };
 
+<<<<<<< HEAD
     const handleSubmit = async () => {
         setLoading(true);
         try {
@@ -46,6 +47,18 @@ const Login: React.FC = () => {
                         text: "Continuar",
                         onPress: () => {
                             const { token, rol } = response.data;
+=======
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post('http://192.168.1.14:3000/api/auth/login', user);
+      if (response.status === 200) {
+        Alert.alert('Éxito', response.data.message, [
+          {
+            text: 'Continuar',
+            onPress: () => {
+              const { token, rol } = response.data;
+>>>>>>> parent of 5431c7d (Revert "movil")
 
                             switch (rol) {
                                 case 1:

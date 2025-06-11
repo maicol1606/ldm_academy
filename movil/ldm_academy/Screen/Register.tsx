@@ -59,6 +59,7 @@ const Register: React.FC = () => {
             return;
         }
 
+<<<<<<< HEAD
         try {
             const response = await axios.post("http://192.168.1.11:3000/api/auth/registrar", user);
             if (response.status === 200) {
@@ -77,6 +78,26 @@ const Register: React.FC = () => {
             Alert.alert(title, message);
         }
     };
+=======
+    try {
+      const response = await axios.post('http://192.168.1.14:3000/api/auth/registrar', user);
+      if (response.status === 200) {
+        Alert.alert('Éxito', response.data.message, [
+          {
+            text: 'Ir a Login',
+            onPress: () => navigation.navigate('Login'),
+          },
+        ]);
+      } else {
+        Alert.alert('Error', 'Error al registrar el usuario');
+      }
+    } catch (error: any) {
+      const title = error?.response?.data?.title || 'Error';
+      const message = error?.response?.data?.message || 'Error al registrar el usuario';
+      Alert.alert(title, message);
+    }
+  };
+>>>>>>> parent of 5431c7d (Revert "movil")
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

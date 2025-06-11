@@ -50,6 +50,7 @@ export default function Recuperar() {
 
             console.log(user);
 
+<<<<<<< HEAD
             if (res.status === 200) {
                 Alert.alert("Éxito", "Contraseña actualizada con éxito", [
                     { text: "OK", onPress: () => navigation.navigate("Login") },
@@ -69,6 +70,12 @@ export default function Recuperar() {
             }
         }
     };
+=======
+    try {
+      const res = await axios.put('http://192.168.1.14:3000/api/auth/recuperar', user, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+>>>>>>> parent of 5431c7d (Revert "movil")
 
     return (
         <View style={{ padding: 20 }}>

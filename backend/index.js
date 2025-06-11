@@ -1,12 +1,17 @@
 const express = require('express');
 const db = require('./config/db');
+const path = require('path'); // 🔧 Importamos path para construir la ruta de forma segura
 const app = express();
 const port = 3000;
+<<<<<<< HEAD
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 
 // Rutas
+=======
+
+>>>>>>> parent of 5431c7d (Revert "movil")
 const estudiantesRutas = require('./rutas/estudiantes');
 const docentesRutas = require('./rutas/docentes');
 const campanasRutas = require('./rutas/campañas');
@@ -28,24 +33,33 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
+<<<<<<< HEAD
 app.use('/api', usuarioRutas);
 app.use('/api/auth', authRutas);
+=======
+// 🔧 Agregado: servir la carpeta de imágenes de campañas públicamente
+app.use('/img/campanas', express.static(path.join(__dirname, 'public', 'img', 'campañas')));
+
+app.use('/imgmovil/campanas', express.static(path.join(__dirname, '../movil/ldm_academy/public/img/campañas')));
+
+app.get('/', (req, res) => {
+    res.send('¡Hola desde el servidor backend!');
+});
+>>>>>>> parent of 5431c7d (Revert "movil")
 
 app.use('/api/estudiantes', estudiantesRutas);
-
 app.use('/api/docentes', docentesRutas);
-
 app.use('/api/campanas', campanasRutas);
-
 app.use('/api/certificados', certificadosRutas);
+<<<<<<< HEAD
 
 
+=======
+app.use('/api/auth', authRutas);
+>>>>>>> parent of 5431c7d (Revert "movil")
 app.use('/api/postulacion', postulacionRutas);
-
 app.use('/api/asistencia', asistenciaRutas);
-
 app.use('/api', estadísticasRutas);
-
 app.use('/api', rutasNotificaciones);
 
 // Middleware de error

@@ -46,7 +46,7 @@ export default function NavegacionAdmin() {
 
   const optionItems: OptionItem[] = [
     { key: 'inicio', title: 'Inicio', icon: 'home-outline', route: 'AdminHome' },
-    { key: 'notificaciones', title: 'Notificaciones', icon: 'notifications-outline', route: 'NotificacionesAdmin' },
+    // Eliminada la opción Notificaciones
     {
       key: 'estudiantes',
       title: 'Estudiantes',
