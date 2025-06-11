@@ -119,14 +119,12 @@ const AsignarHoras = () => {
                 >
                     <div className="modal-dialog modal-dialog-centered">
                         <div
-                            className={`modal-content border-${
-                                tipoModal === "success" ? "success" : "danger"
-                            }`}
+                            className={`modal-content border-${tipoModal === "success" ? "success" : "danger"
+                                }`}
                         >
                             <div
-                                className={`modal-header bg-${
-                                    tipoModal === "success" ? "success" : "danger"
-                                } text-white`}
+                                className={`modal-header bg-${tipoModal === "success" ? "success" : "danger"
+                                    } text-white`}
                             >
                                 <h5 className="modal-title">
                                     {tipoModal === "success" ? "Éxito" : "Error"}
@@ -203,17 +201,19 @@ const AsignarHoras = () => {
                                 <p>Días asistidos: {estudianteSeleccionado?.total_asistencias}</p>
                                 <hr />
                                 <h6>Historial de asistencia:</h6>
-                                {estudianteSeleccionado?.asistencias?.map((asistencia) => (
-                                    <p key={asistencia?.id_asistencia}>
-                                        {new Date(asistencia?.fecha).toLocaleDateString("es-ES", {
-                                            day: "numeric",
-                                            month: "long",
-                                            year: "numeric",
-                                        })}
-                                        {": "}
-                                        {asistencia?.horas} horas
-                                    </p>
-                                ))}
+                                {Array.isArray(estudianteSeleccionado?.asistencias) &&
+                                    estudianteSeleccionado.asistencias.map((asistencia) => (
+                                        <p key={asistencia?.id_asistencia}>
+                                            {new Date(asistencia?.fecha).toLocaleDateString("es-ES", {
+                                                day: "numeric",
+                                                month: "long",
+                                                year: "numeric",
+                                            })}
+                                            {": "}
+                                            {asistencia?.horas} horas
+                                        </p>
+                                    ))}
+
                             </div>
                             <div className="modal-footer">
                                 <button
