@@ -5,12 +5,21 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
+<<<<<<< HEAD
     Home: undefined;
     AdminHome: undefined;
     HomeEstudiante: undefined;
     HomeDocente: undefined;
     Register: undefined;
     OlvidarContrasena: undefined;
+=======
+  Home: undefined;
+  AdminHome: undefined; 
+  HomeEstudiante: undefined;
+  HomeDocentes: undefined;
+  Register: undefined;
+  OlvidarContrasena: undefined;
+>>>>>>> parent of 9044f4c (movil/estudiante 50%)
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -60,6 +69,7 @@ const Login: React.FC = () => {
               const { token, rol } = response.data;
 >>>>>>> parent of 5431c7d (Revert "movil")
 
+<<<<<<< HEAD
                             switch (rol) {
                                 case 1:
                                     navigation.navigate("AdminHome");
@@ -85,6 +95,33 @@ const Login: React.FC = () => {
             setLoading(false);
         }
     };
+=======
+              switch (rol) {
+                case 1:
+                  navigation.navigate('AdminHome'); 
+                  break;
+                case 2:
+                  navigation.navigate('HomeEstudiante');
+                  break;
+                case 3:
+                  navigation.navigate('HomeDocentes');
+                  break;
+                default:
+                  navigation.navigate('Home');
+              }
+            },
+          },
+        ]);
+      }
+    } catch (error: any) {
+      const title = error?.response?.data?.title || 'Error';
+      console.log(error);
+      Alert.alert(title, 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
+    }
+  };
+>>>>>>> parent of 9044f4c (movil/estudiante 50%)
 
     return (
         <View style={styles.container}>

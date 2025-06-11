@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import axios from 'axios';
@@ -168,3 +169,5 @@ const styles = StyleSheet.create({
 });
 
 export default Horas;
+=======
+>>>>>>> parent of 9044f4c (movil/estudiante 50%)
