@@ -28,11 +28,8 @@ export default function CertificadoAdmin() {
             (total, a) => (a.novedades ? total + a.horas : total),
             0
         );
-
         const horasTotales = 120 + horasInvalidas;
-        console.log("Horas hechas:", horasHechas);
-        console.log("Horas inválidas:", horasInvalidas);
-        console.log("Horas totales requeridas:", horasTotales);
+
         if (horasHechas >= horasTotales) {
             setAllowed(true);
             setDownloadable(true);

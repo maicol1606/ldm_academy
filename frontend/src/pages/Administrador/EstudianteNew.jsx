@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { usePostData } from "../../lib/fetchData";
 
 const EstudianteNew = () => {
     const [user, setUser] = useState({
@@ -24,46 +25,21 @@ const EstudianteNew = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (user.contrasena !== user.confirmarContrasena) {
-            Swal.fire({
-                icon: "warning",
-                title: "Las contraseñas no coinciden",
-                text: "Por favor verifica que ambas contraseñas sean iguales.",
-            });
-            return;
-        }
+        const data = {
+            nombre: user.nombre,
+            apellido: user.apellido,
+            correo: user.correo,
+            contrasena: user.contrasena,
+            confirmarContrasena: user.confirmarContrasena,
+            telefono: user.telefono,
+            curso: user.curso,
+            estado: 1,
+        };
 
-        try {
-            const { confirmarContrasena, ...datosAEnviar } = user;
+        const response = await usePostData("/usuarios", data);
 
-            const response = await axios.post(
-                `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/auth/registrar`,
-                datosAEnviar
-            );
-
-            if (response.status === 200) {
-                Swal.fire({
-                    icon: "success",
-                    title: response.data.title,
-                    text: response.data.message,
-                }).then(() => {
-                    window.location.href = "/EstudianteNew";
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Error al crear el estudiante",
-                });
-            }
-        } catch (error) {
-            console.error(error);
-            Swal.fire({
-                icon: "error",
-                title: error.response?.data?.title || "Error",
-                text: "Error al crear el estudiante",
-            });
-        }
+        if (!response.success) return;
+        e.target.reset();
     };
 
     return (

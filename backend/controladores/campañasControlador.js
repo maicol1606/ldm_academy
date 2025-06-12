@@ -61,17 +61,43 @@ exports.agregarCampana = (req, res) => {
     );
 };
 
-exports.eliminarCampana = (req, res) => {
+exports.eliminarCampana = async (req, res) => {
     const id = req.params.id;
-    const query = "DELETE FROM campañas WHERE id_campaña = ?";
-    db.query(query, [id], (error, results) => {
-        if (error) {
-            console.error("Error al eliminar la campaña:", error);
-            res.status(500).json({ error: "Error al eliminar la campaña" });
-        } else {
-            res.status(200).json({ message: "Campaña eliminada correctamente" });
+
+    try {
+        // Verificar que hayan postulaciones con esa campaña
+        const queryPostulaciones = "SELECT * FROM postulacion WHERE id_campaña = ?";
+        const [rowsPostulaciones] = await db.promise().query(queryPostulaciones, [id]);
+
+        if (rowsPostulaciones.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "No se puede eliminar la campaña porque hay postulaciones asociadas",
+            });
         }
-    });
+
+        const query = "DELETE FROM campañas WHERE id_campaña = ?";
+        const [rows] = await db.promise().query(query, [id]);
+
+        res.status(200).json({
+            success: true,
+            message: "Campaña eliminada correctamente",
+            data: rows,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error al eliminar la campaña: " + error.message,
+        });
+    }
+    // db.query(query, [id], (error, results) => {
+    //     if (error) {
+    //         console.error("Error al eliminar la campaña:", error);
+    //         res.status(500).json({ error: "Error al eliminar la campaña" });
+    //     } else {
+    //         res.status(200).json({ message: "Campaña eliminada correctamente" });
+    //     }
+    // });
 };
 
 exports.actualizarCampana = (req, res) => {
@@ -94,19 +120,33 @@ exports.actualizarCampana = (req, res) => {
     });
 };
 
-exports.mostrarCampanas = (req, res) => {
-    db.query("SELECT * FROM campañas", (error, results) => {
-        if (error) {
-            console.error("Error al obtener las campañas:", error);
-            res.status(500).json({ error: "Error al obtener las campañas" });
-        } else {
-            res.status(200).send({
-                success: true,
-                message: "Campañas obtenidas correctamente",
-                data: results,
-            });
-        }
+exports.mostrarCampanas = async (req, res) => {
+    const query =
+        `SELECT 
+        *, 
+        (SELECT COUNT(*) FROM postulacion WHERE id_campaña = campañas.id_campaña) as personas_postuladas, 
+        (SELECT COUNT(*) FROM postulacion WHERE id_campaña = campañas.id_campaña and estado = 'aceptada') as personas_activas 
+        FROM campañas`;
+    const [rows] = await db.promise().query(query);
+
+    res.status(200).send({
+        success: true,
+        message: "Campañas obtenidas correctamente",
+        data: rows,
     });
+
+    // db.query("SELECT * FROM campañas", (error, results) => {
+    //     if (error) {
+    //         console.error("Error al obtener las campañas:", error);
+    //         res.status(500).json({ error: "Error al obtener las campañas" });
+    //     } else {
+    //         res.status(200).send({
+    //             success: true,
+    //             message: "Campañas obtenidas correctamente",
+    //             data: results,
+    //         });
+    //     }
+    // });
 };
 
 exports.mostrarCampanaNombre = (req, res) => {

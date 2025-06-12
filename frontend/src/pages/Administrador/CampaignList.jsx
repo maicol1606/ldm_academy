@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
+import { useDeleteData } from "../../lib/fetchData";
 
 export default function CampaignList() {
     const [campañas, setCampañas] = useState([]);
@@ -16,6 +17,7 @@ export default function CampaignList() {
         id_docente: "",
         foto: null,
     });
+    const [trigger, setTrigger] = useState(0);
 
     const handleChangeEdit = (e) => {
         setCampañaEdit({
@@ -38,8 +40,12 @@ export default function CampaignList() {
         const fetchData = async () => {
             try {
                 const [campanasRes, docentesRes] = await Promise.all([
-                    axios.get(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/campanas/mostrarCampanas`),
-                    axios.get(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/docentes/obtenerDocentes`),
+                    axios.get(
+                        `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/campanas/mostrarCampanas`
+                    ),
+                    axios.get(
+                        `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/docentes/obtenerDocentes`
+                    ),
                 ]);
                 setCampañas(campanasRes.data.data);
                 setDocentes(docentesRes.data);
@@ -48,13 +54,15 @@ export default function CampaignList() {
             }
         };
         fetchData();
-    }, []);
+    }, [trigger]);
 
     const handleSubmitEdit = async (e) => {
         e.preventDefault();
         try {
             const res = await axios.put(
-                `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/campanas/actualizarCampana/${CampañaEdit.id_campaña}`,
+                `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/campanas/actualizarCampana/${
+                    CampañaEdit.id_campaña
+                }`,
                 CampañaEdit
             );
             if (res.status === 200) {
@@ -64,7 +72,7 @@ export default function CampaignList() {
                     icon: "success",
                     confirmButtonText: "Aceptar",
                 }).then(() => {
-                    navigate(0);
+                    setTrigger((prev) => prev + 1);
                 });
             }
         } catch (error) {
@@ -74,35 +82,22 @@ export default function CampaignList() {
     };
 
     const eliminarCampaña = async (id) => {
-        try {
-            const confirm = await Swal.fire({
-                title: "¿Estás seguro de borrar esta campaña?",
-                text: "No podrás revertir esta operación",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sí, borrar",
-            });
-            if (confirm.isConfirmed) {
-                const res = await axios.delete(
-                    `${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/campanas/eliminarCampana/${id}`
-                );
-                if (res.status === 200) {
-                    Swal.fire({
-                        title: "Campaña borrada",
-                        text: "La campaña ha sido borrada",
-                        icon: "success",
-                        confirmButtonText: "Aceptar",
-                    }).then(() => {
-                        navigate(0);
-                    });
-                }
-            }
-        } catch (error) {
-            console.error(error);
-            Swal.fire("Error", "Error al eliminar la campaña", "error");
-        }
+        Swal.fire({
+            title: "¿Estás seguro de borrar esta campaña?",
+            text: "No podrás revertir esta operación",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, borrar",
+        }).then(async (result) => {
+            if (!result.isConfirmed) return;
+
+            const response = await useDeleteData("/campanas/eliminarCampana/" + id);
+            if (!response.success) return;
+
+            setTrigger((prev) => prev + 1);
+        });
     };
 
     return (
@@ -156,22 +151,26 @@ export default function CampaignList() {
                                             }
                                         </td>
                                         <td>
-                                            <button
-                                                type="button"
-                                                class="btn btn-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"
-                                                onClick={() => setCampañaEdit(campaña)}
-                                            >
-                                                Editar
-                                            </button>
+                                            <div className="d-flex gap-2 flex-wrap">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal"
+                                                    onClick={() => setCampañaEdit(campaña)}
+                                                >
+                                                    Editar
+                                                </button>
 
-                                            <button
-                                                className="btn btn-danger btn-sm ms-2"
-                                                onClick={() => eliminarCampaña(campaña.id_campaña)}
-                                            >
-                                                Eliminar
-                                            </button>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() =>
+                                                        eliminarCampaña(campaña.id_campaña)
+                                                    }
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -288,35 +287,6 @@ export default function CampaignList() {
                             </div>
                         </div>
                     </div>
-
-                    {/* Paginación Mejorada */}
-                    <nav aria-label="Page navigation">
-                        <ul className="pagination justify-content-center">
-                            <li className="page-item disabled">
-                                <a className="page-link">Atrás</a>
-                            </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    1
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    2
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    3
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    Siguiente
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>

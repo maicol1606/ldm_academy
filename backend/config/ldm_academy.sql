@@ -28,7 +28,7 @@ CREATE TABLE `usuarios` (
     `telefono` VARCHAR(15),
     `id_rol` INT,
     `curso` VARCHAR(10),
-    `estado` BOOLEAN,
+    `estado` BOOLEAN DEFAULT 1,
     `codigo_verificacion` VARCHAR(10),
     `foto` TEXT
 );

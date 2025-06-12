@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useGetData } from "../../lib/fetchData.js";
 import axios from "axios";
 
 const EstadisticasDashboard = () => {
@@ -9,7 +10,11 @@ const EstadisticasDashboard = () => {
         postulados: 0,
     });
 
-    const [estudiantes, setEstudiantes] = useState([]);
+    const {
+        data: estudiantes,
+        loading: loadingEstudiantes,
+        reload: reloadEstudiantes,
+    } = useGetData("/estudiantes/obtenerEstudiantes");
 
     useEffect(() => {
         // Cargar estadísticas
@@ -18,15 +23,6 @@ const EstadisticasDashboard = () => {
             .then((res) => setDatos(res.data))
             .catch((err) => {
                 console.error("Error al cargar estadísticas:", err);
-            });
-
-        // Cargar estudiantes
-        axios
-            .get(`${import.meta.env.VITE_PUBLIC_API_DOMAIN}/api/estudiantes/llamarEstudiantes`)
-            .then((res) => setEstudiantes(res.data))
-            .catch((err) => {
-                console.error("Error al obtener estudiantes:", err);
-                setEstudiantes([]);
             });
     }, []);
 

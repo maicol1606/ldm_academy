@@ -53,11 +53,11 @@ const AsignarHoras = () => {
             const response = await usePostData("/asistencia/agregarAsistencia", {
                 id_usuario: estudianteSeleccionado.id_usuario,
                 id_campaña: estudianteSeleccionado.id_campaña,
-                fecha: new Date(fecha).toISOString().split("T")[0],
+                fecha: new Date(fecha).toISOString("es-CO").split("T")[0],
                 hora_Inicio: horaInicio,
                 hora_fin: horaFin,
                 horas: nuevasHoras,
-                novedades,
+                novedades: novedades || null,
             });
             if (!response.success) return;
 
@@ -119,12 +119,14 @@ const AsignarHoras = () => {
                 >
                     <div className="modal-dialog modal-dialog-centered">
                         <div
-                            className={`modal-content border-${tipoModal === "success" ? "success" : "danger"
-                                }`}
+                            className={`modal-content border-${
+                                tipoModal === "success" ? "success" : "danger"
+                            }`}
                         >
                             <div
-                                className={`modal-header bg-${tipoModal === "success" ? "success" : "danger"
-                                    } text-white`}
+                                className={`modal-header bg-${
+                                    tipoModal === "success" ? "success" : "danger"
+                                } text-white`}
                             >
                                 <h5 className="modal-title">
                                     {tipoModal === "success" ? "Éxito" : "Error"}
@@ -167,55 +169,45 @@ const AsignarHoras = () => {
                                     className="btn-close"
                                     onClick={() => setMostrarDetalle(false)}
                                 ></button>
-                                <div className="modal-footer">
-                                    <button
-                                        className="btn btn-success"
-                                        onClick={() => {
-                                            setMostrarFormulario(true);
-                                            setMostrarDetalle(false); // Opcional: cerrar el detalle cuando abres el form
-                                        }}
-                                    >
-                                        <FaPlus /> Registrar Asistencia
-                                    </button>
-                                    <button
-                                        className="btn btn-secondary"
-                                        onClick={() => setMostrarDetalle(false)}
-                                    >
-                                        Cerrar
-                                    </button>
-                                </div>
                             </div>
                             <div className="modal-body">
-                                <p>Numero: {estudianteSeleccionado?.id_usuario}</p>
-                                <p>Nombre: {estudianteSeleccionado?.nombre}</p>
-                                <p>Campaña: {estudianteSeleccionado?.nom_campaña}</p>
+                                <p>Numero: {estudianteSeleccionado.id_usuario}</p>
+                                <p>Nombre: {estudianteSeleccionado.nombre}</p>
+                                <p>Campaña: {estudianteSeleccionado.nom_campaña}</p>
                                 <p>
-                                    Total de Horas: {estudianteSeleccionado?.total_horas} de{" "}
+                                    Total de Horas: {estudianteSeleccionado.total_horas} de{" "}
                                     {120 +
-                                        parseInt(estudianteSeleccionado?.total_horas_observaciones)}
+                                        parseInt(estudianteSeleccionado.total_horas_observaciones)}
                                 </p>
                                 <p>
                                     Total de Horas con observaciones:{" "}
-                                    {estudianteSeleccionado?.total_horas_observaciones}
+                                    {estudianteSeleccionado.total_horas_observaciones}
                                 </p>
-                                <p>Días asistidos: {estudianteSeleccionado?.total_asistencias}</p>
+                                <p>Días asistidos: {estudianteSeleccionado.total_asistencias}</p>
                                 <hr />
                                 <h6>Historial de asistencia:</h6>
-                                {Array.isArray(estudianteSeleccionado?.asistencias) &&
-                                    estudianteSeleccionado.asistencias.map((asistencia) => (
-                                        <p key={asistencia?.id_asistencia}>
-                                            {new Date(asistencia?.fecha).toLocaleDateString("es-ES", {
-                                                day: "numeric",
-                                                month: "long",
-                                                year: "numeric",
-                                            })}
-                                            {": "}
-                                            {asistencia?.horas} horas
-                                        </p>
-                                    ))}
-
+                                {estudianteSeleccionado.asistencias.map((asistencia) => (
+                                    <p key={asistencia.id_asistencia}>
+                                        {new Date(asistencia.fecha).toLocaleDateString("es-ES", {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric",
+                                        })}
+                                        {": "}
+                                        {asistencia.horas} horas
+                                    </p>
+                                ))}
                             </div>
                             <div className="modal-footer">
+                                <button
+                                    className="btn btn-success"
+                                    onClick={() => {
+                                        setMostrarFormulario(true);
+                                        setMostrarDetalle(false); // Opcional: cerrar el detalle cuando abres el form
+                                    }}
+                                >
+                                    <FaPlus /> Registrar Asistencia
+                                </button>
                                 <button
                                     className="btn btn-secondary"
                                     onClick={() => setMostrarDetalle(false)}

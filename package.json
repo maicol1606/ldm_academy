@@ -10,7 +10,9 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "npm run dev --prefix frontend",
         "server": "npm start --prefix backend",
-        "download": "npm install --prefix frontend && npm install --prefix backend"
+        "mobile": "npm run dev --prefix mobile",
+        "download": "npm install --prefix frontend && npm install --prefix backend",
+        "download-mobile": "npm install --prefix mobile"
     },
     "keywords": [],
     "author": "",

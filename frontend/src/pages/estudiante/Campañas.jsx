@@ -20,6 +20,11 @@ export default function InfoCampañas() {
     const [postulaciones, setPostulaciones] = useState([]);
 
     useEffect(() => {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(
+            (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+        );
+
         const fetchData = async () => {
             try {
                 const [campanasRes, postulacionesRes, docentesRes] = await Promise.all([
@@ -154,7 +159,7 @@ export default function InfoCampañas() {
                                                 <span className="fw-bold text-primary">
                                                     Cupos disponibles:{" "}
                                                 </span>
-                                                {campana.cupos}
+                                                {campana.cupos - campana.personas_activas}
                                             </p>
                                             <p>
                                                 <span className="fw-bold text-primary">
@@ -174,10 +179,25 @@ export default function InfoCampañas() {
                                                 }
                                             </p>
                                             <div className="d-flex justify-content-between align-items-center">
-                                                <div className="btn-group">
+                                                <div
+                                                    className="btn-group"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title={
+                                                        campana.cupos - campana.personas_activas <=
+                                                        0
+                                                            ? "No hay cupos disponibles"
+                                                            : "Postularse"
+                                                    }
+                                                >
                                                     <button
                                                         type="button"
-                                                        disabled={isLoading}
+                                                        disabled={
+                                                            isLoading ||
+                                                            campana.cupos -
+                                                                campana.personas_activas <=
+                                                                0
+                                                        }
                                                         className="btn btn-sm btn-outline-primary transition-all duration-200 hover:bg-primary hover:text-white"
                                                         onClick={() =>
                                                             setShowPostuladoModal(true) ||
@@ -198,7 +218,8 @@ export default function InfoCampañas() {
                                                     </button>
                                                 </div>
                                                 <small className="text-body-secondary">
-                                                    9 postulados
+                                                    {campana.personas_postuladas} postulado
+                                                    {campana.personas_postuladas != 1 ? "s" : ""}
                                                 </small>
                                             </div>
                                         </div>
@@ -296,7 +317,19 @@ export default function InfoCampañas() {
                                         <span className="fw-bold text-primary">
                                             Cupos disponibles:{" "}
                                         </span>
-                                        {campanas[selectedCampaign].cupos}
+                                        {campanas[selectedCampaign].cupos - campanas[selectedCampaign].personas_activas} de {campanas[selectedCampaign].cupos}
+                                    </p>
+                                    <p>
+                                        <span className="fw-bold text-primary">
+                                            Postulaciones activas:{" "}
+                                        </span>
+                                        {campanas[selectedCampaign].personas_activas || 0}
+                                    </p>
+                                    <p>
+                                        <span className="fw-bold text-primary">
+                                            Total de postulaciones:{" "}
+                                        </span>
+                                        {campanas[selectedCampaign].personas_postuladas || 0}
                                     </p>
                                     <p>
                                         <span className="fw-bold text-primary">Docente: </span>
@@ -312,7 +345,7 @@ export default function InfoCampañas() {
                                                 (docente) =>
                                                     docente.id_usuario ==
                                                     campanas[selectedCampaign].id_docente
-                                            )?.apellidos
+                                            )?.apellido
                                         }
                                     </p>
                                 </div>

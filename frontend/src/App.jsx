@@ -22,7 +22,6 @@ const Campañas = lazy(() => import("./pages/estudiante/Campañas"));
 const GenCertificados = lazy(() => import("./pages/estudiante/GenCertificados"));
 const PerfilEstudiante = lazy(() => import("./pages/estudiante/PerfilEstudiante"));
 const Horas = lazy(() => import("./pages/estudiante/Horas"));
-const HomeEstudiante = lazy(() => import("./pages/estudiante/HomeEstudiante"));
 const Postularse = lazy(() => import("./pages/estudiante/Postularse"));
 const Notificaciones = lazy(() => import("./pages/estudiante/Notificaciones"));
 const InformacionCampaña = lazy(() => import("./pages/estudiante/InformacionCampaña"));
@@ -68,7 +67,6 @@ function App() {
                         <Route path="/HomeEstudiante" element={<Campañas />} />
                         <Route path="/perfil" element={<PerfilEstudiante />} />
                         <Route path="/buscarCampaña" element={<BuscarCampañas />} />
-                        <Route path="/si" element={<HomeEstudiante />} />
                         <Route path="/postularse" element={<Postularse />} />
                         <Route path="/Horas" element={<Horas />} />
                         <Route path="/notificaciones" element={<Notificaciones />} />

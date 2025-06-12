@@ -20,7 +20,6 @@ exports.obtenerEstudiantes = async (req, res) => {
             a.horas,
             a.novedades,
             p.estado,
-            c.id_campaña,
             (
                 SELECT COALESCE(SUM(horas), 0) 
                 FROM asistencia 
@@ -86,7 +85,6 @@ exports.obtenerEstudiantes = async (req, res) => {
             total_horas_observaciones: estudianteData.total_horas_observaciones,
             total_asistencias: estudianteData.total_asistencias,
             nom_campaña: estudianteData.nom_campaña,
-            id_campaña: estudianteData.id_campaña,
             asistencias
         };
     });

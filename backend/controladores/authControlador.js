@@ -59,29 +59,26 @@ module.exports = class AuthControlador {
                     "SELECT * FROM postulacion WHERE id_usuario = ? and estado = 'aceptada'";
 
                 const [rows] = await db.promise().query(query, [usuario.id_usuario]);
-                if (rows.length === 0) {
-                    return res.status(401).json({
-                        success: false,
-                        message: "Usuario no aceptado",
-                    });
-                }
 
-                const postulacion = rows[0];
+                if (rows.length > 0) {
+                    const postulacion = rows[0];
 
-                // validar si pasaron 6 meses desde la fecha de aceptacion
-                const fechaAceptacion = new Date(postulacion.fecha);
-                const fechaActual = new Date();
-                const diferencia = fechaActual.getTime() - fechaAceptacion.getTime();
-                const meses = Math.floor(diferencia / (1000 * 60 * 60 * 24 * 30));
-                if (meses > 6) {
-                    const query2 = "UPDATE usuarios SET estado = 0 WHERE id_usuario = ?";
-                    await db.promise().query(query2, [usuario.id_usuario]);
+                    // validar si pasaron 6 meses desde la fecha de aceptacion
+                    const fechaAceptacion = new Date(postulacion.fecha);
+                    const fechaActual = new Date();
+                    const diferencia = fechaActual.getTime() - fechaAceptacion.getTime();
+                    const meses = Math.floor(diferencia / (1000 * 60 * 60 * 24 * 30));
 
-                    return res.status(401).json({
-                        success: false,
-                        message:
-                            "Cuenta deshabilitada por no haber realizado el servicio social en el tiempo establecido",
-                    });
+                    if (meses >= 6) {
+                        const query2 = "UPDATE usuarios SET estado = 0 WHERE id_usuario = ?";
+                        await db.promise().query(query2, [usuario.id_usuario]);
+
+                        return res.status(401).json({
+                            success: false,
+                            message:
+                                "Cuenta deshabilitada por no haber realizado el servicio social en el tiempo establecido",
+                        });
+                    }
                 }
             }
 
